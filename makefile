@@ -5,3 +5,6 @@ dev:
 
 clean:
 	docker system prune -af --volumes
+
+stop:
+    docker compose down -v
