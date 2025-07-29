@@ -7,4 +7,4 @@ clean:
 	docker system prune -af --volumes
 
 stop:
-    docker compose down -v
+	docker compose down -v
