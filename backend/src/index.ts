@@ -6,12 +6,24 @@ import { buildSchema } from "type-graphql";
 import UserResolver from "./resolvers/UserResolver";
 import * as jwt from "jsonwebtoken";
 import {UserToken} from "./types/Context";
+import { Role } from "./entities/User";
 const port = 3000;
 
 async function startServer() {
     await dataSource.initialize();
     const schema = await buildSchema({
         resolvers: [UserResolver],
+        authChecker: ({context: { user } }, neededRoles: Role[]) => {
+            // si pas authentifié, on retourne false
+            if (!user) return false;
+            // si neededRoles est vide, on retourne true
+            if (!neededRoles.length) return true;
+            // si user a ADMIN, on retourne true
+            if (user.roles.includes(Role.ADMIN)) return true;
+            // si user a au moins un role inclus dans neededRoles, on retourne true
+            // sinon on retourne false
+            return neededRoles.some(user.roles.includes);
+        }
     });
     const apolloServer = new ApolloServer({ schema });
     const { url } = await startStandaloneServer(apolloServer, {

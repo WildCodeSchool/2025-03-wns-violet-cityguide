@@ -46,15 +46,14 @@ function setCookie(ctx: Context, token: string) {
 function createJwt(payload: string | object | Buffer) {
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) throw new Error("Missing env variable : JWT_SECRET");
-    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "1d"});
-    return token;
+    return jwt.sign(payload, JWT_SECRET, {expiresIn: "1d"});
 }
 
-function createUserToken(user: User) {
-    const profile: UserToken = {
+function createUserToken(user: User): UserToken {
+    return {
         id: user.id,
+        roles: user.roles,
     };
-    return profile;
 }
 
 @Resolver(User)
@@ -62,8 +61,7 @@ export default class UserResolver {
 
     @Query(() => [User])
     async getAllUsers() {
-        const users = await User.find();
-        return users;
+        return await User.find();
     }
 
     @Mutation(() => ID)
@@ -99,6 +97,8 @@ export default class UserResolver {
     @Mutation(() => ID)
     async logout(@Ctx('ctx') ctx: Context) {
         setCookie(ctx, "");
-        return "Done";
+        return "See you next time";
     }
+
+    // @Authorized("ADMIN")
 }
