@@ -1,8 +1,6 @@
 services:
   frontend:
     build: ./frontend
-    ports:
-      - "5173:5173"
     volumes:
       - ./frontend/src/:/app/src/
     healthcheck:
@@ -17,8 +15,6 @@ services:
 
   backend:
     build: ./backend
-    ports:
-      - "3000:3000"
     volumes:
       - ./backend/src/:/app/src/
     healthcheck:
@@ -45,3 +41,23 @@ services:
       POSTGRES_HOST: ${DB_HOST}
     volumes:
       - ./persist/database:/var/lib/postgresql/data
+
+  # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
+  gateway:
+    image: nginx
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf
+    ports:
+      # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
+      - ${GATEWAY_PORT}:80
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+
+  adminer:
+    image: adminer
+    depends_on:
+      database:
+        condition: service_healthy

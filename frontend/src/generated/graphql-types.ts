@@ -20,6 +20,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: Scalars['ID']['output'];
+  logout: Scalars['ID']['output'];
   signup: Scalars['ID']['output'];
 };
 
@@ -43,11 +44,18 @@ export type Query = {
   getAllUsers: Array<User>;
 };
 
+/** Roles for users in this app */
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
   id: Scalars['Float']['output'];
+  roles: Array<Role>;
 };
 
 export type UserInput = {
