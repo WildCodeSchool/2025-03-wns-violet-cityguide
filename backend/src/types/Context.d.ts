@@ -1,7 +1,6 @@
-import {IncomingMessage, ServerResponse} from "http";
-
 export type UserToken = {
     id: number;
+    roles: Role[];
 };
 
 type Context = {
