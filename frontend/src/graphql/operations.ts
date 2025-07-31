@@ -7,3 +7,9 @@ export const GET_ALL_USERS = gql`
         }
     }
 `;
+
+export const SIGNUP = gql`
+    mutation Signup($data: NewUserInput!) {
+        signup(data: $data)
+    }
+`;

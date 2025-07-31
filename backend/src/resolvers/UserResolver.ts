@@ -8,10 +8,10 @@ import {
     Query,
     Resolver,
 } from "type-graphql";
-import User from "../entities/User";
+import User, {Role} from "../entities/User";
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
-import {Context, UserToken} from "../types/Context";
+import { Context, UserToken } from "../types/Context";
 
 @InputType()
 class NewUserInput {
@@ -30,6 +30,13 @@ class UserInput {
     @Field()
     password: string;
 }
+
+// type PublicProfile = {
+//     email: string;
+//     // name: string;
+//     // avatar: string;
+//     roles: Role[];
+// }
 
 function setCookie(ctx: Context, token: string) {
     // mon context contient le req et le res, je set le cookie dans mon header
@@ -64,7 +71,7 @@ export default class UserResolver {
         return await User.find();
     }
 
-    @Mutation(() => ID)
+    @Mutation(() => String)
     async signup(@Arg("data") data: NewUserInput, @Ctx('ctx') ctx: Context) {
         const hashedPassword = await argon2.hash(data.password);
         const user = User.create({...data, hashedPassword});
@@ -76,7 +83,15 @@ export default class UserResolver {
 
         setCookie(ctx, token);
 
-        return token;
+        const publicProfile = {
+            email: user.email,
+            // name: user.name,
+            // avatar: user.avatar,
+            roles: user.roles,
+
+        }
+
+        return JSON.stringify(publicProfile);
     }
 
     @Mutation(() => ID)
