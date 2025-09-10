@@ -1,5 +1,9 @@
 import { ObjectType, Field } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import City from "./City";
+import Note from "./Note";
+import Comment from "./Comment";
+import Category from "./Category";
 
 @Entity()
 @ObjectType()
@@ -18,7 +22,7 @@ class Poi extends BaseEntity {
 
     @Column({ unique: true })
     @Field()
-    addess: string;
+    address: string;
 
     @Column()
     @Field()
@@ -34,19 +38,20 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    category: string[];
+    createdBy: string; //id de l'utilisateur qui a crée le point d'interêt
 
-    @Column()
-    @Field()
-    city: string;
+    @ManyToMany(type => Category, category => category.id)
+    category: Promise<Category>;
 
-    // @Column()
-    // @Field()
-    // notes: number;
+    @OneToOne(type => City, city => city.id)
+    @JoinColumn()
+    cityName : string; 
 
-    // @Column()
-    // @Field()
-    // comment: string;
+    @OneToMany(type => Note, note => note.id)
+    note : Promise<Note>; 
+
+    @OneToMany(type => Comment, comment => comment.id)
+    comment: Promise<Comment>;
 }
 
 export default Poi; 

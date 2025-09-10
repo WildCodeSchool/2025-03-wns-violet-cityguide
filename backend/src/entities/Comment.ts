@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import Poi from "./Poi";
 
 @Entity()
 @ObjectType()
@@ -16,10 +17,12 @@ class Comment extends BaseEntity {
     @Field()
     content : string;
 
-    // @Column({ unique : true})
-    // @Field() 
-    // Poi : string
-    // TODO : joined column to be defined later
+    @Column()
+    @Field()
+    createdBy: String; // id de l'utilisateur qui a créé le commentaire
+  
+    @OneToOne(type => Poi, poi => poi.id)
+    poi: Promise<Poi>; 
 
 }
 
