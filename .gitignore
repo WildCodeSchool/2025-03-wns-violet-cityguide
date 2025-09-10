@@ -26,3 +26,4 @@ dist-ssr
 .idea
 .env
 persist/
+frontend/src/generated/graphql-types.ts
