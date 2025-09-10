@@ -11,8 +11,9 @@ describe('Header', () => {
             </MemoryRouter>
         )
 
+        // espère voir le header s'afficher
         expect(html).toContain('<header')
         expect(html.replaceAll('&#x27;', "'")).toContain("S'inscrire")
         expect(html).toContain('href="/signup"')
     })
-})
+});
