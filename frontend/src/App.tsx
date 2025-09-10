@@ -1,15 +1,17 @@
-import { Routes, Route } from 'react-router-dom'
+// React
+import { Outlet } from 'react-router-dom';
 
-import Labo from './pages/Labo'
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-function App() {
+export default function App() {
 
   return (
-    <Routes>
-        {/*je ferai le layout et ou path ici*/}
-        <Route path="/labo" element={<Labo />} />
-    </Routes>
+    <>
+        <Header />
+        <Outlet />
+        <Footer />
+    </>
   )
 }
-
-export default App

@@ -2,7 +2,7 @@ import type {FormEvent} from "react";
 import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
 import { useCurrentUser, useLogin } from "../zustand/userStore";
 
-export default function Labo() {
+export default function Signup() {
     // form signup
     // il doit contacter le backend
     // il faut stocker une info excessible à tous (store global)

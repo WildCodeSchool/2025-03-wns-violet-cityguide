@@ -1,0 +1,34 @@
+// colors
+$dark-blue: #012B58;
+$medium-blue: #094E9C;
+$purple: #A6A7C8;
+$yellow: #F6BB61;
+$white: #FFFFFF;
+$black: #000000;
+
+// fonts
+@font-face {
+  font-family: 'Poppins';
+  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Caudex';
+  src: url('../assets/fonts/Caudex/Caudex-Regular.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Work_Sans';
+  src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900; // si c'est une variable font
+}
+
+// Variables SCSS pour les familles de polices
+$title: 'Poppins', sans-serif;
+$subtitle: 'Caudex', serif;
+$text: 'Work_Sans', sans-serif;

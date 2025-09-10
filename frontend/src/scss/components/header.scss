@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__fullLogo {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+
+    &__ou-text, &__logo {
+      width: 2rem;
+      height: auto;
+      color: #F6BB61;
+    }
+  }
+}

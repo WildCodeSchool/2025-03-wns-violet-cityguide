@@ -1,8 +1,10 @@
+import ReactDOM from 'react-dom/client'
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './scss/index.scss'
 import App from './App.tsx'
-import { BrowserRouter } from "react-router-dom";
+import Signup from './pages/Signup.tsx'
+import HomePage from './pages/HomePage.tsx'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
     ApolloClient,
     InMemoryCache,
@@ -14,12 +16,30 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
-createRoot(document.getElementById('root')!).render(
+const router = createBrowserRouter([
+    {
+        element: <App />,
+        children: [
+            {
+                path: '',
+                element: <HomePage />
+            },
+            {
+                path: '/signup',
+                element: <Signup />,
+            },
+            // {
+            //     path: '*',
+            //     element: <NotFound/>,
+            // },
+        ],
+    },
+])
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ApolloProvider client={client}>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
+            <RouterProvider router={router}/>
         </ApolloProvider>
     </StrictMode>,
 )
