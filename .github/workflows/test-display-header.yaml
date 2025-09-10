@@ -1,9 +1,11 @@
-name: client-tests-workflow
+name: test-display-header
 
-on: pull_request
+on:
+  pull_request:
+      types: [opened]
 
 jobs:
-  client-tests:
+  display-header:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
