@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite'
+// Config
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
@@ -11,5 +12,9 @@ export default defineConfig({
       port: 7000,
       path: "/hmr",
     },
+  },
+  test: {
+    globals: true,
+    environment: 'node',
   },
 })
