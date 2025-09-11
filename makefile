@@ -8,3 +8,6 @@ clean:
 
 stop:
 	docker compose down -v
+
+prod: 
+	docker compose -f compose.prod.yaml --env-file .env.prod up -d --build
