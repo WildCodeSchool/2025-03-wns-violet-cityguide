@@ -7,18 +7,18 @@ import Poi from "./Poi";
 class Note extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    noteId: number;
 
     @Column()
     @Field()
-    note : number;
+    note: number;
 
     @Column()
     @Field()
     createdBy: string; //id de l'utilisateur qui a crée la note 
 
-    @OneToOne(type => Poi, poi => poi.id)
-    poi: Promise<Poi>; 
+    @OneToOne(type => Poi, poi => poi.poiId)
+    poi: Poi; 
 
 }
 export default Note;

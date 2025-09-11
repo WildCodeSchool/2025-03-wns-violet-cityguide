@@ -7,15 +7,14 @@ import Poi from "./Poi";
 class Category extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number; 
+    categoryId: number; 
 
-    @Column({ unique : true})
+    @Column({ unique: true})
     @Field() 
-    name : string; 
+    name: string; 
 
-    @ManyToMany(type => Poi, poi => poi.id)
-    poi : Promise<Poi>
-
+    @ManyToMany(type => Poi, poi => poi.poiId)
+    poi: Poi; 
 }
 
 export default Category; 

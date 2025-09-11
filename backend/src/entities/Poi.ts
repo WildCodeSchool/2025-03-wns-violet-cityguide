@@ -10,7 +10,7 @@ import Category from "./Category";
 class Poi extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    poiId: number;
 
     @Column({ unique: true })
     @Field()
@@ -18,7 +18,7 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    marqueur: any;
+    pin: string;
 
     @Column({ unique: true })
     @Field()
@@ -26,7 +26,7 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    nom: string;
+    poiName: string;
 
     @Column()
     @Field()
@@ -34,24 +34,25 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    photo: string;
+    imageUrl: string;
 
     @Column()
     @Field()
     createdBy: string; //id de l'utilisateur qui a crée le point d'interêt
 
-    @ManyToMany(type => Category, category => category.id)
-    category: Promise<Category>;
+    @ManyToMany(type => Category, category => category.categoryId)
+    category: Category;
 
-    @OneToOne(type => City, city => city.id)
+    @OneToOne(type => City, city => city.cityId)
     @JoinColumn()
-    cityName : string; 
+    cityId: number; 
 
-    @OneToMany(type => Note, note => note.id)
-    note : Promise<Note>; 
+    @OneToMany(type => Note, note => note.noteId)
+    note: Note; 
 
-    @OneToMany(type => Comment, comment => comment.id)
-    comment: Promise<Comment>;
+    @OneToMany(type => Comment, comment => comment.commentId)
+    comment: Comment;
 }
+
 
 export default Poi; 

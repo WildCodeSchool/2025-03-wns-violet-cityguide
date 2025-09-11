@@ -8,7 +8,7 @@ import Poi from "./Poi";
 class City extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    cityId: number;
 
     @Column()
     @Field()
@@ -42,9 +42,9 @@ class City extends BaseEntity {
     @Field() 
     createdBy: number; //id de l'utilisateur qui a créé la ville => utilisable par le backoffice
 
-    @OneToMany(type => Poi, poi => poi.id)
+    @OneToMany(type => Poi, poi => poi.poiId)
     @Field() // or a more specific type
-    poi: Promise<Poi>;
+    poi: Poi;
 }
 
 export default City
