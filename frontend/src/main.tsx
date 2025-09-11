@@ -28,10 +28,6 @@ const router = createBrowserRouter([
                 path: '/signup',
                 element: <Signup />,
             },
-            {
-                path: '/homepage',
-                Element: <HomePage />,
-            },
             // {
             //     path: '*',
             //     element: <NotFound/>,

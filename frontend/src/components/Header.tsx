@@ -11,7 +11,7 @@ export default function Header() {
     return (
         <header className="header">
             <div className="header__fullLogo">
-                <Link to ="/homepage">
+                <Link to="">
                     <LogoSVG />
                     <OuTextSVG />
                 </Link>
