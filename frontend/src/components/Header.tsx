@@ -11,8 +11,10 @@ export default function Header() {
     return (
         <header className="header">
             <div className="header__fullLogo">
-                <LogoSVG />
-                <OuTextSVG />
+                <Link to ="/homepage">
+                    <LogoSVG />
+                    <OuTextSVG />
+                </Link>
             </div>
             <nav>
                 <Link to="/signup">S'inscrire</Link>
