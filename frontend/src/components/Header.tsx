@@ -17,8 +17,11 @@ export default function Header() {
                 </Link>
             </div>
             <nav>
+                <Link to="">Accueil</Link>
+                <Link to="/cities">Villes</Link>
+                <Link to="/pois">Points d'intérêts</Link>
                 <Link to="/signup">S'inscrire</Link>
             </nav>
         </header>
     )
-}
+} 
