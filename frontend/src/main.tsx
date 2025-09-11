@@ -4,6 +4,8 @@ import './scss/index.scss'
 import App from './App.tsx'
 import Signup from './pages/Signup.tsx'
 import HomePage from './pages/HomePage.tsx'
+import Cities from './pages/Cities.tsx'
+import Pois from './pages/Pois.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
     ApolloClient,
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
                 path: '/signup',
                 element: <Signup />,
             },
+            {
+                path: '/cities',
+                element: <Cities />,
+            },
+            {
+                path: '/pois',
+                element: <Pois />,
+            }
             // {
             //     path: '*',
             //     element: <NotFound/>,

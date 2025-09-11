@@ -11,12 +11,17 @@ export default function Header() {
     return (
         <header className="header">
             <div className="header__fullLogo">
-                <LogoSVG />
-                <OuTextSVG />
+                <Link to="">
+                    <LogoSVG />
+                    <OuTextSVG />
+                </Link>
             </div>
             <nav>
+                <Link to="">Accueil</Link>
+                <Link to="/cities">Villes</Link>
+                <Link to="/pois">Points d'intérêts</Link>
                 <Link to="/signup">S'inscrire</Link>
             </nav>
         </header>
     )
-}
+} 
