@@ -1,22 +1,24 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import Poi from "./Poi";
 
 @Entity()
 @ObjectType()
 class Note extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    noteId: number;
 
     @Column()
     @Field()
-    note : number;
+    note: number;
 
-    // @Column()
-    // @Field()
-    // Poi
-    // TODO : joined column to be defined later
+    @Column()
+    @Field()
+    createdBy: string; //id de l'utilisateur qui a crée la note 
+
+    @OneToOne(type => Poi, poi => poi.poiId)
+    poi: Poi; 
 
 }
-
 export default Note;

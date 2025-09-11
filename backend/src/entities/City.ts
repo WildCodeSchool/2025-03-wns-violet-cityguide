@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
+import Poi from "./Poi";
 
 
 @Entity()
@@ -7,15 +8,43 @@ import { Field, ObjectType } from "type-graphql";
 class City extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    cityId: number;
 
     @Column()
     @Field()
-    nom: string;
+    cityName: string;
 
-    @Column({ type: "simple-json" })
-    @Field(() => [String]) // or a more specific type
-    poi: any[];
+    @Column()
+    @Field()
+    country: string; 
+
+    @Column()
+    @Field()
+    description: string; 
+
+    @Column()
+    @Field()
+    createdAt: Date; 
+
+    @Column()
+    @Field()
+    updatedAt: Date; 
+    
+    @Column()
+    @Field()
+    deletedAt: Date; 
+
+    @Column()
+    @Field()
+    imageUrl: string; 
+
+    @Column()
+    @Field() 
+    createdBy: number; //id de l'utilisateur qui a créé la ville => utilisable par le backoffice
+
+    @OneToMany(type => Poi, poi => poi.poiId)
+    @Field() // or a more specific type
+    poi: Poi;
 }
 
 export default City

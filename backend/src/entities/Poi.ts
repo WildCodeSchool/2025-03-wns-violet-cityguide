@@ -1,12 +1,16 @@
 import { ObjectType, Field } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import City from "./City";
+import Note from "./Note";
+import Comment from "./Comment";
+import Category from "./Category";
 
 @Entity()
 @ObjectType()
 class Poi extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    poiId: number;
 
     @Column({ unique: true })
     @Field()
@@ -14,39 +18,41 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    marqueur: any;
+    pin: string;
 
     @Column({ unique: true })
     @Field()
-    addess: string;
+    address: string;
 
     @Column()
     @Field()
-    nom: string;
+    poiName: string;
 
     @Column()
     @Field()
-    description: string;
+    poiDescription: string;
 
     @Column()
     @Field()
-    photo: string;
+    imageUrl: string;
 
     @Column()
     @Field()
-    category: string[];
+    createdBy: string; //id de l'utilisateur qui a crée le point d'interêt
 
-    @Column()
-    @Field()
-    city: string;
+    @ManyToMany(type => Category, category => category.categoryId)
+    category: Category;
 
-    // @Column()
-    // @Field()
-    // notes: number;
+    @OneToOne(type => City, city => city.cityId)
+    @JoinColumn()
+    cityId: number; 
 
-    // @Column()
-    // @Field()
-    // comment: string;
+    @OneToMany(type => Note, note => note.noteId)
+    note: Note; 
+
+    @OneToMany(type => Comment, comment => comment.commentId)
+    comment: Comment;
 }
+
 
 export default Poi; 
