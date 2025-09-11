@@ -11,7 +11,7 @@ class Category extends BaseEntity {
 
     @Column({ unique: true})
     @Field() 
-    name: string; 
+    categoryName: string; 
 
     @ManyToMany(type => Poi, poi => poi.poiId)
     poi: Poi; 

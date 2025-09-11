@@ -30,7 +30,7 @@ class Poi extends BaseEntity {
 
     @Column()
     @Field()
-    description: string;
+    poiDescription: string;
 
     @Column()
     @Field()
