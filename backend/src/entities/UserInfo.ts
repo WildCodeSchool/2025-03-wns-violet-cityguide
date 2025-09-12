@@ -29,3 +29,5 @@ class UserInfo extends BaseEntity {
     user: User;
 
 }
+
+export default UserInfo;
