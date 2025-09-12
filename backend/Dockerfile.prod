@@ -1,0 +1,15 @@
+FROM node:lts-alpine AS builder
+WORKDIR /app
+COPY src src
+COPY *.json .
+RUN npm install
+RUN npm run build
+
+FROM node:lts-alpine
+WORKDIR /app
+RUN apk --no-cache add curl
+COPY --from=builder /app ./build
+COPY package*.json .
+RUN npm install --production
+CMD ["npm", "run", "start"]
+
