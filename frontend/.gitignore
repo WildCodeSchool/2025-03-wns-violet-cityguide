@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 
 .idea
-.env
+.env.stage 
+.env.dev
+.env.prod
