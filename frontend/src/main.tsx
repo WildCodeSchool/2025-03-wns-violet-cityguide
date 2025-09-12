@@ -4,7 +4,7 @@ import './scss/index.scss'
 import App from './App.tsx'
 import Signup from './pages/Signup.tsx'
 import HomePage from './pages/HomePage.tsx'
-import Cities from './pages/Cities.tsx'
+import Cities from './pages/City.tsx'
 import Pois from './pages/Pois.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
