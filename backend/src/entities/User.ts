@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from "typeorm";
 import {Field, ObjectType, registerEnumType} from "type-graphql";
 
 // exemple de Role: USER, ADMIN
@@ -31,6 +31,13 @@ class User extends BaseEntity {
     @Column({type: "enum", enum: Role, array: true, default: [Role.USER] })
     @Field(() => [Role])
     roles: Role[];
+
+    @OneToMany("Poi", "createdBy")
+    createdPois: any[];
+
+    @OneToOne(() => require("./UserInfos").default, (userInfos: any) => userInfos.user)
+    @Field(() => require("./UserInfos").default, { nullable: true })
+    userInfos?: any;
 }
 
 export default User;

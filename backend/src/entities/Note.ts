@@ -1,9 +1,11 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, UpdateDateColumn, Unique } from "typeorm";
 import Poi from "./Poi";
+import User from "./User";
 
 @Entity()
 @ObjectType()
+@Unique(["userId", "poiId"]) 
 class Note extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
@@ -13,12 +15,20 @@ class Note extends BaseEntity {
     @Field()
     note: number;
 
-    @Column()
+    @CreateDateColumn()
     @Field()
-    createdBy: string; //id de l'utilisateur qui a crée la note 
+    createdAt: Date;
 
-    @OneToOne(type => Poi, poi => poi.poiId)
-    poi: Poi; 
+    @UpdateDateColumn()
+    @Field()
+    updatedAt: Date;
 
+    @ManyToOne(() => User)
+    @Field(() => User)
+    user: User;
+
+    @ManyToOne(() => Poi)
+    @Field(() => Poi)
+    poi: Poi;
 }
 export default Note;
