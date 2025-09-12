@@ -1,7 +1,9 @@
 export default function FadingBackground() {
   return (
     <>
-      <div>Fond bleu dégradé</div>
+      <div className="fading-background">
+        <h1 className="test-titre">Youpitralala</h1>
+      </div>
     </>
   )
 }
