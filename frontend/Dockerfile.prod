@@ -7,11 +7,9 @@ RUN npm install
 COPY src src
 RUN npm run build
 
-FROM node:lts-alpine
-WORKDIR /app
+FROM nginx:alpine
 RUN apk --no-cache add curl
-COPY --from=builder /app/dist/ ./build
-COPY package*.json .
-RUN npm install --omit=dev
-CMD ["npm", "run", "start"]
+COPY --from=builder /app/dist/ /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 
