@@ -4,6 +4,7 @@ COPY *.json .
 COPY *.html .
 COPY *.ts .
 RUN npm install
+COPY src src
 RUN npm run build
 
 FROM node:lts-alpine
@@ -11,6 +12,6 @@ WORKDIR /app
 RUN apk --no-cache add curl
 COPY --from=builder /app/dist/ ./build
 COPY package*.json .
-RUN npm install --production
+RUN npm install --omit=dev
 CMD ["npm", "run", "start"]
 
