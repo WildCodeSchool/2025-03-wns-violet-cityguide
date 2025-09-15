@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 import { DataSource } from "typeorm";
-import User from "../entities/User";
-import City from "../entities/City";
-import Poi from "../entities/Poi";
-import Category from "../entities/Category";
-import Notes from "../entities/Note";
-import Note from "../entities/Note";
-import Comment from "../entities/Comment";
+import {User} from "../entities/User";
+import {City} from "../entities/City";
+import {Poi} from "../entities/Poi";
+import {Category} from "../entities/Category";
+import {Note} from "../entities/Note";
+import {Comment} from "../entities/Comment";
+import { UserInfo } from "../entities/UserInfo";
 
 dotenv.config();
 const { DB_HOST, DB_USER, DB_DATABASE, DB_PASSWORD } = process.env;
@@ -17,7 +17,7 @@ const dataSource = new DataSource({
     username: DB_USER,
     password: DB_PASSWORD,
     database: DB_DATABASE,
-    entities: [User, City, Poi, Category, Note, Comment],
+    entities: [User, City, Poi, Category, Note, Comment, UserInfo],
     synchronize: true,
     logging: ["error", "query"],
 });

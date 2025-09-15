@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import Poi from "./Poi";
+import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Poi } from "./Poi";
+import { User } from "./User";
 
 @Entity()
 @ObjectType()
@@ -17,13 +18,22 @@ class Comment extends BaseEntity {
     @Field()
     content: string;
 
-    @Column()
+    @CreateDateColumn()
     @Field()
-    createdBy: String; // id de l'utilisateur qui a créé le commentaire
-  
-    @OneToOne(type => Poi, poi => poi.poiId)
+    createdAt: Date; 
+
+    @UpdateDateColumn()
+    @Field()
+    updatedAt: Date;
+
+    @ManyToOne(() => User)
+    @Field(() => User)
+    user: User;
+
+    @ManyToOne(() => Poi)
+    @Field(() => Poi)
     poi: Poi; 
 
 }
 
-export default Comment; 
+export { Comment };

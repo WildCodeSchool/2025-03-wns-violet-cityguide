@@ -8,7 +8,7 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import User, { Role } from "../entities/User";
+import {User, Role } from "../entities/User";
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context, UserToken } from "../types/Context";

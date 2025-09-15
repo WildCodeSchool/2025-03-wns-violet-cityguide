@@ -11,7 +11,7 @@ import {
 import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context } from "../types/Context";
-import City from "../entities/City";
+import {City} from "../entities/City";
 
 @InputType()
 class CityInput {
