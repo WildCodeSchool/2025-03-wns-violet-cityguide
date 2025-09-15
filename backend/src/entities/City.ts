@@ -1,6 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
-import Poi from "./Poi";
+import { Poi } from "./Poi";
 
 
 @Entity()
@@ -22,17 +22,17 @@ class City extends BaseEntity {
     @Field()
     description: string; 
 
-    @Column()
+    @CreateDateColumn()
     @Field()
     createdAt: Date; 
 
-    @Column()
+    @UpdateDateColumn()
     @Field()
     updatedAt: Date; 
     
-    @Column()
-    @Field()
-    deletedAt: Date; 
+    @DeleteDateColumn({ nullable: true })
+    @Field({ nullable: true })
+    deletedAt?: Date; 
 
     @Column()
     @Field()
@@ -40,11 +40,11 @@ class City extends BaseEntity {
 
     @Column()
     @Field() 
-    createdBy: number; //id de l'utilisateur qui a créé la ville => utilisable par le backoffice
+    createdBy: number; 
 
     @OneToMany(type => Poi, poi => poi.poiId)
-    @Field() // or a more specific type
+    @Field() 
     poi: Poi;
 }
 
-export default City
+export { City };

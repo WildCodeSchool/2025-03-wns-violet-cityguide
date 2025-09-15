@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import Poi from "./Poi";
+import { Poi } from "./Poi";
 
 @Entity()
 @ObjectType()
@@ -17,4 +17,4 @@ class Category extends BaseEntity {
     poi: Poi; 
 }
 
-export default Category; 
+export { Category };

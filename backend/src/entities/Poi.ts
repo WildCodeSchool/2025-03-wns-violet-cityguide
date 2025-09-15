@@ -1,13 +1,15 @@
 import { ObjectType, Field } from "type-graphql";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import City from "./City";
-import Note from "./Note";
-import Comment from "./Comment";
-import Category from "./Category";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { City } from "./City";
+import { Comment } from "./Comment";
+import { User } from "./User";
+import { Category } from "./Category";
+import { Note } from "./Note";
 
 @Entity()
 @ObjectType()
 class Poi extends BaseEntity {
+    
     @PrimaryGeneratedColumn()
     @Field()
     poiId: number;
@@ -37,8 +39,20 @@ class Poi extends BaseEntity {
     imageUrl: string;
 
     @Column()
+    createdById: number;
+
+    @ManyToOne(() => User, { eager: false })
+    @JoinColumn({ name: "createdById" })
+    @Field(() => User)
+    createdBy: User;
+
+    @CreateDateColumn()
     @Field()
-    createdBy: string; //id de l'utilisateur qui a crée le point d'interêt
+    createdAt: Date;    
+
+    @UpdateDateColumn()
+    @Field()
+    updatedAt: Date;
 
     @ManyToMany(type => Category, category => category.categoryId)
     category: Category;
@@ -54,5 +68,4 @@ class Poi extends BaseEntity {
     comment: Comment;
 }
 
-
-export default Poi; 
+export { Poi };
