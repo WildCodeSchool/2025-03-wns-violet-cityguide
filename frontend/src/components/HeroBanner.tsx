@@ -1,8 +1,17 @@
-export default function HeroBanner() {
+// Types
+type HeroBannerProps = {
+    img: string
+}
+
+export default function HeroBanner({ img }: HeroBannerProps) {
 
     return (
-        <>
-            <img src="src/assets/img/parisBridge.jpg" alt="Pont Alexandre III de Paris" />
-        </>
+        <div className="gradientBackground"
+             style={{
+                 backgroundImage: `linear-gradient(to bottom, 
+                 rgba(1,43,88,0.1), rgba(1,43,88,1)), 
+                 url(${img})`
+             }}
+        />
     )
 }

@@ -1,17 +1,154 @@
+@use '../variables' as *;
+
+.header a { text-decoration: none; color: inherit; }
+
 .header {
+  position: relative;
+  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: .75rem 1rem;
+  background: transparent;
+  color: white;
+  @media (min-width: $breakpoint-small) {
+    margin: 0 6rem;
+  }
 
-  &__fullLogo {
+  &__brand {
     display: flex;
     align-items: center;
     gap: .25rem;
-
-    &__ou-text, &__logo {
-      width: 2rem;
-      height: auto;
-      color: #F6BB61;
+  }
+  &__logo, &__ou-text {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    color: #F6BB61;
+    @media (min-width: $breakpoint-small) {
+      width: 3rem;
+      height: 3rem;
     }
+  }
+
+  /* --- BOUTON BURGER --- */
+  &__burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    &__icon {
+      color: $yellow;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    width: 38rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* --- NAV DESKTOP --- */
+  &__nav--desktop {
+    display: none;
+
+    a {
+      font-size: 1.25rem;
+      letter-spacing: .1rem;
+      color: $yellow;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      transition: color .25s ease;
+
+      &:hover, &:focus-visible {
+        color: $white;
+      }
+    }
+  }
+
+  /* --- OFFCANVAS + BACKDROP (mobile) --- */
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+
+    &.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &__panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(80vw, 320px);
+    height: 80vh;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px) saturate(100%);
+    -webkit-backdrop-filter: blur(2px) saturate(80%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 5px 5px;
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    padding: 5rem 1rem 2rem;
+
+    &.is-open {
+      transform: translateX(0);
+    }
+
+    &__cross {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      &__icon {
+        color: $yellow;
+      }
+    }
+  }
+
+  &__nav--mobile {
+    display: grid;
+    gap: .75rem;
+
+    a {
+      display: block;
+      padding: .9rem 1rem;
+      border-radius: .75rem;
+      background: rgba(255,255,255,.06);
+      font-size: 1.25rem;
+      letter-spacing: .1rem;
+      color: $yellow;
+      transition: background .25s ease;
+
+      &:hover, &:focus-visible {
+        background: rgba(255,255,255,.12);
+        outline: none;
+      }
+    }
+  }
+
+  /* --- BREAKPOINT: desktop --- */
+  @media (min-width: $breakpoint-small) {
+    &__burger { display: none; }
+    &__backdrop, &__panel { display: none; }
+    &__nav--desktop { display: flex; }
   }
 }

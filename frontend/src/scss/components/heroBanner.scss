@@ -1,0 +1,12 @@
+@use '../variables' as *;
+
+.gradientBackground {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 40vh;
+  margin-top: -4rem;
+  @media (min-width: $breakpoint-small) {
+    margin-top: -4.5rem;
+  }
+}

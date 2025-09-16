@@ -1,6 +1,7 @@
 @use "components/header";
-@use "components/fadingBackground";
+@use "components/heroBanner";
 @use "pages/homePage";
+@use "pages/city";
 @use './variables' as *;
 
 h1 {
