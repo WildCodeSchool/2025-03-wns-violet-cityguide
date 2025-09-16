@@ -34,7 +34,7 @@ export default function Header() {
         return () => document.removeEventListener("mousedown", onClick);
     }, [open]);
 
-    // Fermer à Échap
+    // Fermer avec Echap
     useEffect(() => {
         if (!open) return;
         const onKey = (e: KeyboardEvent) => {
