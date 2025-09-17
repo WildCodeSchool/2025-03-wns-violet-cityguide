@@ -27,4 +27,3 @@ dist-ssr
 .env.prod
 .env.dev
 persist/
-frontend/src/generated/graphql-types.ts
