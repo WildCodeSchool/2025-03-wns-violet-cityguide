@@ -12,10 +12,6 @@ export default defineConfig({
       usePolling: true,
       interval: 500,
     },
-    watch: {
-      usePolling: true, // Améliore le hot reloading
-      interval: 500,   // Fréquence de vérification des changements
-    },
     hmr: {
       port: 3000,
       path: "/hmr"
