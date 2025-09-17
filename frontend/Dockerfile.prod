@@ -5,6 +5,8 @@ COPY *.html .
 COPY *.ts .
 RUN npm install
 COPY src src
+RUN npm run codegen
+
 RUN npm run build
 
 FROM nginx:alpine
