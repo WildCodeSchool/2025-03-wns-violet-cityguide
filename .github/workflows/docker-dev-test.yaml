@@ -46,10 +46,22 @@ jobs:
     #6. Build all services with Docker Compose
     - name: Build all services with Docker Compose
       run: docker compose -f compose.test.dev.yaml build
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
 
     #7. Start all services for tests
     - name: Start all services for tests
       run: docker compose -f compose.test.dev.yaml up -d
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
 
     #8. Run vitest tests and generate report (in backend-dev)
     - name: Run vitest tests and generate report
@@ -58,6 +70,11 @@ jobs:
       env:
         CI: true
         NODE_ENV: test
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
       timeout-minutes: 10
 
     #8. Login to DockerHub
