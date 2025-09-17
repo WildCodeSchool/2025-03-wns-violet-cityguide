@@ -43,9 +43,9 @@ jobs:
     #5. Extract metadata
     - name: Extract metadata
       id: meta
-      run: 
+      run: |
         echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
-        echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+        echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
 
     #6. Build dev docker image 
     - name: Build docker image for tests
@@ -60,12 +60,12 @@ jobs:
         
     #7. Run vitest tests and generate report 
     - name: Run vitest tests and generate report
-      run: 
+      run: |
         docker run --rm \
-          --workdir /app
+          --workdir /app \
           --entrypoint "" \
-          ${{ steps.meta.outputs.REPO_NAME }}-dev:latest \ 
-          sh -C "npm ci && npx vitest run --reporter=verbose"
+          ${{ steps.meta.outputs.REPO_NAME }}-dev:${{ steps.meta.outputs.SHORT_SHA }} \
+          sh -c "npm ci && npx vitest run --reporter=verbose"
       env:
         CI: true
         NODE_ENV: test 
