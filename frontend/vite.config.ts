@@ -8,6 +8,10 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: true,
+    watch: {
+      usePolling: true, // Améliore le hot reloading
+      interval: 500,   // Fréquence de vérification des changements en milliseconde
+    },
     hmr: {
       port: 7000,
       path: "/hmr",
