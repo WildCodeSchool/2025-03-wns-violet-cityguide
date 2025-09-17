@@ -62,7 +62,7 @@ function createJwt(payload: UserToken) {
 
 function createUserToken(user: User): UserToken {
   const profile: UserToken = {
-    id: user.id,
+    id: user.userId,
     roles: user.roles,
   };
   return profile;

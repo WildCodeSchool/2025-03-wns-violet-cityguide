@@ -8,7 +8,7 @@ class UserInfo extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    userInfoId: number;
 
     @Column()
     @Field()
@@ -22,8 +22,8 @@ class UserInfo extends BaseEntity {
     @Field()
     avatarUrl: string;
 
-    @OneToOne(() => User, (user) => user.userInfos)
-    @JoinColumn({ name: "userId" })
+    @OneToOne(() => User)
+    @JoinColumn()
     @Field(() => User)
     user: User;
 
