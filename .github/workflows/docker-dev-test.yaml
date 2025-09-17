@@ -50,11 +50,12 @@ jobs:
     #6. Build dev docker image 
     - name: Build docker image for tests
       uses: docker/build-push-action@v6
-      with: 
+      with:
         context: .
-        file: compose.test.dev.yaml 
-        tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latestload:true
-        cache-from: type=local, src=/tmp/.buildx-cache
+        file: compose.test.dev.yaml
+        tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latest
+        load: true
+        cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
         
     #7. Run vitest tests and generate report 
