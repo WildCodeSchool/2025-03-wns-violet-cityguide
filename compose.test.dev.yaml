@@ -4,8 +4,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     container_name: frontend-dev
-    volumes:
-      - ./frontend/src/:/app/src/
     healthcheck:
       test:
         [
