@@ -1,10 +1,8 @@
 name: Docker test 
 on:
-  pull-request: 
-  push: {
-    branches: develop
-  }
-  types: [synchronize]
+  pull_request:
+    branches:
+      - develop
 
 jobs: 
   docker-build-dev-test:
