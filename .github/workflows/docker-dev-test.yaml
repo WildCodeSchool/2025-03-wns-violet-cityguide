@@ -8,10 +8,6 @@ jobs:
   docker-build-dev-test:
     name: Build test and push Docker image
     runs-on: ubuntu-latest
-    env: 
-      COMPOSE_FILE: compose.test.dev.yaml
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     
     steps:
     #1. Checkout source code
@@ -83,7 +79,7 @@ jobs:
       uses: docker/build-push-action@v6 
       with: 
         context: . 
-        file: Dockerfile
+        file: compose.test.dev.yaml
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
