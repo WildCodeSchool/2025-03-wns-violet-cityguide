@@ -55,7 +55,7 @@ jobs:
       with: 
         context: .
         file: compose.test.dev.yaml 
-        tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latestload: true
+        tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latestload:true
         cache-from: type=local, src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
         
