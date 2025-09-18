@@ -98,15 +98,21 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    #11. Build and push dev image 
-    - name: Build and push docker dev image
-      uses: docker/build-push-action@v6 
-      with: 
-        context: . 
-        file: compose.test.dev.yaml
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
-        cache-from: type=local,src=/tmp/.buildx-cache
+    #11. Build and push all images with Docker Compose
+    - name: Build all images with Docker Compose
+      run: docker compose -f compose.test.dev.yaml build
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+
+    - name: Push all images with Docker Compose
+      run: docker compose -f compose.test.dev.yaml push
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
