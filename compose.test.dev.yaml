@@ -1,4 +1,44 @@
 services:
+
+  database:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_HOST: ${DB_HOST}
+
+  backend-dev:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: backend-dev
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-dev:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_HOST: ${DB_HOST}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      database:
+        condition: service_healthy
+
   frontend-dev:
     build: 
       context: ./frontend
@@ -17,42 +57,3 @@ services:
     depends_on:
       backend-dev:
         condition: service_healthy
-
-  backend-dev:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    container_name: backend-dev
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-dev:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
-        ]
-      interval: 20s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-    environment:
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USER: ${DB_USER}
-      DB_HOST: ${DB_HOST}
-      JWT_SECRET: ${JWT_SECRET}
-    depends_on:
-      database:
-        condition: service_healthy
-
-  database:
-    image: postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
-      interval: 20s
-      timeout: 10s
-      retries: 5
-      start_period: 120s
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_HOST: ${DB_HOST}
