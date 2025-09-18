@@ -45,6 +45,11 @@
 
     &__icon {
       color: $yellow;
+      transition: transform .25s ease;
+
+      &:hover, &:focus-visible {
+        transform: scale(1.1);
+      }
     }
   }
 
@@ -118,8 +123,14 @@
       border: 0;
       background: transparent;
       cursor: pointer;
+
       &__icon {
         color: $yellow;
+        transition: transform .25s ease;
+
+        &:hover, &:focus-visible {
+          transform: scale(1.1);
+        }
       }
     }
   }

@@ -1,7 +1,9 @@
 @use "components/header";
+@use "components/signupHeader";
 @use "components/heroBanner";
 @use "pages/homePage";
 @use "pages/city";
+@use "pages/login_signup";
 @use './variables' as *;
 
 h1 {
@@ -28,5 +30,5 @@ body {
   -webkit-backdrop-filter: blur(2px) saturate(80%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-  padding: 2rem;
+  //padding: 2rem;
 }

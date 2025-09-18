@@ -1,12 +1,20 @@
+// React
 import ReactDOM from 'react-dom/client'
 import { StrictMode } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+// Styles
 import './scss/index.scss'
+
+// Components
 import App from './App.tsx'
 import Signup from './pages/Signup.tsx'
+import Login from './pages/Login.tsx'
 import HomePage from './pages/HomePage.tsx'
 import Cities from './pages/City.tsx'
 import Pois from './pages/Pois.tsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+// Apollo
 import {
     ApolloClient,
     InMemoryCache,
@@ -29,6 +37,10 @@ const router = createBrowserRouter([
             {
                 path: '/signup',
                 element: <Signup />,
+            },
+            {
+                path: '/login',
+                element: <Login />,
             },
             {
                 path: '/cities',
