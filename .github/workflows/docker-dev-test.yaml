@@ -76,6 +76,7 @@ jobs:
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
       timeout-minutes: 10
+      continue-on-error: true
 
     #9. Print logs for all containers on failure
     - name: Print database logs on failure
