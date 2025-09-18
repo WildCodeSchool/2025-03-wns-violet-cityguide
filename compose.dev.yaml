@@ -1,26 +1,20 @@
 services:
-  frontend-dev:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    container_name: frontend-dev
-    volumes:
-      - ./frontend/src/:/app/src/
+  
+  database:
+    image: postgres
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl --fail --request GET --url 'http://frontend-dev:5173' || exit 1",
-        ]
+      test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
       interval: 20s
       timeout: 10s
       retries: 5
-      start_period: 60s
-    depends_on:
-      backend-dev:
-        condition: service_healthy
+      start_period: 80s
     environment:
-      CHOKIDAR_USEPOLLING: true
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_HOST: ${DB_HOST}
+    volumes:
+      - ./persist/database:/var/lib/postgresql/data
 
   backend-dev:
     build: 
@@ -49,22 +43,29 @@ services:
       database:
         condition: service_healthy
 
-  database:
-    image: postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
-      interval: 20s
-      timeout: 10s
-      retries: 5
-      start_period: 80s
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_HOST: ${DB_HOST}
-    volumes:
-      - ./persist/database:/var/lib/postgresql/data
-
+  frontend-dev:
+      build: 
+        context: ./frontend
+        dockerfile: Dockerfile.dev
+      container_name: frontend-dev
+      volumes:
+        - ./frontend/src/:/app/src/
+      healthcheck:
+        test:
+          [
+            "CMD-SHELL",
+            "curl --fail --request GET --url 'http://frontend-dev:5173' || exit 1",
+          ]
+        interval: 20s
+        timeout: 10s
+        retries: 5
+        start_period: 60s
+      depends_on:
+        backend-dev:
+          condition: service_healthy
+      environment:
+        CHOKIDAR_USEPOLLING: true 
+      
   # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
   gateway:
     image: nginx
@@ -84,3 +85,4 @@ services:
     depends_on:
       database:
         condition: service_healthy
+        
