@@ -22,8 +22,8 @@ class UserInfo extends BaseEntity {
     @Field()
     avatarUrl: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
+    @OneToOne(() => User, user => user.userInfo)
+    @JoinColumn({ name: "userId" })
     @Field(() => User)
     user: User;
 

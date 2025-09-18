@@ -39,7 +39,7 @@ class User extends BaseEntity {
     enum: Role,
     array: true,
     default: [Role.USER],
-    enumName: "role" // Spécifiez explicitement le nom pour correspondre à votre type PostgreSQL
+    enumName: "role" 
     })
     @Field(() => [Role])
     roles: Role[];
@@ -56,7 +56,7 @@ class User extends BaseEntity {
     @Field(() => [Comment])
     createdComments: Comment[];
 
-    @OneToOne(() => UserInfo)
+    @OneToOne(() => UserInfo, userInfo => userInfo.user)
     @JoinColumn()
     @Field(() => UserInfo, { nullable: true })
     userInfo?: UserInfo;
