@@ -5,16 +5,17 @@ import type {FormEvent} from "react";
 import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
 
 // Zustand - Context
-import { useLogin } from "../zustand/userStore";
+import { useCurrentUser, useLogin } from "../zustand/userStore";
 
 // Images
 import img from "../assets/img/parisByNight.png"
 
-export default function Signup() {
+
+export default function Login() {
     // form signup
     // il doit contacter le backend
     // il faut stocker une info excessible à tous (store global)
-    const [ signup ] = useSignupMutation();
+    const [ login ] = useSignupMutation();
     // const toto = useCurrentUser();
     const loginToStore = useLogin();
 
@@ -25,7 +26,7 @@ export default function Signup() {
         const formJson = Object.fromEntries(forDate.entries());
 
         try {
-            const { data } = await signup({variables: {data: formJson as NewUserInput}});
+            const { data } = await login({variables: {data: formJson as NewUserInput}});
 
             if (!data) throw new Error("Missing data");
 
@@ -46,17 +47,10 @@ export default function Signup() {
             <section className="signup__card glassmorphism">
                 <h1 className="signup__card__title">Avec où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
-                    <label htmlFor="Email">Votre adresse email *</label>
+                    <label htmlFor="Email">Email *</label>
                     <input type="text" name="email" required/>
-                    <label htmlFor="password">Votre mot de passe *</label>
+                    <label htmlFor="password">Mot de passe *</label>
                     <input type="password" name="password" required/>
-                    <label htmlFor="favoriteCity">Votre ville favorite *</label>
-                    <select name="favoriteCity" required>
-                        <option value="paris">Paris</option>
-                        <option value="lyon">Lyon</option>
-                        <option value="marseille">Marseille</option>
-                        <option value="toulouse">Toulouse</option>
-                    </select>
                 </form>
                 {/*<h2>Zustand</h2>*/}
                 {/*<p>User: {toto?.email}</p>*/}
