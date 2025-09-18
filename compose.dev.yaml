@@ -12,6 +12,10 @@ services:
           "CMD-SHELL",
           "curl --fail --request GET --url 'http://frontend-dev:5173' || exit 1",
         ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     depends_on:
       backend-dev:
         condition: service_healthy
@@ -31,6 +35,10 @@ services:
           "CMD-SHELL",
           'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-dev:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
         ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
@@ -45,6 +53,10 @@ services:
     image: postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 80s
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
