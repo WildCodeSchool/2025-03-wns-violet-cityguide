@@ -9,7 +9,7 @@
     "lint": "eslint ..",
     "preview": "vite preview",
     "codegen": "graphql-codegen --config codegen.ts",
-    "test": "vitest run", 
+    "test": "vitest run",
     "start": "node"
   },
   "dependencies": {
@@ -28,6 +28,8 @@
     "@graphql-codegen/typescript-graphql-request": "^6.3.0",
     "@graphql-codegen/typescript-operations": "^4.6.1",
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",

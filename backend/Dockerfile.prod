@@ -10,6 +10,6 @@ WORKDIR /app
 RUN apk --no-cache add curl
 COPY --from=builder /app/dist ./build
 COPY package*.json .
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 CMD ["npm", "run", "prod"]
 

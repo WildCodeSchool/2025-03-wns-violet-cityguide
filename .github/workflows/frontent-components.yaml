@@ -1,0 +1,16 @@
+name: Frontend Components Test
+
+on:
+  pull_request:
+    branches: 
+      - develop
+      - stage
+
+jobs:
+  frontend-integrity-components:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: run frontend component test
+        run: cd frontend && npm i && npm run test
