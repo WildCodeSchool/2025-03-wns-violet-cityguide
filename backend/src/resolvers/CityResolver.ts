@@ -12,14 +12,14 @@ import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context } from "../types/Context";
 import {City} from "../entities/City";
+import { Poi } from "../entities/Poi";
+import { Rate } from "../entities/Rate";
+import { User } from "../entities/User";
 
 @InputType()
 class CityInput {
     @Field()
     cityName: string;
-
-    @Field()
-    country: string;
 
     @Field()
     description: string;
@@ -30,14 +30,17 @@ class CityInput {
     @Field()
     updatedAt: Date;
 
-    @Field({ nullable: true })
-    deletedAt?: Date;
-
     @Field()
     imageUrl: string;
     
+    @Field() 
+    createdBy: User;
+
     @Field()
-    pois: any[];
+    cityPois: Poi[];
+
+    @Field()
+    cityRate: Rate;
 
 }
 

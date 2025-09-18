@@ -13,8 +13,8 @@ export default defineConfig({
       interval: 500,
     },
     hmr: {
-      port: 7000,
-      path: "/hmr",
+      port: 3000,
+      path: "/hmr"
     },
   },
   test: {

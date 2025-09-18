@@ -1,10 +1,10 @@
 import { ObjectType, Field } from "type-graphql";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { BaseEntity, JoinTable, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { City } from "./City";
 import { Comment } from "./Comment";
 import { User } from "./User";
 import { Category } from "./Category";
-import { Note } from "./Note";
+import { Rate } from "./Rate";
 
 @Entity()
 @ObjectType()
@@ -38,34 +38,34 @@ class Poi extends BaseEntity {
     @Field()
     imageUrl: string;
 
-    @Column()
-    createdById: number;
-
     @ManyToOne(() => User, { eager: false })
-    @JoinColumn({ name: "createdById" })
     @Field(() => User)
     createdBy: User;
 
     @CreateDateColumn()
     @Field()
-    createdAt: Date;    
+    createdAt: Date;
 
     @UpdateDateColumn()
-    @Field()
-    updatedAt: Date;
+    @Field({ nullable: true })
+    updatedAt?: Date;
 
-    @ManyToMany(type => Category, category => category.categoryId)
-    category: Category;
+    @ManyToMany(() => Category, category => category.categoryId, { eager: true })
+    @JoinTable()
+    @Field(() => [Category],{ nullable: true })
+    poiCategories: Category[];
 
-    @OneToOne(type => City, city => city.cityId)
+    @OneToOne(() => City, city => city.cityId)
     @JoinColumn()
-    cityId: number; 
+    cityId: City; 
 
-    @OneToMany(type => Note, note => note.noteId)
-    note: Note; 
+    @OneToMany(() => Rate, rate => rate.ratePoi)
+    @Field(() => [Rate])
+    rates: Rate[];
 
-    @OneToMany(type => Comment, comment => comment.commentId)
-    comment: Comment;
+    @OneToMany(() => Comment, comment => comment.commentId)
+    @Field(() => [Comment])
+    comment: Comment[];
 }
 
 export { Poi };

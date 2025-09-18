@@ -44,27 +44,27 @@ services:
         condition: service_healthy
 
   frontend-dev:
-      build: 
-        context: ./frontend
-        dockerfile: Dockerfile.dev
-      container_name: frontend-dev
-      volumes:
-        - ./frontend/src/:/app/src/
-      healthcheck:
-        test:
-          [
-            "CMD-SHELL",
-            "curl --fail --request GET --url 'http://frontend-dev:5173' || exit 1",
-          ]
-        interval: 20s
-        timeout: 10s
-        retries: 5
-        start_period: 60s
-      depends_on:
-        backend-dev:
-          condition: service_healthy
-      environment:
-        CHOKIDAR_USEPOLLING: true 
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: frontend-dev
+    volumes:
+      - ./frontend/src/:/app/src/
+    environment:
+      CHOKIDAR_USEPOLLING: true
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail --request GET --url 'http://frontend-dev:5173' || exit 1",
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    depends_on:
+      backend-dev:
+        condition: service_healthy
       
   # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
   gateway:
@@ -85,4 +85,3 @@ services:
     depends_on:
       database:
         condition: service_healthy
-        

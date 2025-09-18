@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Poi } from "./Poi";
 
 @Entity()
@@ -7,14 +7,16 @@ import { Poi } from "./Poi";
 class Category extends BaseEntity {
     @PrimaryGeneratedColumn()
     @Field()
-    categoryId: number; 
+    categoryId: number;
 
     @Column({ unique: true})
-    @Field() 
+    @Field()
     categoryName: string; 
 
-    @ManyToMany(type => Poi, poi => poi.poiId)
-    poi: Poi; 
+    @ManyToMany(() => Poi, poi => poi.poiId, { eager: true })
+    @JoinTable()
+    @Field(() => [Poi],{ nullable: true })
+    categoryPois: Poi[];
 }
 
 export { Category };
