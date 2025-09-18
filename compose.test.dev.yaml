@@ -50,26 +50,9 @@ services:
       interval: 20s
       timeout: 10s
       retries: 5
-      start_period: 80s
+      start_period: 120s
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
-
-  gateway:
-    image: nginx
-    ports:
-      # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
-      - ${GATEWAY_PORT}:80
-    depends_on:
-      backend-dev:
-        condition: service_healthy
-      frontend-dev:
-        condition: service_healthy
-
-  adminer:
-    image: adminer
-    depends_on:
-      database:
-        condition: service_healthy
