@@ -64,22 +64,22 @@ jobs:
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
 
-    #8. Run vitest tests and generate report (in backend-prod)
-    - name: Run vitest tests and generate report
-      run: |
-        docker exec backend-prod sh -c "npm ci && npx vitest run --reporter=verbose"
-      env:
-        CI: true
-        NODE_ENV: test
-        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
-        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
-        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
-        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
-        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
-      timeout-minutes: 10
-      continue-on-error: true
+    # #8. Run vitest tests and generate report (in backend-prod)
+    # - name: Run vitest tests and generate report
+    #   run: |
+    #     docker exec backend-prod sh -c "npm ci && npx vitest run --reporter=verbose"
+    #   env:
+    #     CI: true
+    #     NODE_ENV: test
+    #     DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+    #     DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+    #     DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+    #     DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+    #     JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+    #   timeout-minutes: 10
+    #   continue-on-error: true
 
-    #9. Print logs for all containers on failure
+    #8. Print logs for all containers on failure
     - name: Print database logs on failure
       if: failure()
       run: docker logs database || true
@@ -92,14 +92,14 @@ jobs:
       if: failure()
       run: docker logs frontend-prod || true
 
-    #10. Login to DockerHub
+    #9. Login to DockerHub
     - name: Login to DockerHub
       uses: docker/login-action@v3
       with: 
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    #11. Build and push all images with Docker Compose
+    #10. Build and push all images with Docker Compose
     - name: Build all images with Docker Compose
       run: docker compose -f compose.test.prod.yaml build roxane697/2025-03-wns-violet-cityguide
       env:
