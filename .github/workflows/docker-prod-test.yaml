@@ -101,7 +101,7 @@ jobs:
 
     #10. Build and push all images with Docker Compose
     - name: Build all images with Docker Compose
-      run: docker compose -f compose.test.prod.yaml build roxane697/2025-03-wns-violet-cityguide
+      run: docker compose -f compose.prod.yaml build
       env:
         DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
         DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
@@ -110,7 +110,7 @@ jobs:
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
 
     - name: Push all images with Docker Compose
-      run: docker compose -f compose.test.prod.yaml push roxane697/2025-03-wns-violet-cityguide
+      run: docker compose -f compose.prod.yaml push
       env:
         DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
         DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
