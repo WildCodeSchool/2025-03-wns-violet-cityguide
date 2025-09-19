@@ -6,7 +6,7 @@ query GetAllUsers {
     userId
     email
     roles
-    userInfos {
+    userInfo {
       firstName
       lastName
       avatarUrl
