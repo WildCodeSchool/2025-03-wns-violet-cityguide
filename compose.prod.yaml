@@ -28,9 +28,9 @@ services:
       dockerfile: Dockerfile.prod
     healthcheck:
       interval: 20s
-      retries: 5
+      retries: 10
       timeout: 15s
-      start_period: 100s
+      start_period: 120s
       test:
         [
           "CMD-SHELL",
@@ -57,9 +57,9 @@ services:
       dockerfile: Dockerfile.prod
     healthcheck:
       interval: 20s 
-      retries: 5
+      retries: 15
       timeout: 20s
-      start_period: 100s
+      start_period: 120s
       test:
         [
           "CMD-SHELL",

@@ -2,10 +2,10 @@
 import type {FormEvent} from "react";
 
 // GraphQL
-import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
+// import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
 
 // Zustand - Context
-import { useLogin } from "../zustand/userStore";
+// import { useLogin } from "../zustand/userStore";
 
 // Images
 import img from "../assets/img/parisByNight.png"
@@ -14,27 +14,27 @@ export default function Signup() {
     // form signup
     // il doit contacter le backend
     // il faut stocker une info excessible à tous (store global)
-    const [ signup ] = useSignupMutation();
+    // const [ signup ] = useSignupMutation();
     // const toto = useCurrentUser();
-    const loginToStore = useLogin();
+    // const loginToStore = useLogin();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.target;
-        const forDate = new FormData(form as HTMLFormElement);
-        const formJson = Object.fromEntries(forDate.entries());
+        // const form = e.target;
+        // const forDate = new FormData(form as HTMLFormElement);
+        // const formJson = Object.fromEntries(forDate.entries());
 
-        try {
-            const { data } = await signup({variables: {data: formJson as NewUserInput}});
+        // try {
+        //     const { data } = await signup({variables: {data: formJson as NewUserInput}});
 
-            if (!data) throw new Error("Missing data");
+        //     if (!data) throw new Error("Missing data");
 
-            const publicProfile = JSON.parse(data.signup);
-            loginToStore(publicProfile);
-            console.log(`Salut ${publicProfile.email}`);
-        } catch (error) {
-            console.error(error);
-        }
+        //     const publicProfile = JSON.parse(data.signup);
+        //     loginToStore(publicProfile);
+        //     console.log(`Salut ${publicProfile.email}`);
+        // } catch (error) {
+        //     console.error(error);
+        // }
     }
 
     return (
