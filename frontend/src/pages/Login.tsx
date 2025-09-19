@@ -10,7 +10,6 @@ import { useCurrentUser, useLogin } from "../zustand/userStore";
 // Images
 import img from "../assets/img/parisByNight.png"
 
-
 export default function Login() {
     // form signup
     // il doit contacter le backend
@@ -45,7 +44,7 @@ export default function Login() {
              }}
         >
             <section className="signup__card glassmorphism">
-                <h1 className="signup__card__title">Avec où, découvrez les points d'intérêts autour de vous</h1>
+                <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
                     <label htmlFor="Email">Email *</label>
                     <input type="text" name="email" required/>

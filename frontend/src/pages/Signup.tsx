@@ -44,7 +44,7 @@ export default function Signup() {
              }}
         >
             <section className="signup__card glassmorphism">
-                <h1 className="signup__card__title">Avec où, découvrez les points d'intérêts autour de vous</h1>
+                <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
                     <label htmlFor="Email">Votre adresse email *</label>
                     <input type="text" name="email" required/>
