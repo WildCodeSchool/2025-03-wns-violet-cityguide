@@ -1,7 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from "typeorm";
 import {Field, ObjectType, registerEnumType} from "type-graphql";
 import { UserInfo } from "./UserInfo";
-
+import { Poi } from "./Poi";
+import { Rate } from "./Rate";
+import { Comment } from "./Comment";
+import { City } from "./City";
 // exemple de Role: USER, ADMIN
 // exemple de permission: CREATE, READ, UPDATE, DELETE
 
@@ -18,9 +21,10 @@ registerEnumType(Role, {
 @Entity()
 @ObjectType()
 class User extends BaseEntity {
+
     @PrimaryGeneratedColumn()
     @Field()
-    id: number;
+    userId: number;
 
     @Column({ unique: true })
     @Field()
@@ -30,16 +34,36 @@ class User extends BaseEntity {
     @Field()
     hashedPassword: string;
 
-    @Column({type: "enum", enum: Role, array: true, default: [Role.USER] })
+    @Column({
+    type: "enum",
+    enum: Role,
+    array: true,
+    default: [Role.USER],
+    enumName: "role" 
+    })
     @Field(() => [Role])
     roles: Role[];
 
-    @OneToMany("Poi", "createdBy")
-    createdPois: any[];
+    @OneToMany(()=> Rate, rate => rate.rateId)
+    @Field(() => [Rate])
+    createdRates: Rate[];
 
-    @OneToOne(() => UserInfo, (userInfos: UserInfo) => userInfos.user)
+    @OneToMany(() => Poi, poi => poi.poiId)
+    @Field(() => [Poi])
+    createdPois: Poi[];
+
+    @OneToMany(() => Comment, comment => comment.commentId)
+    @Field(() => [Comment])
+    createdComments: Comment[];
+
+    @OneToOne(() => UserInfo, userInfo => userInfo.user)
+    @JoinColumn()
     @Field(() => UserInfo, { nullable: true })
-    userInfos?: UserInfo;
+    userInfo?: UserInfo;
+
+    @OneToMany(() => City, city => city.createdBy)
+    @Field(() => [City])
+    createdCities: City[];
 }
 
 export { User };

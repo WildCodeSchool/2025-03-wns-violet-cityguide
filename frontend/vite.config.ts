@@ -14,7 +14,7 @@ export default defineConfig({
     },
     hmr: {
       port: 7000,
-      path: "/hmr",
+      path: "/hmr"
     },
   },
   test: {

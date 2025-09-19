@@ -15,13 +15,47 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTimeISO: { input: any; output: any; }
+};
+
+export type Category = {
+  __typename?: 'Category';
+  categoryId: Scalars['Float']['output'];
+  categoryName: Scalars['String']['output'];
+  categoryPois?: Maybe<Array<Poi>>;
+};
+
+export type City = {
+  __typename?: 'City';
+  cityId: Scalars['Float']['output'];
+  cityName: Scalars['String']['output'];
+  cityPois: Array<Poi>;
+  cityRate: Array<Rate>;
+  createdAt: Scalars['DateTimeISO']['output'];
+  createdBy: User;
+  description: Scalars['String']['output'];
+  imageUrl: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  commentCity: City;
+  commentId: Scalars['Float']['output'];
+  commentPoi: Poi;
+  commentUser: User;
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  login: Scalars['String']['output'];
-  logout: Scalars['String']['output'];
-  signup: Scalars['String']['output'];
+  login: UserResponse;
+  logout: UserResponse;
+  signup: UserResponse;
 };
 
 
@@ -39,9 +73,41 @@ export type NewUserInput = {
   password: Scalars['String']['input'];
 };
 
+export type Poi = {
+  __typename?: 'Poi';
+  address: Scalars['String']['output'];
+  comment: Array<Comment>;
+  coordinates: Scalars['String']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  createdBy: User;
+  imageUrl: Scalars['String']['output'];
+  pin: Scalars['String']['output'];
+  poiCategories?: Maybe<Array<Category>>;
+  poiDescription: Scalars['String']['output'];
+  poiId: Scalars['Float']['output'];
+  poiName: Scalars['String']['output'];
+  rates: Array<Rate>;
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getAllUsers: Array<User>;
+  getUserById?: Maybe<User>;
+};
+
+
+export type QueryGetUserByIdArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+export type Rate = {
+  __typename?: 'Rate';
+  rate: Scalars['Float']['output'];
+  rateCity?: Maybe<City>;
+  rateId: Scalars['Float']['output'];
+  ratePoi?: Maybe<Poi>;
+  rateUser: User;
 };
 
 /** Roles for users in this app */
@@ -52,20 +118,24 @@ export enum Role {
 
 export type User = {
   __typename?: 'User';
+  createdCities: Array<City>;
+  createdComments: Array<Comment>;
+  createdPois: Array<Poi>;
+  createdRates: Array<Rate>;
   email: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
-  id: Scalars['Float']['output'];
   roles: Array<Role>;
-  userInfos?: Maybe<UserInfo>;
+  userId: Scalars['Float']['output'];
+  userInfo?: Maybe<UserInfo>;
 };
 
 export type UserInfo = {
   __typename?: 'UserInfo';
   avatarUrl: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
-  id: Scalars['Float']['output'];
   lastName: Scalars['String']['output'];
   user: User;
+  userInfoId: Scalars['Float']['output'];
 };
 
 export type UserInput = {
@@ -73,23 +143,37 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  token: Scalars['String']['output'];
+  user?: Maybe<User>;
+};
+
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', id: number }> };
+export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers: Array<{ __typename?: 'User', userId: number, email: string, roles: Array<Role>, userInfo?: { __typename?: 'UserInfo', firstName: string, lastName: string, avatarUrl: string } | null }> };
 
 export type SignupMutationVariables = Exact<{
   data: NewUserInput;
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: string };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'UserResponse', token: string, message?: string | null, user?: { __typename?: 'User', userId: number, email: string, roles: Array<Role> } | null } };
 
 
 export const GetAllUsersDocument = gql`
     query GetAllUsers {
   getAllUsers {
-    id
+    userId
+    email
+    roles
+    userInfo {
+      firstName
+      lastName
+      avatarUrl
+    }
   }
 }
     `;
@@ -127,7 +211,15 @@ export type GetAllUsersSuspenseQueryHookResult = ReturnType<typeof useGetAllUser
 export type GetAllUsersQueryResult = Apollo.QueryResult<GetAllUsersQuery, GetAllUsersQueryVariables>;
 export const SignupDocument = gql`
     mutation Signup($data: NewUserInput!) {
-  signup(data: $data)
+  signup(data: $data) {
+    token
+    message
+    user {
+      userId
+      email
+      roles
+    }
+  }
 }
     `;
 export type SignupMutationFn = Apollo.MutationFunction<SignupMutation, SignupMutationVariables>;

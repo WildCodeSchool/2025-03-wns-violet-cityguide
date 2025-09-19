@@ -1,6 +1,8 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { BaseEntity, Column, ManyToOne, Entity, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { Poi } from "./Poi";
+import { User } from "./User";
+import { Rate } from "./Rate";
 
 
 @Entity()
@@ -16,35 +18,31 @@ class City extends BaseEntity {
 
     @Column()
     @Field()
-    country: string; 
-
-    @Column()
-    @Field()
     description: string; 
 
     @CreateDateColumn()
     @Field()
-    createdAt: Date; 
+    createdAt: Date;
 
     @UpdateDateColumn()
     @Field()
-    updatedAt: Date; 
-    
-    @DeleteDateColumn({ nullable: true })
-    @Field({ nullable: true })
-    deletedAt?: Date; 
+    updatedAt: Date;
 
     @Column()
     @Field()
-    imageUrl: string; 
+    imageUrl: string;
 
-    @Column()
-    @Field() 
-    createdBy: number; 
+    @ManyToOne(() => User, user => user.createdCities)
+    @Field(() => User) 
+    createdBy: User;
 
-    @OneToMany(type => Poi, poi => poi.poiId)
-    @Field() 
-    poi: Poi;
+    @OneToMany(() => Poi, poi => poi.poiId)
+    @Field(() => [Poi]) 
+    cityPois: Poi[];  
+
+    @OneToMany(() => Rate, rate => rate.rateId)
+    @Field(() => [Rate])
+    cityRate: Rate[];
 }
 
 export { City };
