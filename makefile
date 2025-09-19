@@ -3,6 +3,9 @@
 clean: #nettoie tous les volumes, container + images (images pas utilisées)
 	docker system prune -af --volumes
 
+remove-all: #stoppe tous les containers
+	docker stop $(docker ps -a -q)
+
 prune-image: #nettoie juste les images pas utilisées, pour un petit clean rapide
 	docker image prune -f
 
