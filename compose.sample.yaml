@@ -41,7 +41,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
     volumes:
-      - ./persist/database:/var/lib/postgresql/data
+      - ./persist/database:/var/lib/postgresql
 
   # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
   gateway:
