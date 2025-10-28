@@ -18,31 +18,31 @@ class City extends BaseEntity {
 
     @Column()
     @Field()
-    description: string; 
-
-    @CreateDateColumn()
-    @Field()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    @Field()
-    updatedAt: Date;
+    description: string;
 
     @Column()
     @Field()
     imageUrl: string;
 
-    @ManyToOne(() => User, user => user.createdCities)
-    @Field(() => User) 
-    createdBy: User;
-
     @OneToMany(() => Poi, poi => poi.poiId)
-    @Field(() => [Poi]) 
+    @Field(() => [Poi], { nullable: true }) 
     cityPois: Poi[];  
 
     @OneToMany(() => Rate, rate => rate.rateId)
-    @Field(() => [Rate])
+    @Field(() => [Rate], { nullable: true })
     cityRate: Rate[];
+
+    @ManyToOne(() => User, user => user.createdCities)
+    @Field(() => User, { nullable: true }) 
+    createdBy: User;
+
+    @CreateDateColumn()
+    @Field({ nullable: true })
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    @Field({ nullable: true })
+    updatedAt: Date;
 }
 
 export { City };
