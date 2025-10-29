@@ -10,11 +10,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 100s
-    # environment:
-    #   POSTGRES_PASSWORD: ${DB_PASSWORD}
-    #   POSTGRES_DB: ${DB_DATABASE}
-    #   POSTGRES_USER: ${DB_USER}
-    #   POSTGRES_HOST: ${DB_HOST}
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_HOST: ${DB_HOST}
     volumes:
       - ./persist/database:/var/lib/postgresql
     
@@ -36,12 +36,12 @@ services:
           "CMD-SHELL",
           'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-prod:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
         ]
-    # environment:
-    #   DB_PASSWORD: ${DB_PASSWORD}
-    #   DB_DATABASE: ${DB_DATABASE}
-    #   DB_USER: ${DB_USER}
-    #   DB_HOST: ${DB_HOST}
-    #   JWT_SECRET: ${JWT_SECRET}
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_HOST: ${DB_HOST}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       database: 
         condition: service_healthy
