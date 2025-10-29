@@ -5,12 +5,14 @@ on:
       - dev-to-test-cd-ci-docker
 jobs: 
   ci-cd:
-    name: Build prod and push Docker image, to trigger webhook
-    needs: docker-prod-test
-    if: ${{ needs.docker-prod-test.result == 'success' }}
+    name: Docker push image on DockerHub for CI/CD
+    needs: dockertestprod
     runs-on: ubuntu-latest
     
     steps:
+      - env: 
+          OUTPUT1: ${{needs.dockertestprod.outputs.output1}}
+        run: echo "$OUTPUT1"
       # 1. Checkout source code
       - name: Checkout source code
         uses: actions/checkout@v4
