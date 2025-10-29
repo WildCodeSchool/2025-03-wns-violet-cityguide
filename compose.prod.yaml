@@ -16,7 +16,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
     volumes:
-      - ./persist/database:/var/lib/postgresql/data
+      - ./persist/database:/var/lib/postgresql
     
   backend-prod:
     restart: always

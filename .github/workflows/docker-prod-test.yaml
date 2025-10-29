@@ -52,7 +52,6 @@ jobs:
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
-        
 
     #7. Start all services for tests
     - name: Start all services for tests
@@ -63,21 +62,6 @@ jobs:
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
-
-    # #8. Run vitest tests and generate report (in backend-prod)
-    # - name: Run vitest tests and generate report
-    #   run: |
-    #     docker exec backend-prod sh -c "npm ci && npx vitest run --reporter=verbose"
-    #   env:
-    #     CI: true
-    #     NODE_ENV: test
-    #     DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
-    #     DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
-    #     DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
-    #     DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
-    #     JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
-    #   timeout-minutes: 10
-    #   continue-on-error: true
 
     #8. Print logs for all containers on failure
     - name: Print database logs on failure
