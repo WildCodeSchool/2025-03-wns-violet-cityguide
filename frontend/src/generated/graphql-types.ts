@@ -38,12 +38,6 @@ export type City = {
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
-export type CityInput = {
-  cityName: Scalars['String']['input'];
-  description: Scalars['String']['input'];
-  imageUrl: Scalars['String']['input'];
-};
-
 export type Comment = {
   __typename?: 'Comment';
   commentCity: City;
@@ -55,6 +49,12 @@ export type Comment = {
   deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type CreateCityInput = {
+  cityName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  imageUrl: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -69,7 +69,7 @@ export type Mutation = {
 
 
 export type MutationCreateCityArgs = {
-  data: CityInput;
+  data: CreateCityInput;
 };
 
 
@@ -90,7 +90,7 @@ export type MutationSignupArgs = {
 
 export type MutationUpdateCityArgs = {
   cityId: Scalars['Float']['input'];
-  data: CityInput;
+  data: UpdateCityInput;
 };
 
 export type NewUserInput = {
@@ -141,6 +141,12 @@ export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
 }
+
+export type UpdateCityInput = {
+  cityName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  imageUrl: Scalars['String']['input'];
+};
 
 export type User = {
   __typename?: 'User';
