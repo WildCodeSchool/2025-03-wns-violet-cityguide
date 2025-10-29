@@ -26,7 +26,7 @@ class City extends BaseEntity {
 
     @OneToMany(() => Poi, poi => poi.poiId)
     @Field(() => [Poi], { nullable: true }) 
-    cityPois: Poi[];  
+    cityPois: Poi[];
 
     @OneToMany(() => Rate, rate => rate.rateId)
     @Field(() => [Rate], { nullable: true })
