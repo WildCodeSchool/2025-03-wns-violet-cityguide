@@ -22,7 +22,7 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile.prod
-      image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
     healthcheck:
       interval: 20s
       retries: 10
@@ -50,7 +50,7 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile.prod
-      image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
     healthcheck:
       interval: 20s 
       retries: 15
