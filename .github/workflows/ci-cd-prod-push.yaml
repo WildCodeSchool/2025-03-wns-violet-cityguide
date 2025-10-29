@@ -90,13 +90,20 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Add this step before the push step:
-    - name: Show images to be pushed
+    - name: Debug Docker images and environment
       run: |
+        echo "=== Environment variables ==="
+        echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+        echo "DOCKERHUB_PROJECT_NAME: $DOCKERHUB_PROJECT_NAME"
+        echo ""
+        echo "=== Built images ==="
         docker images
-        echo "Images with your username:"
-        docker images | grep ${{ secrets.DOCKERHUB_USERNAME }} || echo "No images found with your username"
+        echo ""
+        echo "=== Images to be pushed ==="
+        docker images | grep "$DOCKERHUB_USERNAME" || echo "No images found with username $DOCKERHUB_USERNAME"
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
 
     # 11. Build and push prod image
     - name: Build and push production image
