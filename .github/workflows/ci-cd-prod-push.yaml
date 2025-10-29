@@ -89,6 +89,15 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Add this step before the push step:
+    - name: Show images to be pushed
+      run: |
+        docker images
+        echo "Images with your username:"
+        docker images | grep ${{ secrets.DOCKERHUB_USERNAME }} || echo "No images found with your username"
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+
     # 11. Build and push prod image
     - name: Build and push production image
       run: docker compose -f compose.prod.yaml push
