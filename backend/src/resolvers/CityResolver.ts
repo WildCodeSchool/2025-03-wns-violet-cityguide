@@ -11,8 +11,6 @@ import {
 } from "type-graphql";
 import { City } from "../entities/City";
 import { User } from "../entities/User";
-import { Poi } from "../entities/Poi";
-import { Rate } from "../entities/Rate";
 
 @InputType()
 class CreateCityInput {
@@ -25,14 +23,12 @@ class CreateCityInput {
     @Field()
     imageUrl: string;
 
-    // TODO décommenter le field User quand il y aura des users en base
-    // @Field(() => ID) 
-    // createdBy: User;
+    @Field(() => ID) 
+    createdBy: User;
 
     // TODO décommenter pour la suite du dev
     // @Field()
     // createdAt: Date;
-
 }
 
 @InputType()
@@ -46,6 +42,7 @@ class UpdateCityInput {
     @Field()
     imageUrl: string;
 
+    // TODO décommenter pour la suite du dev
     // @Field()
     // updatedAt: Date;
 }
