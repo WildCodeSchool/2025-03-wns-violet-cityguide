@@ -38,7 +38,7 @@ jobs:
 
     #5. Extract metadata
     - name: Extract metadata
-      id: test
+      id: meta
       run: |
         echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
         echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
@@ -87,13 +87,11 @@ jobs:
 
     # 11. Build and push prod image
     - name: Build and push production image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: compose.prod.yaml
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
-        cache-from: type=local,src=/tmp/.buildx-cache
+      run: docker compose -f compose.prod.yaml push
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
