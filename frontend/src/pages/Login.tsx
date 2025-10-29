@@ -1,8 +1,13 @@
 // React
-import type {FormEvent} from "react";
+import type { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 // GraphQL
+<<<<<<< HEAD
 // import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
+=======
+import { type NewUserInput, useLoginMutation, useSignupMutation } from "../generated/graphql-types";
+>>>>>>> 01524c8 (fix(user management): Répare signup et login)
 
 // Zustand - Context
 // réintégrer : useCurrentUser()
@@ -48,15 +53,17 @@ export default function Login() {
             <section className="signup__card glassmorphism">
                 <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
+                    <div className="signup__card__form__input">
                     <label htmlFor="Email">Email *</label>
                     <input type="text" name="email" required/>
                     <label htmlFor="password">Mot de passe *</label>
                     <input type="password" name="password" required/>
+                    </div>
+                    <input className="signup__card__form__button" type="submit" value="Connexion"/>
                 </form>
                 {/*<h2>Zustand</h2>*/}
                 {/*<p>User: {toto?.email}</p>*/}
             </section>
-            <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
         </div>
     )
 }
