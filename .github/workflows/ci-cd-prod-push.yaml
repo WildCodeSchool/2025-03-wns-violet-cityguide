@@ -52,6 +52,7 @@ jobs:
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
 
     #7. Start all services for tests
     - name: Start all services
@@ -62,6 +63,7 @@ jobs:
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
 
     #9. Print logs for all containers on failure
     - name: Print database logs on failure
