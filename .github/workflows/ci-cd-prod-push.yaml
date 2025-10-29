@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v4 
       with: 
         path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.js') }}
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-npm-
 
     #5. Extract metadata
