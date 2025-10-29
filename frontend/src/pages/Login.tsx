@@ -2,7 +2,7 @@
 import type {FormEvent} from "react";
 
 // GraphQL
-import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
+import { type NewUserInput, useLoginMutation, useSignupMutation } from "../generated/graphql-types";
 
 // Zustand - Context
 import { useCurrentUser, useLogin } from "../zustand/userStore";
@@ -14,7 +14,7 @@ export default function Login() {
     // form signup
     // il doit contacter le backend
     // il faut stocker une info excessible à tous (store global)
-    const [ login ] = useSignupMutation();
+    const [ login ] = useLoginMutation();
     // const toto = useCurrentUser();
     const loginToStore = useLogin();
 
@@ -29,9 +29,9 @@ export default function Login() {
 
             if (!data) throw new Error("Missing data");
 
-            const publicProfile = JSON.parse(data.signup);
+            const publicProfile = data.login;
             loginToStore(publicProfile);
-            console.log(`Salut ${publicProfile.email}`);
+            console.log(`Salut ${publicProfile.user?.email}`);
         } catch (error) {
             console.error(error);
         }
@@ -50,11 +50,11 @@ export default function Login() {
                     <input type="text" name="email" required/>
                     <label htmlFor="password">Mot de passe *</label>
                     <input type="password" name="password" required/>
+                    <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
                 </form>
                 {/*<h2>Zustand</h2>*/}
                 {/*<p>User: {toto?.email}</p>*/}
             </section>
-            <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
         </div>
     )
 }

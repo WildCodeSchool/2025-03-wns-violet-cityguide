@@ -28,3 +28,15 @@ export const SIGNUP = gql`
         }
     }
 `;
+
+export const LOGIN = gql `
+  mutation Login($data: UserInput!) {
+  login(data: $data) {
+    token
+    user {
+      userId
+      email
+    }
+  }
+}
+`;
