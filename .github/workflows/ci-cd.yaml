@@ -49,7 +49,7 @@
 #         with:
 #           context: .
 #           file: compose.prod.yaml
-#           tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latest
+#           tags: ${{ steps.meta.outputs.REPO_NAME }}-prod:latest
 #           load: true # Load to local Docker daemon for testing
 #           cache-from: type=local,src=/tmp/.buildx-cache
 #           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
