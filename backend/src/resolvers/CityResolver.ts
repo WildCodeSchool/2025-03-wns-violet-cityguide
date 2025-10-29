@@ -7,17 +7,15 @@ import {
     Mutation,
     Query,
     Resolver,
+    Authorized,
 } from "type-graphql";
-import * as argon2 from "argon2";
-import * as jwt from "jsonwebtoken";
-import { Context } from "../types/Context";
-import {City} from "../entities/City";
+import { City } from "../entities/City";
+import { User } from "../entities/User";
 import { Poi } from "../entities/Poi";
 import { Rate } from "../entities/Rate";
-import { User } from "../entities/User";
 
 @InputType()
-class CityInput {
+class CreateCityInput {
     @Field()
     cityName: string;
 
@@ -25,41 +23,32 @@ class CityInput {
     description: string;
     
     @Field()
-    createdAt: Date;
-
-    @Field()
-    updatedAt: Date;
-
-    @Field()
     imageUrl: string;
-    
-    @Field() 
-    createdBy: User;
 
-    @Field()
-    cityPois: Poi[];
+    // TODO décommenter le field User quand il y aura des users en base
+    // @Field(() => ID) 
+    // createdBy: User;
 
-    @Field()
-    cityRate: Rate;
+    // TODO décommenter pour la suite du dev
+    // @Field()
+    // createdAt: Date;
 
 }
 
 @InputType()
-class PoiInput {
+class UpdateCityInput {
     @Field()
-    id: number
+    cityName: string;
 
     @Field()
-    poi: object
+    description: string;
+
+    @Field()
+    imageUrl: string;
+
+    // @Field()
+    // updatedAt: Date;
 }
-
-
-// type PublicProfile = {
-//     email: string;
-//     // name: string;
-//     // avatar: string;
-//     roles: Role[];
-// }
 
 @Resolver(City)
 export default class CityResolver {
@@ -68,62 +57,40 @@ export default class CityResolver {
     // Administrateur ville => peut ajouter des points d'intêret à une ville
     // Adminstrateur site => peut ajouter/modifier ville
 
-
-    @Query(() => City)
-    async getAllUsers() {
-        // return await CityInput.find();
+    // Récupérer toutes les villes en base
+    @Query(() => [City])
+    async getAllCities() {
+        return await City.find();
     }
 
+    // Créer une ville
     @Mutation(() => ID)
-    async addPoi(@Arg("data") data : PoiInput, @Ctx('ctx') ctx: Context ) {
-        // const associatedPoi = await Poi.find(poi {id : Poi.id})
-        // if (associatedPoi) return 
+    async createCity(@Arg("data") data: CreateCityInput) {
+        const city = City.create({ ...data });
+        await city.save();
+        return city.cityId;
     }
 
-    
-    // @Mutation(() => String)
-    // async signup(@Arg("data") data: NewUserInput, @Ctx('ctx') ctx: Context) {
-    //     const hashedPassword = await argon2.hash(data.password);
-    //     const user = User.create({...data, hashedPassword});
-    //     await user.save();
+    // Modifier une ville
+    @Mutation(() => ID)
+    async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {
 
-    //     const payload = createUserToken(user);
+        // Récupérer la ville à partir de l'id fourni
+        let city = await City.findOneByOrFail({cityId});
 
-    //     const token = createJwt(payload)
+        // Assigner les nouvelles données à la ville trouvée en base
+        city = Object.assign(city, data);
 
-    //     setCookie(ctx, token);
+        // Sauvegarder les modifications
+        await city.save();
+        return city.cityId;
+    }
 
-    //     const publicProfile = {
-    //         email: user.email,
-    //         // name: user.name,
-    //         // avatar: user.avatar,
-    //         roles: user.roles,
-
-    //     }
-
-    //     return JSON.stringify(publicProfile);
-    // }
-
-    // @Mutation(() => ID)
-    // async login(@Arg("data") data: UserInput, @Ctx('ctx') ctx: Context) {
-    //     const user = await User.findOneOrFail({where: {email: data.email}});
-    //     const isValid = await argon2.verify(user.hashedPassword, data.password);
-    //     if (!isValid) throw new Error("Invalid password");
-
-    //     const payload = createUserToken(user);
-
-    //     const token = createJwt(payload)
-
-    //     setCookie(ctx, token);
-
-    //     return token;
-    // }
-
-    // @Mutation(() => ID)
-    // async logout(@Ctx('ctx') ctx: Context) {
-    //     setCookie(ctx, "");
-    //     return "See you next time";
-    // }
-
-    // @Authorized("ADMIN")
+    // Supprimer une ville
+    // @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+    @Mutation(() => ID)
+    async deleteCity(@Arg("cityId") cityId: number) {
+        await City.delete({ cityId });
+        return cityId;
+    }
 }

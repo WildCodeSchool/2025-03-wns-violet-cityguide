@@ -4,15 +4,17 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql";
 import UserResolver from "./resolvers/UserResolver";
+import CityResolver from "./resolvers/CityResolver";
 import * as jwt from "jsonwebtoken";
 import {UserToken} from "./types/Context";
 import { Role } from "./entities/User";
+
 const port = 3000;
 
 async function startServer() {
     await dataSource.initialize();
     const schema = await buildSchema({
-        resolvers: [UserResolver],
+        resolvers: [UserResolver, CityResolver],
         authChecker: ({context: { user } }, neededRoles: Role[]) => {
             // si pas authentifié, on retourne false
             if (!user) return false;

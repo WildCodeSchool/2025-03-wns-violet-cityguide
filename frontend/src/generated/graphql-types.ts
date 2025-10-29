@@ -29,13 +29,19 @@ export type City = {
   __typename?: 'City';
   cityId: Scalars['Float']['output'];
   cityName: Scalars['String']['output'];
-  cityPois: Array<Poi>;
-  cityRate: Array<Rate>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  createdBy: User;
+  cityPois?: Maybe<Array<Poi>>;
+  cityRate?: Maybe<Array<Rate>>;
+  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  createdBy?: Maybe<User>;
   description: Scalars['String']['output'];
   imageUrl: Scalars['String']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
+  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type CityInput = {
+  cityName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  imageUrl: Scalars['String']['input'];
 };
 
 export type Comment = {
@@ -53,9 +59,22 @@ export type Comment = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCity: Scalars['ID']['output'];
+  deleteCity: Scalars['ID']['output'];
   login: UserResponse;
   logout: UserResponse;
   signup: UserResponse;
+  updateCity: Scalars['ID']['output'];
+};
+
+
+export type MutationCreateCityArgs = {
+  data: CityInput;
+};
+
+
+export type MutationDeleteCityArgs = {
+  cityId: Scalars['Float']['input'];
 };
 
 
@@ -66,6 +85,12 @@ export type MutationLoginArgs = {
 
 export type MutationSignupArgs = {
   data: NewUserInput;
+};
+
+
+export type MutationUpdateCityArgs = {
+  cityId: Scalars['Float']['input'];
+  data: CityInput;
 };
 
 export type NewUserInput = {
@@ -92,6 +117,7 @@ export type Poi = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllCities: Array<City>;
   getAllUsers: Array<User>;
   getUserById?: Maybe<User>;
 };
