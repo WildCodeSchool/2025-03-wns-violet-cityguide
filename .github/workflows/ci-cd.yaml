@@ -1,12 +1,17 @@
 name: Docker push image on DockerHub for CI/CD
 on:
-  pull_request:
+  workflow_run:
+    workflows: ["Docker stage and prod test"]
+    types:
+      - completed
     branches:
       - dev-to-test-cd-ci-docker
-jobs: 
+
+jobs:
   ci-cd:
     name: Docker push image on DockerHub for CI/CD
-    needs: docker-build-prod-test
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     
     steps:
