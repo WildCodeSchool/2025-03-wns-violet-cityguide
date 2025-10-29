@@ -95,5 +95,5 @@ jobs:
 
     #10. Build test ok, output to success
     - name: Build test ok, output to success
-    - id : dockertestprod
+      id: dockertestprod
       run: echo "test=success" >> "$GITHUB_OUTPUT"

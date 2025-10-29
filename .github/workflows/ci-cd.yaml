@@ -6,12 +6,13 @@ on:
 jobs: 
   ci-cd:
     name: Docker push image on DockerHub for CI/CD
-    needs: dockertestprod
+    needs: docker-build-prod-test
     runs-on: ubuntu-latest
     
     steps:
-      - env: 
-          OUTPUT1: ${{needs.dockertestprod.outputs.output1}}
+      - name: Check previous job output
+        env: 
+          OUTPUT1: ${{needs.docker-build-prod-test.outputs.output1}}
         run: echo "$OUTPUT1"
       # 1. Checkout source code
       - name: Checkout source code
