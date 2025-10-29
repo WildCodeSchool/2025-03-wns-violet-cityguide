@@ -2,7 +2,7 @@ name: Docker stage test #test for prod and stage
 on:
   pull_request:
     branches:
-      - stage
+      - dev-ci-cd-docker
 
 jobs: 
   docker-build-prod-test:

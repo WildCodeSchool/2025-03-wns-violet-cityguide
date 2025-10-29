@@ -2,7 +2,7 @@ name: Docker push image on DockerHub for CI/CD
 on:
   pull_request:
     branches:
-      - stage
+      - dev-ci-cd-docker
 jobs: 
   ci-cd:
     name: Build prod and push Docker image, to trigger webhook
