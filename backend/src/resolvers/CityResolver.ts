@@ -1,0 +1,96 @@
+import {
+    Arg,
+    Field,
+    Ctx,
+    ID,
+    InputType,
+    Mutation,
+    Query,
+    Resolver,
+    Authorized,
+} from "type-graphql";
+import { City } from "../entities/City";
+import { User } from "../entities/User";
+import { Poi } from "../entities/Poi";
+import { Rate } from "../entities/Rate";
+
+@InputType()
+class CreateCityInput {
+    @Field()
+    cityName: string;
+
+    @Field()
+    description: string;
+    
+    @Field()
+    imageUrl: string;
+
+    // TODO décommenter le field User quand il y aura des users en base
+    // @Field(() => ID) 
+    // createdBy: User;
+
+    // TODO décommenter pour la suite du dev
+    // @Field()
+    // createdAt: Date;
+
+}
+
+@InputType()
+class UpdateCityInput {
+    @Field()
+    cityName: string;
+
+    @Field()
+    description: string;
+
+    @Field()
+    imageUrl: string;
+
+    // @Field()
+    // updatedAt: Date;
+}
+
+@Resolver(City)
+export default class CityResolver {
+
+    // Utilisateur (tous) => peut consulter les villes 
+    // Administrateur ville => peut ajouter des points d'intêret à une ville
+    // Adminstrateur site => peut ajouter/modifier ville
+
+    // Récupérer toutes les villes en base
+    @Query(() => [City])
+    async getAllCities() {
+        return await City.find();
+    }
+
+    // Créer une ville
+    @Mutation(() => ID)
+    async createCity(@Arg("data") data: CreateCityInput) {
+        const city = City.create({ ...data });
+        await city.save();
+        return city.cityId;
+    }
+
+    // Modifier une ville
+    @Mutation(() => ID)
+    async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {
+
+        // Récupérer la ville à partir de l'id fourni
+        let city = await City.findOneByOrFail({cityId});
+
+        // Assigner les nouvelles données à la ville trouvée en base
+        city = Object.assign(city, data);
+
+        // Sauvegarder les modifications
+        await city.save();
+        return city.cityId;
+    }
+
+    // Supprimer une ville
+    // @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+    @Mutation(() => ID)
+    async deleteCity(@Arg("cityId") cityId: number) {
+        await City.delete({ cityId });
+        return cityId;
+    }
+}

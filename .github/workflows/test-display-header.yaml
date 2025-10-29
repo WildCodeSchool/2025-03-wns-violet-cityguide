@@ -1,0 +1,14 @@
+name: test-display-header
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  display-header:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: run tests
+        run: cd frontend && npm i && npm run test

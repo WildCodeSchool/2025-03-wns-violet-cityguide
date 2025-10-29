@@ -1,0 +1,129 @@
+name: Docker stage test #test for prod and stage
+on:
+  pull_request:
+    branches:
+      - stage
+
+jobs: 
+  docker-build-prod-test:
+    name: Build test and push Docker image
+    runs-on: ubuntu-latest
+    
+    steps:
+    #1. Checkout source code
+    - name: Checkout source code
+      uses: actions/checkout@v4
+      with: 
+        fetch-depth: 0
+    
+    #2. Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    #3. Cache Docker Layers
+    - name: Cache Docker Layers
+      uses: actions/cache@v4
+      with: 
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os}}-buildx-${{ github.sha }}
+        restore-keys: ${{ runner.os}}-buildx-
+
+    #4. Cache npm dependencies
+    - name: Cache npm dependencies
+      uses: actions/cache@v4 
+      with: 
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.js') }}
+        restore-keys: ${{ runner.os }}-npm-
+
+    #5. Extract metadata
+    - name: Extract metadata
+      id: meta
+      run: |
+        echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+        echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+    #6. Build all services with Docker Compose
+    - name: Build all services with Docker Compose
+      run: docker compose -f compose.test.prod.yaml build
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        
+
+    #7. Start all services for tests
+    - name: Start all services for tests
+      run: docker compose -f compose.test.prod.yaml up -d
+      env:
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+
+    # #8. Run vitest tests and generate report (in backend-prod)
+    # - name: Run vitest tests and generate report
+    #   run: |
+    #     docker exec backend-prod sh -c "npm ci && npx vitest run --reporter=verbose"
+    #   env:
+    #     CI: true
+    #     NODE_ENV: test
+    #     DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+    #     DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+    #     DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+    #     DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+    #     JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+    #   timeout-minutes: 10
+    #   continue-on-error: true
+
+    #8. Print logs for all containers on failure
+    - name: Print database logs on failure
+      if: failure()
+      run: docker logs database || true
+
+    - name: Print backend logs on failure
+      if: failure()
+      run: docker logs backend-prod || true
+
+    - name: Print frontend logs on failure
+      if: failure()
+      run: docker logs frontend-prod || true
+
+    #9. Login to DockerHub
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with: 
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    #10. Build and push all images with Docker Compose (en faire un nouveau job)
+    # - name: Build all images with Docker Compose
+    #   # uses: docker build & push actions v4 /!\ pas docker build + push
+    #   # file;  
+    #   # push : true
+    #   run: docker compose -f compose.prod.yaml build
+    #   env:
+    #     DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+    #     DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+    #     DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+    #     DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+    #     JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+
+    # - name: Push all images with Docker Compose
+    #   run: docker compose -f compose.prod.yaml push roxane697/2025-03-wns-violet-cityguide
+    #   env:
+    #     DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+    #     DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+    #     DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+    #     DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+    #     JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+
+  # notify sercer new job => appeler le webhook   
+
+  # donc 3 jobs : 
+  ## test le build 
+  ## si build = ok => build + push image (trouver comment faire des conditions entre les jobs) chercher sur github actions la dernière version disponible pour le job
+  ## si ok => notifie server 
