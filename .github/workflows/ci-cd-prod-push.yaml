@@ -47,6 +47,8 @@ jobs:
     - name: Build all services with Docker Compose
       run: docker compose -f compose.prod.yaml build
       env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
         DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
         DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
@@ -58,6 +60,8 @@ jobs:
     - name: Start all services
       run: docker compose -f compose.prod.yaml up -d
       env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
         DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
         DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
@@ -89,6 +93,8 @@ jobs:
     - name: Build and push production image
       run: docker compose -f compose.prod.yaml push
       env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
         DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
         DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
         DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
