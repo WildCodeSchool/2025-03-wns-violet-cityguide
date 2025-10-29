@@ -1,11 +1,15 @@
 // React
-import type {FormEvent} from "react";
+import type { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 // GraphQL
-import { type NewUserInput, useLoginMutation, useSignupMutation } from "../generated/graphql-types";
+import { type NewUserInput, useLoginMutation } from "../generated/graphql-types";
 
 // Zustand - Context
-import { useCurrentUser, useLogin } from "../zustand/userStore";
+import {
+    // useCurrentUser,
+    useLogin
+} from "../zustand/userStore";
 
 // Images
 import img from "../assets/img/parisByNight.png"
@@ -17,6 +21,7 @@ export default function Login() {
     const [ login ] = useLoginMutation();
     // const toto = useCurrentUser();
     const loginToStore = useLogin();
+    const path = useNavigate();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,6 +37,8 @@ export default function Login() {
             const publicProfile = data.login;
             loginToStore(publicProfile);
             console.log(`Salut ${publicProfile.user?.email}`);
+
+            path("/");
         } catch (error) {
             console.error(error);
         }
@@ -46,11 +53,13 @@ export default function Login() {
             <section className="signup__card glassmorphism">
                 <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
+                    <div className="signup__card__form__input">
                     <label htmlFor="Email">Email *</label>
                     <input type="text" name="email" required/>
                     <label htmlFor="password">Mot de passe *</label>
                     <input type="password" name="password" required/>
-                    <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
+                    </div>
+                    <input className="signup__card__form__button" type="submit" value="Connexion"/>
                 </form>
                 {/*<h2>Zustand</h2>*/}
                 {/*<p>User: {toto?.email}</p>*/}
