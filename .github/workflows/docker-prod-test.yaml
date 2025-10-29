@@ -8,8 +8,6 @@ jobs:
   docker-build-prod-test:
     name: Build test (only) Docker image
     runs-on: ubuntu-latest
-    outputs: 
-      output1: ${{ steps.dockertestprod.outputs.test}}
     
     steps:
     #1. Checkout source code
@@ -40,7 +38,7 @@ jobs:
 
     #5. Extract metadata
     - name: Extract metadata
-      id: meta
+      id: test
       run: |
         echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
         echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
@@ -92,11 +90,6 @@ jobs:
     - name: Print frontend logs on failure
       if: failure()
       run: docker logs frontend-prod || true
-
-    #10. Build test ok, output to success
-    - name: Build test ok, output to success
-      id: dockertestprod
-      run: echo "test=success" >> "$GITHUB_OUTPUT"
 
     # 11. Checkout source code
     - name: Checkout source code
