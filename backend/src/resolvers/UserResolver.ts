@@ -89,12 +89,11 @@ export default class UserResolver {
 
   @Mutation(() => UserResponse)
   async signup(@Arg("data") data: NewUserInput, @Ctx() ctx: Context) {
-    try {
+
 
       if (!data.email.includes('@')) throw new Error("Invalid email format");
       if (data.password.length < 8) throw new Error("Password must be at least 8 characters");
-      
- 
+
       const existingUser = await User.findOne({ where: { email: data.email } });
       if (existingUser) throw new Error("Email already in use");
       
@@ -121,12 +120,6 @@ export default class UserResolver {
         user,
         message: "User created successfully"
       };
-    } catch (error) {
-      return {
-        token: "",
-        message: error instanceof Error ? error.message : "An unknown error occurred"
-      };
-    }
   }
 
   @Mutation(() => UserResponse)

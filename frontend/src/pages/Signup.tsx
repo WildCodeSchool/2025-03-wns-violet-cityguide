@@ -25,13 +25,19 @@ export default function Signup() {
         const formJson = Object.fromEntries(forDate.entries());
 
         try {
-            const { data } = await signup({variables: {data: formJson as NewUserInput}});
+            const { data, errors } = await signup({variables: {data: formJson as NewUserInput}});
 
             if (!data) throw new Error("Missing data");
 
-            const publicProfile = JSON.parse(data.signup);
+            // TODO traiter si erreur
+            //if (errors?.length > 0) throw errors[0];
+
+            const publicProfile = data.signup;
+
             loginToStore(publicProfile);
-            console.log(`Salut ${publicProfile.email}`);
+
+            console.log(`Salut ${publicProfile.user?.email}`);
+
         } catch (error) {
             console.error(error);
         }
@@ -50,18 +56,18 @@ export default function Signup() {
                     <input type="text" name="email" required/>
                     <label htmlFor="password">Votre mot de passe *</label>
                     <input type="password" name="password" required/>
-                    <label htmlFor="favoriteCity">Votre ville favorite *</label>
-                    <select name="favoriteCity" required>
+                    {/* <label htmlFor="favoriteCity">Votre ville favorite *</label> */}
+                    {/* <select name="favoriteCity" required>
                         <option value="paris">Paris</option>
                         <option value="lyon">Lyon</option>
                         <option value="marseille">Marseille</option>
                         <option value="toulouse">Toulouse</option>
-                    </select>
+                    </select> */}
+                    <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
                 </form>
                 {/*<h2>Zustand</h2>*/}
                 {/*<p>User: {toto?.email}</p>*/}
             </section>
-            <input className="signup__button glassmorphism" type="submit" value="Connexion"/>
         </div>
     )
 }
