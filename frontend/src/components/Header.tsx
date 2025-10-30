@@ -1,16 +1,24 @@
 // React & React Router
-import { Link, useLocation } from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 // Images
 import LogoSVG from "./LogoSVG";
 import OuTextSVG from "./OuTextSVG";
 
+// Zustand - Context
+import { useIsAuthenticated, useLogout } from "../zustand/userStore";
+
 export default function Header() {
     const [open, setOpen] = useState(false);
     const btnRef = useRef<HTMLButtonElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
     const { pathname } = useLocation();
+
+    // Récupère l'état depuis Zustand
+    const isAuth = useIsAuthenticated();
+    const logout = useLogout();
+    const navigate = useNavigate();
 
     // Fermer le menu quand on change de route
     useEffect(() => {
@@ -44,6 +52,12 @@ export default function Header() {
         return () => document.removeEventListener("keydown", onKey);
     }, [open]);
 
+    const onLogout = () => {
+        logout();
+        setOpen(false);
+        navigate("/login");
+    };
+
     return (
         <header className="header">
             <div className="header__fullLogo">
@@ -72,7 +86,17 @@ export default function Header() {
                 <Link to="">Accueil</Link>
                 <Link to="/cities">Villes</Link>
                 <Link to="/pois">Points d'intérêts</Link>
-                <Link to="/signup">S'inscrire</Link>
+                {isAuth ? (
+                    <>
+                        <Link to="/account">Mon compte</Link>
+                        <button className="auth-button" onClick={onLogout}>Déconnexion</button>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/login">Se connecter</Link>
+                        <Link to="/signup">S'inscrire</Link>
+                    </>
+                )}
             </nav>
 
             {/* Offcanvas mobile */}
@@ -89,7 +113,17 @@ export default function Header() {
                     <Link to="">Accueil</Link>
                     <Link to="/cities">Villes</Link>
                     <Link to="/pois">Points d'intérêts</Link>
-                    <Link to="/signup">S'inscrire</Link>
+                    {isAuth ? (
+                        <>
+                            <Link to="/account" onClick={() => setOpen(false)}>Mon compte</Link>
+                            <button className="auth-button" onClick={onLogout}>Déconnexion</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" onClick={() => setOpen(false)}>Se connecter</Link>
+                            <Link to="/signup" onClick={() => setOpen(false)}>S'inscrire</Link>
+                        </>
+                    )}
                 </nav>
                 <button
                 className="header__panel__cross"

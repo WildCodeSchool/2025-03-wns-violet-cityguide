@@ -6,20 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { type NewUserInput, useLoginMutation } from "../generated/graphql-types";
 
 // Zustand - Context
-import {
-    // useCurrentUser,
-    useLogin
-} from "../zustand/userStore";
+import { useLogin } from "../zustand/userStore";
 
 // Images
 import img from "../assets/img/parisByNight.png"
 
 export default function Login() {
-    // form signup
-    // il doit contacter le backend
-    // il faut stocker une info excessible à tous (store global)
+    // form login
     const [ login ] = useLoginMutation();
-    // const toto = useCurrentUser();
     const loginToStore = useLogin();
     const path = useNavigate();
 
@@ -61,8 +55,6 @@ export default function Login() {
                     </div>
                     <input className="signup__card__form__button" type="submit" value="Connexion"/>
                 </form>
-                {/*<h2>Zustand</h2>*/}
-                {/*<p>User: {toto?.email}</p>*/}
             </section>
         </div>
     )
