@@ -55,9 +55,24 @@
 
   &__nav {
     display: flex;
-    width: 38rem;
+    width: 45rem;
     justify-content: space-between;
     align-items: center;
+
+    .auth-button {
+      background-color: transparent;
+      border: none;
+      color: $yellow;
+      font-size: 1.25rem;
+      letter-spacing: .1rem;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      transition: color .25s ease;
+      cursor: pointer;
+
+      &:hover, &:focus-visible {
+        color: $white;
+      }
+    }
   }
 
   /* --- NAV DESKTOP --- */
@@ -139,7 +154,7 @@
     display: grid;
     gap: .75rem;
 
-    a {
+    a, .auth-button {
       display: block;
       padding: .9rem 1rem;
       border-radius: .75rem;
@@ -153,6 +168,11 @@
         background: rgba(255,255,255,.12);
         outline: none;
       }
+    }
+    .auth-button {
+      border: none;
+      text-align: left;
+      cursor: pointer;
     }
   }
 

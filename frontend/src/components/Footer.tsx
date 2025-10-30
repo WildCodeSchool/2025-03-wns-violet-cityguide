@@ -1,8 +1,11 @@
+// React & React Router
+import {Link} from "react-router-dom";
+
 export default function Footer() {
 
     return (
         <footer>
-            <h1>Footer</h1>
+            <Link to="/legalNotice">Mentions légales</Link>
         </footer>
     )
 }
