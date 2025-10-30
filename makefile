@@ -9,20 +9,26 @@ remove-all: #stoppe tous les containers
 prune-image: #nettoie juste les images pas utilisées, pour un petit clean rapide
 	docker image prune -f
 
-stop: #stop le container
-	docker compose down -v
-
 dev: #lance le build de dev docker
 	docker compose -f compose.dev.yaml --env-file .env.dev up -d --build
-
-prod: #lance le build de prod docker 
-	docker compose -f compose.prod.yaml --env-file .env.prod up -d --build
 
 test-dev: #lance le build de test de dev  => /!\ pas de volumes ni de gateway dans le build de test ! 
 	docker compose -f compose.test.dev.yaml --env-file .env.dev up -d --build
 
 test-prod: #lance le build de test de prod => /!\ pas de volumes ni de gateway dans le build de test ! 
 	docker compose -f compose.test.prod.yaml --env-file .env.prod up -d --build
+
+stop-dev: #stop dev containers
+    docker compose -f compose.dev.yaml down -v
+
+stop-test-dev: #stop test dev containers
+    docker compose -f compose.test.dev.yaml down -v
+
+stop-test-prod: #stop test prod containers
+    docker compose -f compose.test.prod.yaml down -v
+
+stop-all: #stop all containers (regardless of compose file)
+    docker stop $$(docker ps -q) 2>/dev/null || true
 
 logs: #affiche les logs de tous les services 
 	docker compose logs -f

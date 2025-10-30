@@ -2,8 +2,6 @@ services:
 
   database:
     image: postgres
-    env_file:
-      - .env.prod
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
       interval: 20s 
@@ -16,21 +14,20 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
     volumes:
-      - ./persist/database:/var/lib/postgresql/data
+      - ./persist/database:/var/lib/postgresql
     
   backend-prod:
     restart: always
     container_name: backend-prod
-    env_file:
-      - .env.prod
     build: 
       context: ./backend
       dockerfile: Dockerfile.prod
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
     healthcheck:
       interval: 20s
-      retries: 5
+      retries: 10
       timeout: 15s
-      start_period: 100s
+      start_period: 120s
       test:
         [
           "CMD-SHELL",
@@ -50,16 +47,15 @@ services:
   frontend-prod:
     restart: always
     container_name: frontend-prod
-    env_file:
-      - .env.prod
     build: 
       context: ./frontend
       dockerfile: Dockerfile.prod
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:frontend-latest
     healthcheck:
       interval: 20s 
-      retries: 5
+      retries: 15
       timeout: 20s
-      start_period: 100s
+      start_period: 120s
       test:
         [
           "CMD-SHELL",
@@ -72,8 +68,6 @@ services:
   # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
   gateway:
     image: nginx
-    env_file:
-      - .env.prod
     volumes:
       - ./nginx.prod.conf:/etc/nginx/nginx.conf
     ports:
@@ -87,8 +81,6 @@ services:
 
   adminer:
     image: adminer
-    env_file:
-      - .env.prod
     depends_on:
       database:
         condition: service_healthy
