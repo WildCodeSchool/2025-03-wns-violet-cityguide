@@ -17,25 +17,29 @@ export default function Signup() {
     // il faut stocker une info excessible à tous (store global)
     // const [ signup ] = useSignupMutation();
     // const toto = useCurrentUser();
-    // const loginToStore = useLogin();
+    const loginToStore = useLogin();
+    const path = useNavigate();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // const form = e.target;
         // const forDate = new FormData(form as HTMLFormElement);
         // const formJson = Object.fromEntries(forDate.entries());
+        try {
+            const { data, errors } = await signup({variables: {data: formJson as NewUserInput}});
+          
+            if (errors && errors?.length > 0) throw (errors[0] as Error);
 
-        // try {
-        //     const { data } = await signup({variables: {data: formJson as NewUserInput}});
+            const publicProfile = data.signup;
 
-        //     if (!data) throw new Error("Missing data");
+            loginToStore(publicProfile);
 
-        //     const publicProfile = JSON.parse(data.signup);
-        //     loginToStore(publicProfile);
-        //     console.log(`Salut ${publicProfile.email}`);
-        // } catch (error) {
-        //     console.error(error);
-        // }
+            console.log(`Salut ${publicProfile.user?.email}`);
+
+            path("/");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (

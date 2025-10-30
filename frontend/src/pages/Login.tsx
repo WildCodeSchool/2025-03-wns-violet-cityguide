@@ -3,15 +3,7 @@ import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 // GraphQL
-<<<<<<< HEAD
-// import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
-=======
 import { type NewUserInput, useLoginMutation, useSignupMutation } from "../generated/graphql-types";
->>>>>>> 01524c8 (fix(user management): Répare signup et login)
-
-// Zustand - Context
-// réintégrer : useCurrentUser()
-// import { useLogin } from "../zustand/userStore";
 
 // Images
 import img from "../assets/img/parisByNight.png"
@@ -20,9 +12,10 @@ export default function Login() {
     // form signup
     // il doit contacter le backend
     // il faut stocker une info excessible à tous (store global)
-    // const [ login ] = useSignupMutation();
+    const [ login ] = useLoginMutation();
     // const toto = useCurrentUser();
-    // const loginToStore = useLogin();
+    const loginToStore = useLogin();
+    const path = useNavigate();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -35,13 +28,14 @@ export default function Login() {
         //     const { data } = await login({variables: {data: formJson as NewUserInput}});
 
         //     if (!data) throw new Error("Missing data");
+            const publicProfile = data.login;
+            loginToStore(publicProfile);
+            console.log(`Salut ${publicProfile.user?.email}`);
 
-        //     const publicProfile = JSON.parse(data.signup);
-        //     loginToStore(publicProfile);
-        //     console.log(`Salut ${publicProfile.email}`);
-        // } catch (error) {
-        //     console.error(error);
-        // }
+            path("/");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
