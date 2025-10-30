@@ -2,7 +2,8 @@ name: Docker test, build & image (PROD) #test for prod and stage
 on:
   pull_request:
     branches:
-      - dev-to-test-cd-ci-docker
+      - stage 
+      - main
 
 jobs: 
   ci-cd-test-and-push:
@@ -69,7 +70,7 @@ jobs:
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
         GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
 
-    #9. Print logs for all containers on failure
+    #8. Print logs for all containers on failure
     - name: Print database logs on failure
       if: failure()
       run: docker logs database || true
@@ -82,14 +83,14 @@ jobs:
       if: failure()
       run: docker logs frontend-prod || true
 
-    # 10. Login to Docker Hub
+    #9. Login to Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # Add this step before the push step:
+    #10. Add this step before the push step:
     - name: Debug Docker images and environment
       run: |
         echo "=== Environment variables ==="
