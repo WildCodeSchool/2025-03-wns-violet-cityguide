@@ -3,6 +3,7 @@ import { Field, ObjectType } from "type-graphql";
 import { Poi } from "./Poi";
 import { User } from "./User";
 import { Rate } from "./Rate";
+import { toUSVString } from "util";
 
 
 @Entity()
@@ -26,13 +27,13 @@ class City extends BaseEntity {
 
     @OneToMany(() => Poi, poi => poi.poiId)
     @Field(() => [Poi], { nullable: true }) 
-    cityPois: Poi[];  
+    cityPois: Poi[];
 
     @OneToMany(() => Rate, rate => rate.rateId)
     @Field(() => [Rate], { nullable: true })
     cityRate: Rate[];
 
-    @ManyToOne(() => User, user => user.createdCities)
+    @ManyToOne(() => User, user => user.createdCities, {eager: true})
     @Field(() => User, { nullable: true }) 
     createdBy: User;
 

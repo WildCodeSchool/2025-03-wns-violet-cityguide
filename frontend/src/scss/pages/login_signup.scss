@@ -35,51 +35,66 @@
     &__form {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: .5rem;
       @media (min-width: $breakpoint-small) {
         gap: 1rem;
       }
 
-      label {
-        color: $yellow;
-        font-size: 1rem;
-        font-weight: bold;
-      }
+      &__input {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: .5rem;
+        @media (min-width: $breakpoint-small) {
+          gap: 1rem;
+        }
 
-      input, select {
-        border: none;
-        border-radius: 5px;
-        background-color: $yellow;
-        font-family: $text;
-        padding: .5rem;
-        font-size: 1rem;
-        box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
 
-        option {
+        label {
+          color: $yellow;
+          font-size: 1rem;
+          font-weight: bold;
+        }
+
+        input, select {
+          border: none;
+          border-radius: 5px;
           background-color: $yellow;
+          font-family: $text;
+          font-size: 1rem;
+          font-weight: 500;
+          color: $dark-blue;
+          padding: .5rem;
+          box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
+
+          option {
+            background-color: $yellow;
+          }
         }
       }
-    }
-  }
+      &__button {
+        width: 12rem;
+        margin-top: 3rem;
+        padding: .5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        color: $dark-blue;
+        background-color: $yellow;
+        font-family: $title;
+        font-size: 1.25rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
+        transition: background-color .25s ease, color .25s ease, transform .25s ease;
 
-  &__button {
-    width: 12rem;
-    margin-top: 3rem;
-    padding: .5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    color: $yellow;
-    font-family: $title;
-    font-size: 1.25rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color .25s ease, color .25s ease, transform .25s ease;
-
-    &:hover, &:focus-visible {
-      transform: scale(1.05);
-      background-color: $yellow;
-      color: $dark-blue;
-      outline: none;
+        &:hover, &:focus-visible {
+          transform: scale(1.02);
+          background-color: $medium-blue;
+          color: $yellow;
+          outline: none;
+        }
+      }
     }
   }
 }

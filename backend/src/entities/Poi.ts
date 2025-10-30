@@ -55,9 +55,9 @@ class Poi extends BaseEntity {
     @Field(() => [Category],{ nullable: true })
     poiCategories: Category[];
 
-    @OneToOne(() => City, city => city.cityId)
+    @ManyToOne(() => City, city => city.cityId)
     @JoinColumn()
-    cityId: City; 
+    cityId: City[]; 
 
     @OneToMany(() => Rate, rate => rate.ratePoi)
     @Field(() => [Rate])
