@@ -13,6 +13,7 @@ import Login from './pages/Login.tsx'
 import HomePage from './pages/HomePage.tsx'
 import Cities from './pages/City.tsx'
 import Pois from './pages/Pois.tsx'
+import Account from './pages/Account.tsx'
 
 // Apollo
 import {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: '/pois',
                 element: <Pois />,
+            },
+            {
+                path: '/account',
+                element: <Account />,
             }
             // {
             //     path: '*',

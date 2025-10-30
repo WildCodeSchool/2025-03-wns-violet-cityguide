@@ -13,10 +13,7 @@ import img from "../assets/img/parisByNight.png"
 
 export default function Signup() {
     // form signup
-    // il doit contacter le backend
-    // il faut stocker une info excessible à tous (store global)
     const [ signup ] = useSignupMutation();
-    // const toto = useCurrentUser();
     const loginToStore = useLogin();
     const path = useNavigate();
 
@@ -69,8 +66,6 @@ export default function Signup() {
                     </div>
                     <input className="signup__card__form__button" type="submit" value="S'inscrire"/>
                 </form>
-                {/*<h2>Zustand</h2>*/}
-                {/*<p>User: {toto?.email}</p>*/}
             </section>
         </div>
     )
