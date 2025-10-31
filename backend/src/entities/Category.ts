@@ -13,7 +13,9 @@ class Category extends BaseEntity {
     @Field()
     categoryName: string; 
 
-    @ManyToMany(() => Poi, poi => poi.poiId, { eager: true })
+    /* Pour indiquer les liens entre les entités, il faut ajouter le chemin "retour" entre l'entité actuelle (Category) et l'entité liée (Poi)
+    Ici : On trouve les categories sur l'entité Poi à la propriété poiCategory*/
+    @ManyToMany(() => Poi, poi => poi.poiCategories)
     @JoinTable()
     @Field(() => [Poi],{ nullable: true })
     categoryPois: Poi[];
