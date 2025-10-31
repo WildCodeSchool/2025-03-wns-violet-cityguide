@@ -3,7 +3,6 @@ import { Field, ObjectType } from "type-graphql";
 import { Poi } from "./Poi";
 import { User } from "./User";
 import { Rate } from "./Rate";
-import { toUSVString } from "util";
 
 
 @Entity()
@@ -25,11 +24,12 @@ class City extends BaseEntity {
     @Field()
     imageUrl: string;
 
-    @OneToMany(() => Poi, poi => poi.poiId)
+    // Pour le chemin "retour" Poi -> City, on trouve la ville associée au poi sur la propriété poi.cityId
+    @OneToMany(() => Poi, poi => poi.cityId)
     @Field(() => [Poi], { nullable: true }) 
     cityPois: Poi[];
 
-    @OneToMany(() => Rate, rate => rate.rateId)
+    @OneToMany(() => Rate, rate => rate.rateCity)
     @Field(() => [Rate], { nullable: true })
     cityRate: Rate[];
 

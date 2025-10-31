@@ -15,7 +15,7 @@ import * as jwt from "jsonwebtoken";
 import { Context, UserToken } from "../types/Context";
 import { UserInfo } from "../entities/UserInfo";
 
-
+// Input de création d'un nouvel utilisateur
 @InputType()
 class NewUserInput {
   @Field()
@@ -25,6 +25,7 @@ class NewUserInput {
   password: string;
 }
 
+// Input de "sélection" d'un nouvel utilisateur (pour le login)
 @InputType()
 class UserInput {
   @Field()
@@ -34,7 +35,7 @@ class UserInput {
   password: string;
 }
 
-
+// Input de retour attendu pour les mutations (signup, login, logout)
 @ObjectType()
 class UserResponse {
   @Field(() => String)
@@ -47,6 +48,8 @@ class UserResponse {
   message?: string;
 }
 
+/* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
+Le cookie possède une date d'expiration (expires=XXX) : après l'expiration du cookie l'utilisateur sera obligé de se re-connecter pour accéder à l'application */
 function setCookie(ctx: Context, token: string) {
   ctx.res.setHeader(
     "Set-Cookie",
@@ -56,12 +59,20 @@ function setCookie(ctx: Context, token: string) {
   );
 }
 
+// Définition d'une focntion pour la création d'un JWT (JSon Web Token)
 function createJwt(payload: UserToken) {
+
+  // JWT_SECRET est défini dans le .env && process.env.JWT_SECRET est fourni par NodeJS
   const JWT_SECRET = process.env.JWT_SECRET;
+
+  // Si JWT_SECRET n'est pas défini dans le .env -> envoi d'une erreur
   if (!JWT_SECRET) throw new Error("Missing env variable : JWT_SECRET");
+
+  // Crée le token à partir des informations fournies (pour notre cas, un email et un password), du JWT_SECRET et ajout d'une durée d'expiration
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 }
 
+// Crée un élément de type UserToken qui sera utilisé pour fournir les payloads dans les mutations signup et login
 function createUserToken(user: User): UserToken {
   const profile: UserToken = {
     id: user.userId,
@@ -72,6 +83,8 @@ function createUserToken(user: User): UserToken {
 
 @Resolver(User)
 export default class UserResolver {
+
+  // Récupérer tous les utilisateurs
   @Query(() => [User])
   async getAllUsers() {
     return await User.find({
@@ -79,6 +92,7 @@ export default class UserResolver {
     });
   }
 
+  // Récupère un utilisateur à partir de son id
   @Query(() => User, { nullable: true })
   async getUserById(@Arg("userId", () => ID) userId: number) {
     return await User.findOne({
@@ -87,58 +101,82 @@ export default class UserResolver {
     });
   }
 
+  // Enregistre un nouvel utilisateur
   @Mutation(() => UserResponse)
   async signup(@Arg("data") data: NewUserInput, @Ctx() ctx: Context) {
 
+    // Vérification de la validité du champ email (on considère que si un "@" présent, l'utilisateur a bien fourni un email)
+    if (!data.email.includes('@')) throw new Error("Invalid email format");
 
-      if (!data.email.includes('@')) throw new Error("Invalid email format");
-      if (data.password.length < 8) throw new Error("Password must be at least 8 characters");
+    // Vérification que la longueur du password fourni par l'utilisateur est suffisamment longue
+    if (data.password.length < 7) throw new Error("Password must be at least 7 characters");
 
-      const existingUser = await User.findOne({ where: { email: data.email } });
-      if (existingUser) throw new Error("Email already in use");
-      
-      const hashedPassword = await argon2.hash(data.password);
-      const user = User.create({ ...data, hashedPassword });
-      await user.save();
-      
+    // On vérifie si l'utilisateur n'existe pas déjà en base (l'email est un identifiant unique)
+    const existingUser = await User.findOne({ where: { email: data.email } });
 
-      const userInfo = UserInfo.create({
-        firstName: "",
-        lastName: "",
-        avatarUrl: "https://example.com/default-avatar.png",
-        user: user
-      });
-      await userInfo.save();
+    // Si l'utilisateur existe déjà, envoi d'une erreur et arrêt du processus
+    if (existingUser) throw new Error("Email already in use");
+    
+    // Hashage du password (la librairie argon2 fourni la fonction de hash)
+    const hashedPassword = await argon2.hash(data.password);
 
+    // Création de l'utilisateur
+    const user = User.create({ ...data, hashedPassword });
 
-      const payload = createUserToken(user);
-      const token = createJwt(payload);
-      setCookie(ctx, token);
+    // Enregistrement du nouvel utilisateur
+    await user.save();
+    
+    /* Lesutilisateurs ont la possibilité de fournir d'autres informations les concernant ultérieurement
+    Toutefois, on crée ces informations avec des valeurs par défaut pour qu'elles soient associées avec le nouvel utilisateur */
+    const userInfo = UserInfo.create({
+      firstName: "",
+      lastName: "",
+      avatarUrl: "https://example.com/default-avatar.png",
+      user: user
+    });
+    await userInfo.save();
 
-      return {
-        token,
-        user,
-        message: "User created successfully"
-      };
+    // Fabrication du payload
+    const payload = createUserToken(user);
+
+    // utilisation du payload pour la fabrication du token
+    const token = createJwt(payload);
+
+    // Fabrication du cookie et ajout de celui-ci dans le navigateur
+    setCookie(ctx, token);
+
+    return {
+      token,
+      user,
+      message: "User created successfully"
+    };
   }
 
+  // Permet à un utilisateur de se connecter
   @Mutation(() => UserResponse)
   async login(@Arg("data") data: UserInput, @Ctx() ctx: Context) {
-    try {
 
+    // Rechercher en base un utilisateur avec le mail fourni
+    try {
       const user = await User.findOneOrFail({ 
         where: { email: data.email },
         relations: ["userInfo"]
       });
 
-
+      // Vérifier si le mot de passe fourni hashé et mot de passe hashé en base sont identiques
       const isValid = await argon2.verify(user.hashedPassword, data.password);
+
+      // Si la vérification du mot de passe échoue, envoie d'une erreur et arrêt du processus
       if (!isValid) throw new Error("Invalid password");
 
+      // Fabrication du payload puis du token à partir de celui-ci.
       const payload = createUserToken(user);
       const token = createJwt(payload);
+
+      // Création et ajout du cookie dans le navigateur
       setCookie(ctx, token);
 
+      // L'utilisateur est connecté
       return {
         token,
         user,
@@ -152,8 +190,11 @@ export default class UserResolver {
     }
   }
 
+  // Déconnexion de l'utilisateur
   @Mutation(() => UserResponse)
   async logout(@Ctx() ctx: Context) {
+
+    // Fabrication d'un cookie vide et stockage de celui-ci dans le navigateur : l'utilisateur n'est plus connecté
     setCookie(ctx, "");
     return {
       token: "",
