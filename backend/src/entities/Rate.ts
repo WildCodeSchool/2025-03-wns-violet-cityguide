@@ -16,15 +16,15 @@ class Rate extends BaseEntity {
     @Field()
     rate: number;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, user => user.createdRates, {eager: true})
     @Field(() => User)
     rateUser: User;
 
-    @ManyToOne(() => Poi, poi => poi.rates)
+    @ManyToOne(() => Poi, poi => poi.rates, {eager: true})
     @Field(() => Poi, { nullable: true })
     ratePoi?: Poi;
 
-    @ManyToOne(() => City)
+    @ManyToOne(() => City, city => city.cityRate)
     @Field(() => City, { nullable: true })
     rateCity?: City;
 }

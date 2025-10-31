@@ -53,13 +53,28 @@ export type Comment = {
 
 export type CreateCityInput = {
   cityName: Scalars['String']['input'];
+  createdBy: Scalars['ID']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
+};
+
+export type CreateCityRateInput = {
+  rate: Scalars['Float']['input'];
+  rateCity: Scalars['ID']['input'];
+  rateUser: Scalars['ID']['input'];
+};
+
+export type CreatePoiRateInput = {
+  rate: Scalars['Float']['input'];
+  ratePoi: Scalars['ID']['input'];
+  rateUser: Scalars['ID']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createCity: Scalars['ID']['output'];
+  createCityRate: Scalars['ID']['output'];
+  createPoiRate: Scalars['ID']['output'];
   deleteCity: Scalars['ID']['output'];
   login: UserResponse;
   logout: UserResponse;
@@ -70,6 +85,16 @@ export type Mutation = {
 
 export type MutationCreateCityArgs = {
   data: CreateCityInput;
+};
+
+
+export type MutationCreateCityRateArgs = {
+  data: CreateCityRateInput;
+};
+
+
+export type MutationCreatePoiRateArgs = {
+  data: CreatePoiRateInput;
 };
 
 
@@ -119,7 +144,13 @@ export type Query = {
   __typename?: 'Query';
   getAllCities: Array<City>;
   getAllUsers: Array<User>;
+  getRatesByCity: Array<Rate>;
   getUserById?: Maybe<User>;
+};
+
+
+export type QueryGetRatesByCityArgs = {
+  cityId: Scalars['Float']['input'];
 };
 
 
