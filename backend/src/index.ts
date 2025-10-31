@@ -7,10 +7,10 @@ import * as jwt from "jsonwebtoken";
 import {UserToken} from "./types/Context";
 import { Role } from "./entities/User";
 
-
 import RateResolver from "./resolvers/RateResolver";
 import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
+import CommentResolver from "./resolvers/CommentResolver";
 
 
 const port = 3000;
@@ -22,7 +22,9 @@ async function startServer() {
 
     // Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
     const schema = await buildSchema({
-        resolvers: [UserResolver, CityResolver, RateResolver],
+
+        resolvers: [UserResolver, CityResolver, CommentResolver, RateResolver],
+
         authChecker: ({context: { user } }, neededRoles: Role[]) => {
 
             // si pas authentifié, on retourne false
