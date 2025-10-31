@@ -53,6 +53,7 @@ export type Comment = {
 
 export type CreateCityInput = {
   cityName: Scalars['String']['input'];
+  createdBy: Scalars['ID']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
 };
