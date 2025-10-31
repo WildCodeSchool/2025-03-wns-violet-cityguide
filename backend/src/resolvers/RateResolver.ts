@@ -43,8 +43,15 @@ export default class RateResolver {
   // Récupérer les notes liées à une ville
   @Query(() => [Rate])
   async getRatesByCity(@Arg("cityId") cityId: number): Promise<Rate[]> {
-    return await Rate.findBy({
-      rateCity: cityId
+    return await Rate.find({
+
+      // On filtre par relation
+      where: {
+        rateCity: { cityId },
+      },
+
+      // On demande les informations de la ville associée aux notes 
+      relations: ["rateCity"],
     });
   }
 
