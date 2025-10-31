@@ -34,7 +34,7 @@ class City extends BaseEntity {
     cityRate: Rate[];
 
     @ManyToOne(() => User, user => user.createdCities, {eager: true})
-    @Field(() => User, { nullable: true }) 
+    @Field(() => User) 
     createdBy: User;
 
     @CreateDateColumn()

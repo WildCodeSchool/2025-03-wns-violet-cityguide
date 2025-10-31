@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm";
 import { Poi } from "./Poi";
 import { User } from "./User";
 
@@ -18,21 +18,25 @@ class Comment extends BaseEntity {
     @Field()
     content: string;
 
-    @CreateDateColumn()
-    @Field()
-    createdAt: Date; 
-
-    @UpdateDateColumn()
-    @Field()
-    updatedAt: Date;
-
     @ManyToOne(() => User, user => user.createdComments)
     @Field(() => User)
-    user: User;
+    commentUser: User;
 
     @ManyToOne(() => Poi, poi => poi.comment)
     @Field(() => Poi)
-    poi: Poi; 
+    commentPoi: Poi;
+
+    @CreateDateColumn({ nullable: true })
+    @Field({ nullable: true })
+    createdAt: Date; 
+
+    @UpdateDateColumn({ nullable: true })
+    @Field({ nullable: true })
+    updatedAt: Date;
+
+    @DeleteDateColumn({ nullable: true })
+    @Field({ nullable: true })
+    deletedAt?: Date;
 
 }
 

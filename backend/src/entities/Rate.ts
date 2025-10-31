@@ -16,7 +16,7 @@ class Rate extends BaseEntity {
     @Field()
     rate: number;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, user => user.createdRates)
     @Field(() => User)
     rateUser: User;
 
@@ -24,7 +24,7 @@ class Rate extends BaseEntity {
     @Field(() => Poi, { nullable: true })
     ratePoi?: Poi;
 
-    @ManyToOne(() => City)
+    @ManyToOne(() => City, city => city.cityRate)
     @Field(() => City, { nullable: true })
     rateCity?: City;
 }
