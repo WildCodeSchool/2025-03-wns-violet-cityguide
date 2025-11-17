@@ -55,6 +55,14 @@ export default class CityResolver {
         return await City.find();
     }
 
+    // Récupérer une ville à partir de son id
+    @Query(() => City) 
+    async getCityById(@Arg("id") id: number) {
+        const city = await City.findOneByOrFail({cityId: id});
+        return city;
+    } 
+
+
     // Créer une ville
     @Mutation(() => ID)
     async createCity(@Arg("data") data: CreateCityInput) {
