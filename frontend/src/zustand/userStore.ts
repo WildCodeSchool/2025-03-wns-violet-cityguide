@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
 
 // Types
-import { type State, type Actions } from "../types/authentication.d.ts";
+import { type State, type Actions } from "../types/authentication.ts";
 
 export const useUserStore = create<State & Actions>()(
     devtools(
