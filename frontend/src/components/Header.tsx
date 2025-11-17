@@ -20,6 +20,13 @@ export default function Header() {
     const logout = useLogout();
     const navigate = useNavigate();
 
+    const scrollToId = (id: string) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     // Fermer le menu quand on change de route
     useEffect(() => {
         setOpen(false);
@@ -84,7 +91,11 @@ export default function Header() {
             {/* Nav desktop */}
             <nav className="header__nav header__nav--desktop" aria-label="Navigation principale">
                 <Link to="">Accueil</Link>
-                <Link to="/cities">Villes</Link>
+                <button
+                    type="button"
+                    onClick={() => scrollToId("cities")}
+                    className="header__nav--desktop__linkLikeButton"
+                >Villes</button>
                 <Link to="/pois">Points d'intérêts</Link>
                 {isAuth ? (
                     <>
@@ -111,7 +122,14 @@ export default function Header() {
             >
                 <nav className="header__nav--mobile">
                     <Link to="">Accueil</Link>
-                    <Link to="/cities">Villes</Link>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            scrollToId("cities");
+                            setOpen(false);
+                        }}
+                        className="header__nav--mobile__linkLikeButton"
+                    >Villes</button>
                     <Link to="/pois">Points d'intérêts</Link>
                     {isAuth ? (
                         <>

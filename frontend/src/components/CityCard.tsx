@@ -8,7 +8,7 @@ type CityCardProps = {
 export default function CityCard({ city }: CityCardProps) {
 
     return (
-        <section className="cityCard">
+        <section className="cityCard" id="cities">
             <div className="cityCard__imgContainer">
                 <img className="cityCard__imgContainer__img" src={city.imageUrl} alt={city.cityName} />
             </div>
