@@ -1,15 +1,34 @@
+# Build stage
 FROM node:lts-alpine3.22 AS builder
 WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source files
 COPY src src
-COPY *.json .
-RUN npm install
+COPY tsconfig.json ./
+
+# Build for production
 RUN npm run build
 
-FROM node:lts-alpine
+# Production stage
+FROM node:lts-alpine3.22
 WORKDIR /app
-RUN apk --no-cache add curl
-COPY --from=builder /app/dist ./build
-COPY package*.json .
-RUN npm install --omit=dev
-CMD ["npm", "run", "prod"]
 
+# Install curl for healthchecks
+RUN apk --no-cache add curl
+
+# Copy built files from builder
+COPY --from=builder /app/dist ./build
+
+# Copy package files and install production dependencies only
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# Expose port (adjust if needed)
+EXPOSE 3000
+
+# Start the production server
+CMD ["npm", "run", "prod"]
