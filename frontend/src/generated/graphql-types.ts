@@ -156,7 +156,19 @@ export type Query = {
   __typename?: 'Query';
   getAllCities: Array<City>;
   getAllUsers: Array<User>;
+  getCityById: City;
+  getRatesByCity: Array<Rate>;
   getUserById?: Maybe<User>;
+};
+
+
+export type QueryGetCityByIdArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type QueryGetRatesByCityArgs = {
+  cityId: Scalars['Float']['input'];
 };
 
 
