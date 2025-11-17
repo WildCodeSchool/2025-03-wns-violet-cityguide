@@ -80,7 +80,7 @@
   &__nav--desktop {
     display: none;
 
-    a {
+    &__linkLikeButton, a {
       font-size: 1.25rem;
       letter-spacing: .1rem;
       color: $marron;
@@ -89,6 +89,12 @@
       &:hover, &:focus-visible {
         color: $sand;
       }
+    }
+    &__linkLikeButton {
+      background-color: transparent;
+      border: none;
+      color: $marron;
+      cursor: pointer;
     }
   }
 
@@ -151,7 +157,7 @@
     display: grid;
     gap: .75rem;
 
-    a, .auth-button {
+    &__linkLikeButton, a, .auth-button {
       display: block;
       padding: .9rem 1rem;
       border-radius: .75rem;
@@ -171,6 +177,11 @@
       border: none;
       text-align: left;
       cursor: pointer;
+    }
+    &__linkLikeButton {
+      border: none;
+      cursor: pointer;
+      text-align: left;
     }
   }
 
