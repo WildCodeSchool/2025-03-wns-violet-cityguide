@@ -8,9 +8,6 @@ import { type NewUserInput, useLoginMutation } from "../generated/graphql-types"
 // Zustand - Context
 import { useLogin } from "../zustand/userStore";
 
-// Images
-import img from "../assets/img/parisByNight.png"
-
 export default function Login() {
     // form login
     const [ login ] = useLoginMutation();
@@ -39,19 +36,15 @@ export default function Login() {
     }
 
     return (
-        <div className="signup"
-             style={{
-                 backgroundImage: `url(${img})`
-             }}
-        >
-            <section className="signup__card glassmorphism">
+        <div className="signup">
+            <section className="signup__card">
                 <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
                     <div className="signup__card__form__input">
-                    <label htmlFor="Email">Email *</label>
-                    <input type="text" name="email" required/>
-                    <label htmlFor="password">Mot de passe *</label>
-                    <input type="password" name="password" required/>
+                        <label htmlFor="Email">Email *</label>
+                        <input type="text" name="email" required/>
+                        <label htmlFor="password">Mot de passe *</label>
+                        <input type="password" name="password" required/>
                     </div>
                     <input className="signup__card__form__button" type="submit" value="Connexion"/>
                 </form>

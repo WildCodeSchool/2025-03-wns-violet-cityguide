@@ -1,11 +1,11 @@
 @use "components/header";
 @use "components/signupHeader";
-@use "components/heroBanner";
 @use "pages/homePage";
 @use "pages/city";
 @use "pages/login_signup";
 @use "components/footer";
-@use './variables' as *;
+@use "components/cityCard";
+@use 'variables' as *;
 
 h1 {
   font-family: $title;
@@ -17,6 +17,7 @@ h2 {
 
 body {
   font-family: $text;
+  background-color: $beige;
 }
 
 * {
