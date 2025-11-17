@@ -1,3 +1,4 @@
+// GraphQL
 import { Role } from "../generated/graphql-types";
 
 // Types utilisés dans le context
