@@ -27,6 +27,11 @@ export default function Header() {
         }
     };
 
+    const navigateToCities = () => {
+        sessionStorage.setItem("scrollTo", "cities");
+        navigate("/");
+    };
+
     // Fermer le menu quand on change de route
     useEffect(() => {
         setOpen(false);
@@ -93,7 +98,10 @@ export default function Header() {
                 <Link to="">Accueil</Link>
                 <button
                     type="button"
-                    onClick={() => scrollToId("cities")}
+                    onClick={() => {
+                        navigateToCities();
+                        scrollToId("cities");
+                    }}
                     className="header__nav--desktop__linkLikeButton"
                 >Villes</button>
                 <Link to="/pois">Points d'intérêts</Link>
@@ -125,6 +133,7 @@ export default function Header() {
                     <button
                         type="button"
                         onClick={() => {
+                            navigateToCities();
                             scrollToId("cities");
                             setOpen(false);
                         }}
