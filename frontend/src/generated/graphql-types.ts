@@ -253,7 +253,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Us
 export type GetAllCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename?: 'City', cityId: number, cityName: string, createdAt?: any | null, description: string, imageUrl: string, updatedAt?: any | null, createdBy?: { __typename?: 'User', userInfo?: { __typename?: 'UserInfo', avatarUrl: string, firstName: string, lastName: string } | null } | null }> };
+export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename?: 'City', cityId: number, cityName: string, createdAt?: any | null, description: string, imageUrl: string, updatedAt?: any | null, createdBy: { __typename?: 'User', userInfo?: { __typename?: 'UserInfo', avatarUrl: string, firstName: string, lastName: string } | null } }> };
 
 
 export const GetAllUsersDocument = gql`
