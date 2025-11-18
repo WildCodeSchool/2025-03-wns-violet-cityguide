@@ -11,7 +11,7 @@ import RateResolver from "./resolvers/RateResolver";
 import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
 import CommentResolver from "./resolvers/CommentResolver";
-
+import CategoryResolver from "./resolvers/CategoryResolver";
 
 const port = 3000;
 
@@ -23,7 +23,7 @@ async function startServer() {
     // Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
     const schema = await buildSchema({
 
-        resolvers: [UserResolver, CityResolver, CommentResolver, RateResolver],
+        resolvers: [UserResolver, CityResolver, CommentResolver, RateResolver, CategoryResolver],
 
         authChecker: ({context: { user } }, neededRoles: Role[]) => {
 
