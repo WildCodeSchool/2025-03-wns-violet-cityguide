@@ -2,15 +2,15 @@ export type User = {
     userId: number;
     email: string;
     roles: string[];
-    userInfo: UserInfo;
+    userInfo?: UserInfo;
 }
 
 export type City = {
     cityId: number;
     cityName: string;
-    createdAt: string;
+    createdAt?: string | null;
     description: string;
     imageUrl: string;
-    updatedAt: string;
+    updatedAt?: string | null;
     createdBy: User;
 }
