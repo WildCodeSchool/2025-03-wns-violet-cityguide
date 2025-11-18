@@ -51,7 +51,7 @@ export default class RateResolver {
       },
 
       // On demande les informations de la ville associée aux notes 
-      relations: ["rateCity"],
+      relations: ["rateCity", "rateUser"],
     });
   }
 
