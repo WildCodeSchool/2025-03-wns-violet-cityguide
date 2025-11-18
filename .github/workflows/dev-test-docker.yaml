@@ -1,0 +1,120 @@
+name: Docker test, build & image (PROD) #test for prod and stage
+on:
+  pull_request:
+    branches:
+      - stage 
+      - main
+
+jobs: 
+  ci-cd-test-and-push:
+    name: Docker push image on DockerHub for CI/CD
+    runs-on: ubuntu-latest
+    
+    steps:
+    #1. Checkout source code
+    - name: Checkout source code
+      uses: actions/checkout@v4
+      with: 
+        fetch-depth: 0
+    
+    #2. Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    #3. Cache Docker Layers
+    - name: Cache Docker Layers
+      uses: actions/cache@v4
+      with: 
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os}}-buildx-${{ github.sha }}
+        restore-keys: ${{ runner.os}}-buildx-
+
+    #4. Cache npm dependencies
+    - name: Cache npm dependencies
+      uses: actions/cache@v4 
+      with: 
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json', 'backend/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-npm-        
+
+    #5. Extract metadata
+    - name: Extract metadata
+      id: meta
+      run: |
+        echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+        echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+    #6. Build all services with Docker Compose
+    - name: Build all services with Docker Compose
+      run: docker compose -f compose.prod.yaml build
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+    #7. Start all services for tests
+    - name: Start all services
+      run: docker compose -f compose.prod.yaml up -d
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+    #8. Print logs for all containers on failure
+    - name: Print database logs on failure
+      if: failure()
+      run: docker logs database || true
+
+    - name: Print backend logs on failure
+      if: failure()
+      run: docker logs backend-prod || true
+
+    - name: Print frontend logs on failure
+      if: failure()
+      run: docker logs frontend-prod || true
+
+    #9. Login to Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    #10. Add this step before the push step:
+    - name: Debug Docker images and environment
+      run: |
+        echo "=== Environment variables ==="
+        echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+        echo "DOCKERHUB_PROJECT_NAME: $DOCKERHUB_PROJECT_NAME"
+        echo ""
+        echo "=== Built images ==="
+        docker images
+        echo ""
+        echo "=== Images to be pushed ==="
+        docker images | grep "$DOCKERHUB_USERNAME" || echo "No images found with username $DOCKERHUB_USERNAME"
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+
+    # 11. Build and push prod image
+    - name: Build and push production image
+      run: docker compose -f compose.prod.yaml push
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}

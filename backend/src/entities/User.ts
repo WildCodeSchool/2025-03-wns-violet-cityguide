@@ -44,16 +44,16 @@ class User extends BaseEntity {
     @Field(() => [Role])
     roles: Role[];
 
-    @OneToMany(()=> Rate, rate => rate.rateId)
-    @Field(() => [Rate])
+    @OneToMany(()=> Rate, rate => rate.rateUser)
+    @Field(() => [Rate], { nullable: true })
     createdRates: Rate[];
 
-    @OneToMany(() => Poi, poi => poi.poiId)
-    @Field(() => [Poi])
+    @OneToMany(() => Poi, poi => poi.createdBy)
+    @Field(() => [Poi], { nullable: true })
     createdPois: Poi[];
 
-    @OneToMany(() => Comment, comment => comment.commentId)
-    @Field(() => [Comment])
+    @OneToMany(() => Comment, comment => comment.commentUser)
+    @Field(() => [Comment], { nullable: true })
     createdComments: Comment[];
 
     @OneToOne(() => UserInfo, userInfo => userInfo.user)
@@ -62,7 +62,7 @@ class User extends BaseEntity {
     userInfo?: UserInfo;
 
     @OneToMany(() => City, city => city.createdBy)
-    @Field(() => [City])
+    @Field(() => [City], { nullable: true })
     createdCities: City[];
 }
 

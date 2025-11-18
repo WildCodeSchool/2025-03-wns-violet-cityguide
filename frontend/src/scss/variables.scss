@@ -1,8 +1,8 @@
 // colors
-$dark-blue: #012B58;
-$medium-blue: #094E9C;
-$purple: #A6A7C8;
-$yellow: #F6BB61;
+$beige: #FAF6ED;
+$light-beige: #FEFAF1;
+$sand: #eee0cb;
+$marron: rgb(134, 119, 111);
 $white: #FFFFFF;
 $black: #000000;
 
@@ -13,14 +13,9 @@ $black: #000000;
   font-weight: 500;
 }
 @font-face {
-  font-family: 'Poppins';
-  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: 500;
-}
-@font-face {
-  font-family: 'Caudex';
-  src: url('../assets/fonts/Caudex/Caudex-Regular.ttf') format('truetype');
-  font-weight: 500;
+  font-family: 'JosefinSlab';
+  src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
 }
 @font-face {
   font-family: 'Work_Sans';
@@ -30,8 +25,13 @@ $black: #000000;
 
 // Variables SCSS pour les familles de polices
 $title: 'Poppins', sans-serif;
-$subtitle: 'Caudex', serif;
+$subtitle: 'JosefinSlab', sans-serif;
 $text: 'Work_Sans', sans-serif;
 
 // Responsive
 $breakpoint-small: 480px;
+
+// Shadows
+$text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+$box-shadow: 1px 1px 10px rgba(134, 119, 111, 0.1),
+-1px -1px 10px rgba(134, 119, 111, 0.1);;

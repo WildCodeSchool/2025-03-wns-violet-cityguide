@@ -25,16 +25,17 @@ class City extends BaseEntity {
     @Field()
     imageUrl: string;
 
-    @OneToMany(() => Poi, poi => poi.poiId)
+    // Pour le chemin "retour" Poi -> City, on trouve la ville associée au poi sur la propriété poi.cityId
+    @OneToMany(() => Poi, poi => poi.cityId)
     @Field(() => [Poi], { nullable: true }) 
     cityPois: Poi[];
 
-    @OneToMany(() => Rate, rate => rate.rateId)
+    @OneToMany(() => Rate, rate => rate.rateCity)
     @Field(() => [Rate], { nullable: true })
-    cityRate: Rate[];
+    cityRate?: Rate[];
 
     @ManyToOne(() => User, user => user.createdCities, {eager: true})
-    @Field(() => User, { nullable: true }) 
+    @Field(() => User) 
     createdBy: User;
 
     @CreateDateColumn()
