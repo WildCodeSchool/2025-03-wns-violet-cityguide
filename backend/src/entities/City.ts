@@ -39,11 +39,11 @@ class City extends BaseEntity {
 
     @CreateDateColumn()
     @Field({ nullable: true })
-    createdAt?: Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
     @Field({ nullable: true })
-    updatedAt?: Date;
+    updatedAt: Date;
 }
 
 export { City };
