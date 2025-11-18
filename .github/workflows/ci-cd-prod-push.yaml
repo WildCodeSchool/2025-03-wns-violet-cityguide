@@ -46,20 +46,23 @@ jobs:
 
     #6. Build all services with Docker Compose
     - name: Build all services with Docker Compose
-      run: docker compose -f compose.prod.yaml build
+      run: |
+        if [ "${{ github.base_ref }}" == "stage" ]; then
+          docker compose -f compose.stage.yaml build
+        else
+          docker compose -f compose.prod.yaml build
+        fi
       env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
-        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
-        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
-        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
-        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
-        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
-        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+        # ... your env vars ...
 
-    #7. Start all services for tests
+    #7. Start all services
     - name: Start all services
-      run: docker compose -f compose.prod.yaml up -d
+      run: |
+        if [ "${{ github.base_ref }}" == "stage" ]; then
+          docker compose -f compose.stage.yaml up -d
+        else
+          docker compose -f compose.prod.yaml up -d
+        fi
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
@@ -108,7 +111,12 @@ jobs:
 
     # 11. Build and push prod image
     - name: Build and push production image
-      run: docker compose -f compose.prod.yaml push
+      run: |
+        if [ "${{ github.base_ref }}" == "stage" ]; then
+          docker compose -f compose.stage.yaml push
+        else
+          docker compose -f compose.prod.yaml push
+        fi
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
