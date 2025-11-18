@@ -8,9 +8,6 @@ import { type NewUserInput, useSignupMutation } from "../generated/graphql-types
 // Zustand - Context
 import { useLogin } from "../zustand/userStore";
 
-// Images
-import img from "../assets/img/parisByNight.png"
-
 export default function Signup() {
     // form signup
     const [ signup ] = useSignupMutation();
@@ -43,12 +40,8 @@ export default function Signup() {
     }
 
     return (
-        <div className="signup"
-             style={{
-                 backgroundImage: `url(${img})`
-             }}
-        >
-            <section className="signup__card glassmorphism">
+        <div className="signup">
+            <section className="signup__card">
                 <h1 className="signup__card__title">Avec Où, découvrez les points d'intérêts autour de vous</h1>
                 <form onSubmit={handleSubmit} className="signup__card__form">
                     <div className="signup__card__form__input">

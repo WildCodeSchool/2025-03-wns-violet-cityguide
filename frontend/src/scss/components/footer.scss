@@ -5,15 +5,15 @@ footer {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  background-color: $dark-blue;
+  background-color: $beige;
   font-size: 1rem;
   a {
-    color: $yellow;
+    color: $marron;
     text-decoration: none;
     transition: color .25s ease;
 
     &:hover, &:focus-visible {
-      color: $white;
+      color: $sand;
     }
   }
 }

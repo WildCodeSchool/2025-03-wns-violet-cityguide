@@ -20,13 +20,16 @@
     flex-direction: column;
     padding: 2rem;
     margin-top: 5rem;
+    border-radius: 1rem;
+    background-color: $light-beige;
+    box-shadow: $box-shadow;
     @media (min-width: $breakpoint-small) {
       width: 20rem;
       padding: 4rem 2rem;
     }
 
     &__title {
-      color: $yellow;
+      color: $marron;
       font-size: 1.5rem;
       text-align: center;
       margin-bottom: 2rem;
@@ -52,24 +55,23 @@
 
 
         label {
-          color: $yellow;
+          color: $marron;
           font-size: 1rem;
-          font-weight: bold;
+          font-weight: 500;
         }
 
         input, select {
-          border: none;
+          background-color: $beige;
+          border: solid 2px $sand;
           border-radius: 5px;
-          background-color: $yellow;
           font-family: $text;
           font-size: 1rem;
           font-weight: 500;
-          color: $dark-blue;
+          color: $beige;
           padding: .5rem;
-          box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
 
           option {
-            background-color: $yellow;
+            background-color: $beige;
           }
         }
       }
@@ -79,19 +81,18 @@
         padding: .5rem 1rem;
         border: none;
         border-radius: 5px;
-        color: $dark-blue;
-        background-color: $yellow;
+        color: $marron;
+        background-color: $sand;
         font-family: $title;
         font-size: 1.25rem;
         font-weight: bold;
         cursor: pointer;
-        box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
         transition: background-color .25s ease, color .25s ease, transform .25s ease;
 
         &:hover, &:focus-visible {
           transform: scale(1.02);
-          background-color: $medium-blue;
-          color: $yellow;
+          background-color: $marron;
+          color: $sand;
           outline: none;
         }
       }

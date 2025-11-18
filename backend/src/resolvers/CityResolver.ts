@@ -9,9 +9,11 @@ import {
     Resolver,
     Authorized,
 } from "type-graphql";
+
 import { City } from "../entities/City";
 import { User } from "../entities/User";
 
+// Lors de la création d'une ville il est impératif de fourni son nom, sa description, une image et l'utilisateur qui la crée
 @InputType()
 class CreateCityInput {
     @Field()
@@ -25,12 +27,9 @@ class CreateCityInput {
 
     @Field(() => ID) 
     createdBy: User;
-
-    // TODO décommenter pour la suite du dev
-    // @Field()
-    // createdAt: Date;
 }
 
+// Lors de la modification de la ville, on NE doit PAS modifier l'utilisateur créateur de la ville
 @InputType()
 class UpdateCityInput {
     @Field()
@@ -41,10 +40,6 @@ class UpdateCityInput {
 
     @Field()
     imageUrl: string;
-
-    // TODO décommenter pour la suite du dev
-    // @Field()
-    // updatedAt: Date;
 }
 
 @Resolver(City)
@@ -59,6 +54,14 @@ export default class CityResolver {
     async getAllCities() {
         return await City.find();
     }
+
+    // Récupérer une ville à partir de son id
+    @Query(() => City) 
+    async getCityById(@Arg("id") id: number) {
+        const city = await City.findOneByOrFail({cityId: id});
+        return city;
+    } 
+
 
     // Créer une ville
     @Mutation(() => ID)

@@ -19,16 +19,16 @@ test-prod: #lance le build de test de prod => /!\ pas de volumes ni de gateway d
 	docker compose -f compose.test.prod.yaml --env-file .env.prod up -d --build
 
 stop-dev: #stop dev containers
-    docker compose -f compose.dev.yaml down -v
+	docker compose -f compose.dev.yaml down -v
 
 stop-test-dev: #stop test dev containers
-    docker compose -f compose.test.dev.yaml down -v
+	docker compose -f compose.test.dev.yaml down -v
 
 stop-test-prod: #stop test prod containers
-    docker compose -f compose.test.prod.yaml down -v
+	docker compose -f compose.test.prod.yaml down -v
 
 stop-all: #stop all containers (regardless of compose file)
-    docker stop $$(docker ps -q) 2>/dev/null || true
+	docker stop $$(docker ps -q) 2>/dev/null || true
 
 logs: #affiche les logs de tous les services 
 	docker compose logs -f

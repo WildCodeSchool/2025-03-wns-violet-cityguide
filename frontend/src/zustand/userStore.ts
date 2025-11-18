@@ -1,6 +1,9 @@
+// Zustand - Context
 import { create } from "zustand";
 import { persist, devtools } from "zustand/middleware";
-import { type State, type Actions } from "../types/types";
+
+// Types
+import { type State, type Actions } from "../types/authentication.ts";
 
 export const useUserStore = create<State & Actions>()(
     devtools(

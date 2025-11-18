@@ -3,16 +3,15 @@
 .header a { text-decoration: none; color: inherit; }
 
 .header {
-  position: relative;
-  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .75rem 1rem;
+  margin: .75rem 1rem;
   background: transparent;
   color: white;
   @media (min-width: $breakpoint-small) {
-    margin: 0 6rem;
+    margin: 1rem 6rem;
+    padding: 0;
   }
 
   &__brand {
@@ -20,16 +19,18 @@
     align-items: center;
     gap: .25rem;
   }
-  &__logo, &__ou-text {
-    display: inline-flex;
-    width: 2rem;
-    height: 2rem;
-    color: #F6BB61;
-    @media (min-width: $breakpoint-small) {
-      width: 3rem;
-      height: 3rem;
+
+    &__logo, &__ou-text {
+      display: inline-flex;
+      width: 2rem;
+      height: 2rem;
+      color: #F6BB61;
+      @media (min-width: $breakpoint-small) {
+        width: 3rem;
+        height: 3rem;
+      }
     }
-  }
+
 
   /* --- BOUTON BURGER --- */
   &__burger {
@@ -44,7 +45,7 @@
     cursor: pointer;
 
     &__icon {
-      color: $yellow;
+      color: $marron;
       transition: transform .25s ease;
 
       &:hover, &:focus-visible {
@@ -62,15 +63,15 @@
     .auth-button {
       background-color: transparent;
       border: none;
-      color: $yellow;
+      color: $marron;
       font-size: 1.25rem;
       letter-spacing: .1rem;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
       transition: color .25s ease;
       cursor: pointer;
 
       &:hover, &:focus-visible {
-        color: $white;
+        color: $sand;
       }
     }
   }
@@ -79,16 +80,21 @@
   &__nav--desktop {
     display: none;
 
-    a {
+    &__linkLikeButton, a {
       font-size: 1.25rem;
       letter-spacing: .1rem;
-      color: $yellow;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      color: $marron;
       transition: color .25s ease;
 
       &:hover, &:focus-visible {
-        color: $white;
+        color: $sand;
       }
+    }
+    &__linkLikeButton {
+      background-color: transparent;
+      border: none;
+      color: $marron;
+      cursor: pointer;
     }
   }
 
@@ -112,11 +118,8 @@
     top: 0;
     right: 0;
     width: min(80vw, 320px);
-    height: 80vh;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px) saturate(100%);
-    -webkit-backdrop-filter: blur(2px) saturate(80%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 70vh;
+    background-color: $beige;
     border-radius: 0 0 5px 5px;
     transform: translateX(100%);
     transition: transform .25s ease;
@@ -140,7 +143,7 @@
       cursor: pointer;
 
       &__icon {
-        color: $yellow;
+        color: $marron;
         transition: transform .25s ease;
 
         &:hover, &:focus-visible {
@@ -154,18 +157,19 @@
     display: grid;
     gap: .75rem;
 
-    a, .auth-button {
+    &__linkLikeButton, a, .auth-button {
       display: block;
       padding: .9rem 1rem;
       border-radius: .75rem;
-      background: rgba(255,255,255,.06);
+      background: $light-beige;
       font-size: 1.25rem;
       letter-spacing: .1rem;
-      color: $yellow;
+      color: $marron;
       transition: background .25s ease;
+      box-shadow: $box-shadow;
 
       &:hover, &:focus-visible {
-        background: rgba(255,255,255,.12);
+        background: $sand;
         outline: none;
       }
     }
@@ -173,6 +177,11 @@
       border: none;
       text-align: left;
       cursor: pointer;
+    }
+    &__linkLikeButton {
+      border: none;
+      cursor: pointer;
+      text-align: left;
     }
   }
 

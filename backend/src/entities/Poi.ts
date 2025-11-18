@@ -14,6 +14,7 @@ class Poi extends BaseEntity {
     @Field()
     poiId: number;
 
+    // Attention : la contrainte d'unicité risque d'être un souci exemple deux poi =!= l'uin sur l'autre (ex magasin dans un centre commercial) ont les mêmes coordonnées GPS
     @Column({ unique: true })
     @Field()
     coordinates: string;
@@ -22,6 +23,7 @@ class Poi extends BaseEntity {
     @Field()
     pin: string;
 
+    // Attention, idem que pour coordinates
     @Column({ unique: true })
     @Field()
     address: string;
@@ -38,9 +40,26 @@ class Poi extends BaseEntity {
     @Field()
     imageUrl: string;
 
-    @ManyToOne(() => User, { eager: false })
+    @ManyToOne(() => User, user => user.createdPois)
     @Field(() => User)
     createdBy: User;
+
+    @ManyToMany(() => Category, category => category.categoryPois)
+    @JoinTable()
+    @Field(() => [Category],{ nullable: true })
+    poiCategories: Category[];
+
+    @ManyToOne(() => City, city => city.cityPois)
+    @JoinColumn()
+    cityId: City; 
+
+    @OneToMany(() => Rate, rate => rate.ratePoi)
+    @Field(() => [Rate],{ nullable: true })
+    rates: Rate[];
+
+    @OneToMany(() => Comment, comment => comment.commentPoi)
+    @Field(() => [Comment],{ nullable: true })
+    comment: Comment[];
 
     @CreateDateColumn()
     @Field()
@@ -49,23 +68,6 @@ class Poi extends BaseEntity {
     @UpdateDateColumn()
     @Field({ nullable: true })
     updatedAt?: Date;
-
-    @ManyToMany(() => Category, category => category.categoryId, { eager: true })
-    @JoinTable()
-    @Field(() => [Category],{ nullable: true })
-    poiCategories: Category[];
-
-    @ManyToOne(() => City, city => city.cityId)
-    @JoinColumn()
-    cityId: City[]; 
-
-    @OneToMany(() => Rate, rate => rate.ratePoi)
-    @Field(() => [Rate])
-    rates: Rate[];
-
-    @OneToMany(() => Comment, comment => comment.commentId)
-    @Field(() => [Comment])
-    comment: Comment[];
 }
 
 export { Poi };
