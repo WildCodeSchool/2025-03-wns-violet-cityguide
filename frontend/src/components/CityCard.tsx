@@ -1,9 +1,11 @@
 // Types
-import type {City} from "../types/CityType";
+import type { GetAllCitiesQuery } from "../generated/graphql-types";
+
+type CityFromQuery = NonNullable<GetAllCitiesQuery["getAllCities"]>[number];
 
 type CityCardProps = {
-    city: City;
-}
+    city: CityFromQuery;
+};
 
 export default function CityCard({ city }: CityCardProps) {
 
