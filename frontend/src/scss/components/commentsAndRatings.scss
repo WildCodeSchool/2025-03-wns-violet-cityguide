@@ -1,0 +1,12 @@
+.comments {
+  &__stars {
+    display: flex;
+    gap: 0.5rem;
+
+    .star {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+}

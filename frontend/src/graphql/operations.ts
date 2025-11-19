@@ -60,3 +60,20 @@ export const GET_ALL_CITIES = gql`
         }
     }
 `;
+
+export const GET_ONE_CITY = gql`
+    query GetOneCity($getCityByIdId: Float!) {
+        getCityById(id: $getCityByIdId) {
+            cityId
+            cityName
+            description
+            imageUrl
+            cityRate {
+                rate
+            }
+            cityPois {
+                poiName
+            }
+        }
+    }
+`;

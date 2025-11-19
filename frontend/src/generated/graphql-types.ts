@@ -25,6 +25,10 @@ export type Category = {
   categoryPois?: Maybe<Array<Poi>>;
 };
 
+export type CategoryInput = {
+  categoryName: Scalars['String']['input'];
+};
+
 export type City = {
   __typename?: 'City';
   cityId: Scalars['Float']['output'];
@@ -78,6 +82,7 @@ export type CreatePoiRateInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCategory: Scalars['ID']['output'];
   createCity: Scalars['ID']['output'];
   createCityRate: Scalars['ID']['output'];
   createPoiComment: Scalars['ID']['output'];
@@ -87,6 +92,11 @@ export type Mutation = {
   logout: UserResponse;
   signup: UserResponse;
   updateCity: Scalars['ID']['output'];
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CategoryInput;
 };
 
 
@@ -154,6 +164,7 @@ export type Poi = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllCategories: Array<Category>;
   getAllCities: Array<City>;
   getAllUsers: Array<User>;
   getCityById: City;
@@ -254,6 +265,13 @@ export type GetAllCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename?: 'City', cityId: number, cityName: string, createdAt?: any | null, description: string, imageUrl: string, updatedAt?: any | null, createdBy: { __typename?: 'User', userInfo?: { __typename?: 'UserInfo', avatarUrl: string, firstName: string, lastName: string } | null } }> };
+
+export type GetOneCityQueryVariables = Exact<{
+  getCityByIdId: Scalars['Float']['input'];
+}>;
+
+
+export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?: 'City', cityId: number, cityName: string, description: string, imageUrl: string, cityRate?: Array<{ __typename?: 'Rate', rate: number }> | null, cityPois?: Array<{ __typename?: 'Poi', poiName: string }> | null } };
 
 
 export const GetAllUsersDocument = gql`
@@ -429,3 +447,52 @@ export type GetAllCitiesQueryHookResult = ReturnType<typeof useGetAllCitiesQuery
 export type GetAllCitiesLazyQueryHookResult = ReturnType<typeof useGetAllCitiesLazyQuery>;
 export type GetAllCitiesSuspenseQueryHookResult = ReturnType<typeof useGetAllCitiesSuspenseQuery>;
 export type GetAllCitiesQueryResult = Apollo.QueryResult<GetAllCitiesQuery, GetAllCitiesQueryVariables>;
+export const GetOneCityDocument = gql`
+    query GetOneCity($getCityByIdId: Float!) {
+  getCityById(id: $getCityByIdId) {
+    cityId
+    cityName
+    description
+    imageUrl
+    cityRate {
+      rate
+    }
+    cityPois {
+      poiName
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOneCityQuery__
+ *
+ * To run a query within a React component, call `useGetOneCityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneCityQuery({
+ *   variables: {
+ *      getCityByIdId: // value for 'getCityByIdId'
+ *   },
+ * });
+ */
+export function useGetOneCityQuery(baseOptions: Apollo.QueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables> & ({ variables: GetOneCityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneCityQuery, GetOneCityQueryVariables>(GetOneCityDocument, options);
+      }
+export function useGetOneCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneCityQuery, GetOneCityQueryVariables>(GetOneCityDocument, options);
+        }
+export function useGetOneCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOneCityQuery, GetOneCityQueryVariables>(GetOneCityDocument, options);
+        }
+export type GetOneCityQueryHookResult = ReturnType<typeof useGetOneCityQuery>;
+export type GetOneCityLazyQueryHookResult = ReturnType<typeof useGetOneCityLazyQuery>;
+export type GetOneCitySuspenseQueryHookResult = ReturnType<typeof useGetOneCitySuspenseQuery>;
+export type GetOneCityQueryResult = Apollo.QueryResult<GetOneCityQuery, GetOneCityQueryVariables>;

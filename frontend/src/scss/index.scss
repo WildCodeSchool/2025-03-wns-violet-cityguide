@@ -5,13 +5,14 @@
 @use "pages/login_signup";
 @use "components/footer";
 @use "components/cityCard";
+@use "components/commentsAndRatings";
 @use 'variables' as *;
 
 h1 {
   font-family: $title;
 }
 
-h2 {
+h2, h3 {
   font-family: $subtitle;
 }
 
