@@ -10,9 +10,10 @@
 
 ## S'affranchir des erreurs d'import/utilisation de dépendances dans les fichiers pour le développement
 Exécuter les commandes suivantes : 
-* Installation des dépendances : ```npm i```
+* Installation des dépendances : ```npm i``` (à la racine du projet et dans le sous-dossier frontend)
 * Installation de argon2 : ```npm i argon2```
 * Installation de jsonWebToken : ```npm i @types/jsonwebtoken```
+
 
 ## Conventions à respecter pour participer au développement du projet
 * Obligatoire
@@ -81,7 +82,7 @@ Clone project using `git clone git@github.com:WildCodeSchool/2025-03-wns-violet-
 * Go to URL: `localhost:7000`
 
 ## Get rid off import/use dependancies errors for development tasks:
-* Dependancies installation: `npm i`
+* Dependancies installation: `npm i` (in root folder and frontend subfolder)
 * argon2 installation: `npm i argon2`
 * jsonWebToken installation: `npm i @types/jsonwebtoken`
 
