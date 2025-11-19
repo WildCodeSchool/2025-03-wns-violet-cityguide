@@ -1,6 +1,7 @@
 // Config
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,5 +21,14 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+  },
+  resolve: {
+    alias: {
+      // Alias CSS Leaflet sous un nom custom
+      '~leaflet-css': path.resolve(
+          __dirname,
+          'node_modules/leaflet/dist/leaflet.css'
+      ),
+    },
   },
 })
