@@ -1,17 +1,23 @@
 // Leaflet
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 
-// import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-// import markerIcon from 'leaflet/dist/images/marker-icon.png';
-// import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import persoIcon from '../assets/img/logoimg.svg';
+// Types
+import type { GetAllCitiesQuery } from "../generated/graphql-types";
 
-// Définir une icône par défaut pour tous les Markers
+// Assets
+import persoIcon from "../assets/img/logoimg.svg";
+
+type CityFromQuery = GetAllCitiesQuery["getAllCities"][number];
+
+type MapProps = {
+    city: CityFromQuery;
+};
+
+// Icône perso
 const DefaultIcon = L.icon({
     iconRetinaUrl: persoIcon,
     iconUrl: persoIcon,
-    // shadowUrl: markerShadow,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -19,30 +25,39 @@ const DefaultIcon = L.icon({
     shadowSize: [41, 41],
 });
 
-// On assigne cette icône par défaut à tous les Markers
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export default function Map() {
+// Exemple de coordonnées en dur (à remplacer par ton vrai système)
+const CITY_COORDS: Record<string, [number, number]> = {
+    Paris: [48.8566, 2.3522],
+    Lyon: [45.7640, 4.8357],
+    Marseille: [43.2965, 5.3698],
+};
+
+export default function Map({ city }: MapProps) {
+    const defaultCenter: [number, number] = [48.8566, 2.3522];
+
+    const center = CITY_COORDS[city.cityName] ?? defaultCenter;
 
     return (
         <div className="city__map">
             <MapContainer
-                center={[48.8566, 2.3522]} // Paris
+                center={center}
                 zoom={13}
                 className="city__map-container"
-                scrollWheelZoom={false}
+                scrollWheelZoom={true}
             >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; OpenStreetMap contributors"
                 />
 
-                <Marker position={[48.8566, 2.3522]}>
+                <Marker position={center}>
                     <Popup className="city__popup">
-                        Salut ! Je suis un marqueur Leaflet dans React.
+                        {city.cityName}
                     </Popup>
                 </Marker>
             </MapContainer>
         </div>
-    )
+    );
 }

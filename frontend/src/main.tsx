@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Styles
 import './scss/index.scss';
-import '~leaflet-css';
+// import '~leaflet-css';
 
 // Components
 import App from './App.tsx'

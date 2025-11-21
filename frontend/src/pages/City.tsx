@@ -3,32 +3,28 @@ import {useParams} from "react-router-dom";
 
 // Components
 import Map from "../components/Map.tsx";
-import CitySelect from "../components/CitySelect.tsx";
+import CitySearch from "../components/CitySearch.tsx";
 
 // GraphQL
-import {useGetOneCityQuery} from "../generated/graphql-types";
+import {useGetAllCitiesQuery} from "../generated/graphql-types";
 
 export default function City() {
     const {cityId} = useParams<{ cityId: string }>();
-
     const numericId = Number(cityId);
 
-    const {data, loading, error} = useGetOneCityQuery({
-        variables: {
-            getCityByIdId: numericId,
-        },
-    });
+    const {data, loading, error} = useGetAllCitiesQuery();
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
-    if (!data || !data.getCityById) return <p>Ville introuvable</p>;
+    if (error || !data || !data.getAllCities) return <p>Aucune ville trouvée</p>;
 
-    const city = data.getCityById;
+    const cities = data.getAllCities;
+    const currentCity =
+        cities.find((c) => c.cityId === numericId) ?? cities[0];
 
     return (
         <section className="city">
-            <CitySelect city={city}/>
-            <Map />
+            <CitySearch cities={cities} currentCity={currentCity} />
+            <Map city={currentCity} />
         </section>
     )
 }

@@ -14,6 +14,9 @@
     padding: 5rem 0;
     margin: 3rem 6rem;
   }
+  @media (min-width: $breakpoint-large) {
+    margin: 3rem 10rem;
+  }
 }
 
 .cityCards {
@@ -21,11 +24,15 @@
   flex-direction: column;
   background-color: $beige;
   padding: 1.25rem;
-  gap: 1.5rem;
+  gap: 2%;
   @media (min-width: $breakpoint-small) {
-    padding: 2rem 7rem;
+    padding: 2rem 6rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: $breakpoint-large) {
+    padding: 2rem 10rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
   }
 }
