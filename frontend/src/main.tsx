@@ -23,6 +23,7 @@ import {
     InMemoryCache,
     ApolloProvider,
 } from "@apollo/client";
+import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
 
 const client = new ApolloClient({
     uri: "http://localhost:7000/api",
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: '/legalNotice',
                 element: <LegalNotice />,
+            },
+            {
+                path: '/admin',
+                element: <BackofficeAdmin />,
             },
             // {
             //     path: '*',

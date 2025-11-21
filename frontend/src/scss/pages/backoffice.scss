@@ -1,0 +1,117 @@
+@use '../variables' as *;
+
+.backoffice {
+  &-banner {
+	@include flex-column; 
+	@include align-center; 
+	height: 120px; 
+	width: 100%;
+
+	h1 {
+		color:$marron; 
+	}
+
+
+  }
+}
+.add-city, .admin-cities {
+	@include flex-column; 
+	padding: 0.8rem;
+	gap: 0.8rem;
+	h3 { text-align: center; font-family: $subtitle;}
+}
+
+.add-city {
+	label {
+		display: inline-flex; 
+		width: 100%;
+		padding-bottom: 1rem;
+		align-items: center;
+	}
+	input {
+		margin-left: 1rem; 
+
+	}
+	p {text-align: center}
+	.add-ville-coordonnees {
+		@include flex-row; 
+		justify-content: space-between;
+
+		@media (max-width: $breakpoint-small) {
+    		@include flex-column;
+  		}
+	}
+}
+
+
+#admin {
+	section {
+	@include flex-column; 
+	background-color: $sand;
+
+	width: 100%;
+	padding: 0.8rem; 
+	margin-bottom: 1rem;
+
+	h2 {
+		text-align: center;
+		width: 100%;
+		}
+
+	.hr {
+		width: 500px ;
+		height: 5px ;
+		background-color: $accent ;
+		}
+	}
+
+
+	label {
+		color: $marron;
+		font-size: 1rem;
+		font-weight: 500;
+	}
+
+	input[type="text"], select {
+		background-color: $beige;
+		border: solid 2px $sand;
+		border-radius: 5px;
+		font-family: $text;
+		font-size: 1rem;
+		font-weight: 500;
+		// color: $beige;
+		padding: .5rem;
+
+		option {
+		background-color: $beige;
+		}
+	}
+	select {
+		color: $marron; 
+	}
+
+	::picker(select) {
+		border-radius: 10px;
+	}
+	.admin-cities-wrapper {
+		@include flex-column; 
+		@include align-center;
+	}
+	option:hover, option:focus, option:focus-visible, option:active {
+		background: $beige ;
+	}
+	option:last-of-type {
+		border-radius: 10px 10px; 
+	}
+}
+.separator {
+	height: 4px;
+	@include flex-column; 
+	@include align-center;
+	margin: 2rem 0; 
+	&-line {
+		width: 300px;
+		background-color: $accent;
+		height: 100%;
+	}
+}

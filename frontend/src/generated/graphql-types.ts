@@ -25,6 +25,10 @@ export type Category = {
   categoryPois?: Maybe<Array<Poi>>;
 };
 
+export type CategoryInput = {
+  categoryName: Scalars['String']['input'];
+};
+
 export type City = {
   __typename?: 'City';
   cityId: Scalars['Float']['output'];
@@ -78,6 +82,7 @@ export type CreatePoiRateInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCategory: Scalars['ID']['output'];
   createCity: Scalars['ID']['output'];
   createCityRate: Scalars['ID']['output'];
   createPoiComment: Scalars['ID']['output'];
@@ -87,6 +92,11 @@ export type Mutation = {
   logout: UserResponse;
   signup: UserResponse;
   updateCity: Scalars['ID']['output'];
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CategoryInput;
 };
 
 
@@ -154,6 +164,7 @@ export type Poi = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllCategories: Array<Category>;
   getAllCities: Array<City>;
   getAllUsers: Array<User>;
   getCityById: City;
