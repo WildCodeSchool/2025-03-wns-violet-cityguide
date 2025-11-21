@@ -15,6 +15,9 @@ class CategoryInput {
     
     @Field()
     categoryName: string;
+
+    @Field()
+    style: string; 
 }
 
 @Resolver(Category)
@@ -28,7 +31,7 @@ export default class CategoryResolver {
     async getAllCategories() {
         return await Category.find();
     }
-
+    
     //Créer une catégorie
     @Mutation(() => ID)
     async createCategory(@Arg("data") data: CategoryInput) {
@@ -37,4 +40,7 @@ export default class CategoryResolver {
         return category.categoryId;
     }
 
+    // Modifier une catégorie
+
+    // Supprimer une catégorie      
 }

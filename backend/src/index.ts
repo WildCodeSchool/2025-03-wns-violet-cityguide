@@ -6,12 +6,10 @@ import { buildSchema } from "type-graphql";
 import * as jwt from "jsonwebtoken";
 import {UserToken} from "./types/Context";
 import { Role } from "./entities/User";
-
-import RateResolver from "./resolvers/RateResolver";
 import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
-import CommentResolver from "./resolvers/CommentResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
+import PoiResolver from "./resolvers/PoiResolver";
 
 const port = 3000;
 
@@ -23,7 +21,12 @@ async function startServer() {
     // Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
     const schema = await buildSchema({
 
-        resolvers: [UserResolver, CityResolver, CommentResolver, RateResolver, CategoryResolver],
+        resolvers: [
+            UserResolver,
+            CityResolver, 
+            CategoryResolver, 
+            PoiResolver,
+        ],
 
         authChecker: ({context: { user } }, neededRoles: Role[]) => {
 

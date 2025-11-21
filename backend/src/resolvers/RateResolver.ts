@@ -1,4 +1,5 @@
-import { 
+/**
+ * import { 
   Arg,
   Field,
   InputType,
@@ -75,3 +76,4 @@ export default class RateResolver {
 
   // Supprimer une note
 }
+ */

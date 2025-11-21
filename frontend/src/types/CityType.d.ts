@@ -12,5 +12,6 @@ export type City = {
     description: string;
     imageUrl: string;
     updatedAt?: string | null;
-    createdBy: User;
+    cityLatitude: number;
+    cityLongitude: number;      
 }

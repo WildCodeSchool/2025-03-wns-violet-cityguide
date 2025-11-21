@@ -41,22 +41,17 @@ export const LOGIN = gql `
 }
 `;
 
-export const GET_ALL_CITIES = gql`
-    query GetAllCities {
-        getAllCities {
-            cityId
-            cityName
-            createdAt
-            description
-            imageUrl
-            updatedAt
-            createdBy {
-                userInfo {
-                    avatarUrl
-                    firstName
-                    lastName
-                }
-            }
-        }
-    }
-`;
+// export const GET_ALL_CITIES = gql`
+//     query GetAllCities {
+//         getAllCities {
+//             cityId
+//             cityName
+//             createdAt
+//             description
+//             imageUrl
+//             updatedAt
+//             cityLatitude
+//             cityLongitude   
+//         }
+//     }
+// `;
