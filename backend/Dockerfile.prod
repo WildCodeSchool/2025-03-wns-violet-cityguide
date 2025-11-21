@@ -1,29 +1,29 @@
-# Build stage
+# Build stage : construit le code typescript
 FROM node:lts-alpine3.22 AS builder
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copie les fichiers package et installe les dépendances
 COPY package*.json ./
 RUN npm ci
 
-# Copy source files
+# Copie la source des fichiers
 COPY src src
 COPY tsconfig.json ./
 
-# Build for production
+# Build pour la production/stage + compile le code typescript en javascript
 RUN npm run build
 
-# Production stage
+# Production stage pour récupérer l'image de prod à partir de celle construite plus haut
 FROM node:lts-alpine3.22
 WORKDIR /app
 
-# Install curl for healthchecks
+# Installe curl pour les healthchecks
 RUN apk --no-cache add curl
 
-# Copy built files from builder
+# Copie les fichiers construit par le build précédents
 COPY --from=builder /app/dist ./build
 
-# Copy package files and install production dependencies only
+# Copie les fichiers package et installe les dépendances de production seulement (pas celle de dev)
 COPY package*.json ./
 RUN npm ci --omit=dev
 

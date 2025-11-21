@@ -1,26 +1,40 @@
 services:
   
+  # nom du service : database
   database:
+    # Récupération de l'image existante pour la base de données
     image: postgres
+    # "script" du healthckeck
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
+      # interval entre les healthcheck => à définir, ce n'est pas une valeur fixe (revoir si besoin, si le projet devient plus gros par exemple)
       interval: 20s
+      # si le test met plus de 10s à aboutir, l'exécution s'arrête
       timeout: 10s
+      # nombre d'essais pour le healthcheck (à définir également et changer si besoin)
       retries: 5
+      # le healthcheck doit démarrer 80s après la commande de lancement du Docker (cf make dev dans le makefile)(valeur à définir également)
       start_period: 80s
+    # variables utilisées (voir .env.dev) pour accéder à la BDD
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
+    # les données de la BDD sont persistées en local (persist/database) doivent être "transférées" dans le conteneur dans var/lib/postgresql
     volumes:
       - ./persist/database:/var/lib/postgresql/
 
   backend-dev:
+    # commande de construction du container à partir du Dockerfile et pas à partir d'une image existante
     build: 
+      # là où se situe le Dockerfile 
       context: ./backend
+      # le Dockerfile en question
       dockerfile: Dockerfile.dev
+    # On nomme le container qu'on vient de construire (pas besoin de nommer les container créés à partir des images préexistantes)
     container_name: backend-dev
+    # création du volume pour la copies des fichier de dev de backend
     volumes:
       - ./backend/src/:/app/src/
     healthcheck:
@@ -33,12 +47,14 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+    # variables utilisées pour que le backend communique avec la BDD (cf .env.dev)
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DB_USER: ${DB_USER}
       DB_HOST: ${DB_HOST}
       JWT_SECRET: ${JWT_SECRET}
+    # condition de lancement du backend : service 'database' fonctionnel
     depends_on:
       database:
         condition: service_healthy
@@ -63,6 +79,7 @@ services:
       depends_on:
         backend-dev:
           condition: service_healthy
+      # nécessaire pour les utilisateurs de windows pour le hotreload
       environment:
         CHOKIDAR_USEPOLLING: true 
       
@@ -72,7 +89,7 @@ services:
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf
     ports:
-      # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
+      # Gateway port (cf .env.dev) => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
       - ${GATEWAY_PORT}:80
     depends_on:
       backend-dev:
@@ -85,4 +102,3 @@ services:
     depends_on:
       database:
         condition: service_healthy
-        

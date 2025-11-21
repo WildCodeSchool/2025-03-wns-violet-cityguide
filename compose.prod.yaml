@@ -79,8 +79,9 @@ services:
       frontend-prod:
         condition: service_healthy
 
-  adminer:
-    image: adminer
-    depends_on:
-      database:
-        condition: service_healthy
+# A supprimer et laisser sur compose.stage.yaml
+  # adminer:
+  #   image: adminer
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy

@@ -1,11 +1,17 @@
 FROM node:lts-alpine3.22
-
 WORKDIR /app
 
+# Installe curl pour les healthchecks
 RUN apk --no-cache add curl
+
+# Copie du src locale vers le src du container docker
 COPY src src
+
+# Copie des packages files 
 COPY *.json .
 
+# Installations des dépendances
 RUN npm i
 
+# Lance la commande de lancement du serveur (développement)
 CMD ["npm", "run", "start"]
