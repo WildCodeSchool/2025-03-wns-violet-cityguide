@@ -2,10 +2,8 @@
 import {useParams} from "react-router-dom";
 
 // Components
-import MiniMap from "../components/MiniMap";
-import CommentsAndRatings from "../components/CommentsAndRatings.tsx";
-import PlaceName from "../components/PlaceName";
-import Description from "../components/Description";
+import Map from "../components/Map.tsx";
+import CitySelect from "../components/CitySelect.tsx";
 
 // GraphQL
 import {useGetOneCityQuery} from "../generated/graphql-types";
@@ -29,15 +27,8 @@ export default function City() {
 
     return (
         <section className="city">
-            <div className="city__background">
-                <img src={city.imageUrl} className="city__background__img" alt={city.cityName}/>
-            </div>
-            <MiniMap />
-            <div className="city__display">
-                <PlaceName city={city} />
-                <CommentsAndRatings city={city} />
-                <Description city={city} />
-            </div>
+            <CitySelect city={city}/>
+            <Map />
         </section>
     )
 }

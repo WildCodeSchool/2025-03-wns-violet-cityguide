@@ -7,12 +7,11 @@ type CityProps = {
     city: CityFromQuery;
 };
 
-export default function Description({ city }: CityProps) {
+export default function CityName({ city }: CityProps) {
 
     return (
         <>
-            <h2>Description</h2>
-            <p>{city.description}</p>
+            <h1>{city.cityName}</h1>
         </>
     )
 }
