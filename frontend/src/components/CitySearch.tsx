@@ -2,20 +2,17 @@
 import { useState, useMemo, useEffect, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Types & GraphQL
-import type { GetAllCitiesQuery } from "../generated/graphql-types";
+// Zustand - Context
+import { useCityStore } from "../zustand/cityStore";
 
-type CityFromQuery = GetAllCitiesQuery["getAllCities"][number];
-
-type CitySearchProps = {
-    cities: CityFromQuery[];
-    currentCity?: CityFromQuery;
-};
-
-export default function CitySearch({ cities, currentCity }: CitySearchProps) {
-    const [query, setQuery] = useState("");
+export default function CitySearch() {
     const navigate = useNavigate();
+    const cities = useCityStore((s) => s.cities);
+    const currentCity = useCityStore((s) => s.currentCity);
 
+    const [query, setQuery] = useState(currentCity?.cityName ?? "");
+
+    // Met à jour l’input si la ville courante change
     useEffect(() => {
         setQuery(currentCity?.cityName ?? "");
     }, [currentCity]);
@@ -33,7 +30,6 @@ export default function CitySearch({ cities, currentCity }: CitySearchProps) {
         const trimmed = query.trim().toLowerCase();
         if (!trimmed) return;
 
-        // On tente d'abord une correspondance exacte, sinon la 1ère suggestion
         const exactMatch =
             cities.find(
                 (city) => city.cityName.toLowerCase() === trimmed

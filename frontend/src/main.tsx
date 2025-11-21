@@ -4,8 +4,8 @@ import { StrictMode } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Styles
+import 'leaflet/dist/leaflet.css';
 import './scss/index.scss';
-// import '~leaflet-css';
 
 // Components
 import App from './App.tsx'

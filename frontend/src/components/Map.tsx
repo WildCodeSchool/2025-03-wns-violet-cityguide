@@ -2,42 +2,38 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
-// Types
-import type { GetAllCitiesQuery } from "../generated/graphql-types";
+// Zustand
+import { useCityStore } from "../zustand/cityStore";
 
-// Assets
-import persoIcon from "../assets/img/logoimg.svg";
+// Fonction pour générer une icône colorée
+function createColoredIcon(color: string) {
+    return L.divIcon({
+        className: "custom-marker",
+        html: `
+      <div style="
+        width: 24px;
+        height: 24px;
+        background-color: ${color};
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 4px rgba(0,0,0,0.5);
+      "></div>
+    `,
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+    });
+}
 
-type CityFromQuery = GetAllCitiesQuery["getAllCities"][number];
+export default function Map() {
+    const city = useCityStore((s) => s.currentCity);
 
-type MapProps = {
-    city: CityFromQuery;
-};
+    if (!city) return null;
 
-// Icône perso
-const DefaultIcon = L.icon({
-    iconRetinaUrl: persoIcon,
-    iconUrl: persoIcon,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41],
-});
+    // const center: [number, number] = [city.cityLat, city.cityLng];
+    const center: [number, number] = [43.6048462, 1.4428480];
 
-L.Marker.prototype.options.icon = DefaultIcon;
-
-// Exemple de coordonnées en dur (à remplacer par ton vrai système)
-const CITY_COORDS: Record<string, [number, number]> = {
-    Paris: [48.8566, 2.3522],
-    Lyon: [45.7640, 4.8357],
-    Marseille: [43.2965, 5.3698],
-};
-
-export default function Map({ city }: MapProps) {
-    const defaultCenter: [number, number] = [48.8566, 2.3522];
-
-    const center = CITY_COORDS[city.cityName] ?? defaultCenter;
+    // const markerIcon = createColoredIcon(city.style ?? "#ff0000");
+    const markerIcon = createColoredIcon("#ff0000");
 
     return (
         <div className="city__map">
@@ -52,10 +48,8 @@ export default function Map({ city }: MapProps) {
                     attribution="&copy; OpenStreetMap contributors"
                 />
 
-                <Marker position={center}>
-                    <Popup className="city__popup">
-                        {city.cityName}
-                    </Popup>
+                <Marker position={center} icon={markerIcon}>
+                    <Popup className="city__popup">{city.cityName}</Popup>
                 </Marker>
             </MapContainer>
         </div>
