@@ -6,7 +6,7 @@ import {
     Mutation,
     ID,
     Arg
- } from "type-graphql";
+} from "type-graphql";
 import { Category } from "../entities/Category";
 
 

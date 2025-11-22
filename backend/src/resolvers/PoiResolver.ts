@@ -1,6 +1,5 @@
 import { InputType, Field, Resolver, Query, Mutation, ID, Arg } from "type-graphql";
 import { Poi } from "../entities/Poi";
-import { User } from "../entities/User";
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
 
@@ -36,9 +35,8 @@ class CreatePoiInput {
 	@Field(() => ID)
 	cityId: City;
 
-	@Field(() => [ID])
-	poiCategory: Category[];		
-
+	@Field(() => ID)
+	poiCategory: Category;
 }
 
 @Resolver(Poi)
@@ -48,7 +46,7 @@ export default class PoiResolver {
     @Query(() => [Poi])
     async getAllPois() {
         return await Poi.find({
-            relations: ["categoryPois"],
+            relations: ["poiCategory"],
         });
     }
 

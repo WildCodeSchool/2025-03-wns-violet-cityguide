@@ -42,38 +42,29 @@ export const LOGIN = gql `
 `;
 
 export const GET_ALL_CITIES = gql`
-    query GetAllCities {
-        getAllCities {
-            cityId
-            cityName
-            createdAt
-            description
-            imageUrl
-            updatedAt
-            createdBy {
-                userInfo {
-                    avatarUrl
-                    firstName
-                    lastName
-                }
-            }
-        }
-    }
+		query GetAllCities {
+			getAllCities {
+			cityId
+			cityName
+			imageUrl
+			description
+			cityLatitude
+			cityLongitude
+		}
+	}
 `;
 
+// Pois à dé-commenter lorsque la requête sera ok
 export const GET_ONE_CITY = gql`
     query GetOneCity($getCityByIdId: Float!) {
         getCityById(id: $getCityByIdId) {
             cityId
             cityName
-            description
             imageUrl
-            cityRate {
-                rate
-            }
-            cityPois {
-                poiName
-            }
+            description
+            # cityPois {
+            #     poiName
+            # }
         }
     }
 `;

@@ -23,70 +23,52 @@ export type Category = {
   categoryId: Scalars['Float']['output'];
   categoryName: Scalars['String']['output'];
   categoryPois?: Maybe<Array<Poi>>;
+  style: Scalars['String']['output'];
 };
 
 export type CategoryInput = {
   categoryName: Scalars['String']['input'];
+  style: Scalars['String']['input'];
 };
 
 export type City = {
   __typename?: 'City';
   cityId: Scalars['Float']['output'];
+  cityLatitude: Scalars['Float']['output'];
+  cityLongitude: Scalars['Float']['output'];
   cityName: Scalars['String']['output'];
   cityPois?: Maybe<Array<Poi>>;
-  cityRate?: Maybe<Array<Rate>>;
   createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  createdBy: User;
   description: Scalars['String']['output'];
   imageUrl: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
-export type Comment = {
-  __typename?: 'Comment';
-  commentId: Scalars['Float']['output'];
-  commentPoi: Poi;
-  commentUser: User;
-  content: Scalars['String']['output'];
-  createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  deletedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  title: Scalars['String']['output'];
-  updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-};
-
 export type CreateCityInput = {
+  cityLatitude: Scalars['Float']['input'];
+  cityLongitude: Scalars['Float']['input'];
   cityName: Scalars['String']['input'];
-  createdBy: Scalars['ID']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
 };
 
-export type CreateCityRateInput = {
-  rate: Scalars['Float']['input'];
-  rateCity: Scalars['ID']['input'];
-  rateUser: Scalars['ID']['input'];
-};
-
-export type CreateCommentInput = {
-  content: Scalars['String']['input'];
-  createdBy: Scalars['ID']['input'];
-  poi: Scalars['ID']['input'];
-  title: Scalars['String']['input'];
-};
-
-export type CreatePoiRateInput = {
-  rate: Scalars['Float']['input'];
-  ratePoi: Scalars['ID']['input'];
-  rateUser: Scalars['ID']['input'];
+export type CreatePoiInput = {
+  address: Scalars['String']['input'];
+  cityId: Scalars['ID']['input'];
+  externalLink: Scalars['String']['input'];
+  imageUrl: Scalars['String']['input'];
+  poiCategory: Scalars['ID']['input'];
+  poiDescription: Scalars['String']['input'];
+  poiLatitude: Scalars['Float']['input'];
+  poiLongitude: Scalars['Float']['input'];
+  poiName: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Scalars['ID']['output'];
   createCity: Scalars['ID']['output'];
-  createCityRate: Scalars['ID']['output'];
-  createPoiComment: Scalars['ID']['output'];
-  createPoiRate: Scalars['ID']['output'];
+  createPoi: Scalars['ID']['output'];
   deleteCity: Scalars['ID']['output'];
   login: UserResponse;
   logout: UserResponse;
@@ -105,18 +87,8 @@ export type MutationCreateCityArgs = {
 };
 
 
-export type MutationCreateCityRateArgs = {
-  data: CreateCityRateInput;
-};
-
-
-export type MutationCreatePoiCommentArgs = {
-  data: CreateCommentInput;
-};
-
-
-export type MutationCreatePoiRateArgs = {
-  data: CreatePoiRateInput;
+export type MutationCreatePoiArgs = {
+  data: CreatePoiInput;
 };
 
 
@@ -148,17 +120,16 @@ export type NewUserInput = {
 export type Poi = {
   __typename?: 'Poi';
   address: Scalars['String']['output'];
-  comment?: Maybe<Array<Comment>>;
-  coordinates: Scalars['String']['output'];
+  cityId: City;
   createdAt: Scalars['DateTimeISO']['output'];
-  createdBy: User;
+  externalLink: Scalars['String']['output'];
   imageUrl: Scalars['String']['output'];
-  pin: Scalars['String']['output'];
-  poiCategories?: Maybe<Array<Category>>;
+  poiCategory?: Maybe<Category>;
   poiDescription: Scalars['String']['output'];
   poiId: Scalars['Float']['output'];
+  poiLatitude: Scalars['Float']['output'];
+  poiLongitude: Scalars['Float']['output'];
   poiName: Scalars['String']['output'];
-  rates?: Maybe<Array<Rate>>;
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
 };
 
@@ -166,9 +137,10 @@ export type Query = {
   __typename?: 'Query';
   getAllCategories: Array<Category>;
   getAllCities: Array<City>;
+  getAllPois: Array<Poi>;
   getAllUsers: Array<User>;
   getCityById: City;
-  getRatesByCity: Array<Rate>;
+  getPoiById: Poi;
   getUserById?: Maybe<User>;
 };
 
@@ -178,22 +150,13 @@ export type QueryGetCityByIdArgs = {
 };
 
 
-export type QueryGetRatesByCityArgs = {
-  cityId: Scalars['Float']['input'];
+export type QueryGetPoiByIdArgs = {
+  id: Scalars['Float']['input'];
 };
 
 
 export type QueryGetUserByIdArgs = {
   userId: Scalars['ID']['input'];
-};
-
-export type Rate = {
-  __typename?: 'Rate';
-  rate: Scalars['Float']['output'];
-  rateCity?: Maybe<City>;
-  rateId: Scalars['Float']['output'];
-  ratePoi?: Maybe<Poi>;
-  rateUser: User;
 };
 
 /** Roles for users in this app */
@@ -203,6 +166,8 @@ export enum Role {
 }
 
 export type UpdateCityInput = {
+  cityLatitude: Scalars['Float']['input'];
+  cityLongitude: Scalars['Float']['input'];
   cityName: Scalars['String']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
@@ -210,10 +175,6 @@ export type UpdateCityInput = {
 
 export type User = {
   __typename?: 'User';
-  createdCities?: Maybe<Array<City>>;
-  createdComments?: Maybe<Array<Comment>>;
-  createdPois?: Maybe<Array<Poi>>;
-  createdRates?: Maybe<Array<Rate>>;
   email: Scalars['String']['output'];
   hashedPassword: Scalars['String']['output'];
   roles: Array<Role>;
@@ -264,14 +225,14 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Us
 export type GetAllCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename?: 'City', cityId: number, cityName: string, createdAt?: any | null, description: string, imageUrl: string, updatedAt?: any | null, createdBy: { __typename?: 'User', userInfo?: { __typename?: 'UserInfo', avatarUrl: string, firstName: string, lastName: string } | null } }> };
+export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename?: 'City', cityId: number, cityName: string, imageUrl: string, description: string, cityLatitude: number, cityLongitude: number }> };
 
 export type GetOneCityQueryVariables = Exact<{
   getCityByIdId: Scalars['Float']['input'];
 }>;
 
 
-export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?: 'City', cityId: number, cityName: string, description: string, imageUrl: string, cityRate?: Array<{ __typename?: 'Rate', rate: number }> | null, cityPois?: Array<{ __typename?: 'Poi', poiName: string }> | null } };
+export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?: 'City', cityId: number, cityName: string, imageUrl: string, description: string } };
 
 
 export const GetAllUsersDocument = gql`
@@ -401,17 +362,10 @@ export const GetAllCitiesDocument = gql`
   getAllCities {
     cityId
     cityName
-    createdAt
-    description
     imageUrl
-    updatedAt
-    createdBy {
-      userInfo {
-        avatarUrl
-        firstName
-        lastName
-      }
-    }
+    description
+    cityLatitude
+    cityLongitude
   }
 }
     `;
@@ -452,14 +406,8 @@ export const GetOneCityDocument = gql`
   getCityById(id: $getCityByIdId) {
     cityId
     cityName
-    description
     imageUrl
-    cityRate {
-      rate
-    }
-    cityPois {
-      poiName
-    }
+    description
   }
 }
     `;
