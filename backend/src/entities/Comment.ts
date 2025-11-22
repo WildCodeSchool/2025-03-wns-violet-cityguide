@@ -1,3 +1,5 @@
+/**
+ * 
 import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, UpdateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm";
 import { Poi } from "./Poi";
@@ -41,3 +43,4 @@ class Comment extends BaseEntity {
 }
 
 export { Comment };
+ */

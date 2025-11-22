@@ -2,7 +2,6 @@ import { BaseEntity, Column, ManyToOne, Entity, OneToMany, PrimaryGeneratedColum
 import { Field, ObjectType } from "type-graphql";
 import { Poi } from "./Poi";
 import { User } from "./User";
-import { Rate } from "./Rate";
 
 
 @Entity()
@@ -24,18 +23,22 @@ class City extends BaseEntity {
     @Field()
     imageUrl: string;
 
+    @Field()
+    @Column("float")
+    cityLatitude!: number;
+
+    @Field()
+    @Column("float")
+    cityLongitude!: number;
+
     // Pour le chemin "retour" Poi -> City, on trouve la ville associée au poi sur la propriété poi.cityId
     @OneToMany(() => Poi, poi => poi.cityId)
     @Field(() => [Poi], { nullable: true }) 
     cityPois: Poi[];
 
-    @OneToMany(() => Rate, rate => rate.rateCity)
-    @Field(() => [Rate], { nullable: true })
-    cityRate?: Rate[];
-
-    @ManyToOne(() => User, user => user.createdCities, {eager: true})
-    @Field(() => User) 
-    createdBy: User;
+    // @ManyToOne(() => User, user => user.createdCities, {eager: true})
+    // @Field(() => User) 
+    // createdBy: User;
 
     @CreateDateColumn()
     @Field({ nullable: true })

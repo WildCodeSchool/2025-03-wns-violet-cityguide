@@ -1,7 +1,7 @@
-import { Arg, Field, ID, InputType, Mutation, Resolver } from "type-graphql";
+/**
+ * import { Arg, Field, ID, InputType, Mutation, Resolver } from "type-graphql";
 import { User } from "../entities/User";
 import { Poi } from "../entities/Poi";
-import { Comment } from "../entities/Comment";
 
 @InputType()
 class CreateCommentInput {
@@ -35,3 +35,4 @@ export default class CommentResolver {
   
   // Supprimer un commentaire
 }
+ */

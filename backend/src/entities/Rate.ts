@@ -1,4 +1,5 @@
-import { Field, ObjectType } from "type-graphql";
+/**
+ * import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { Poi } from "./Poi";
@@ -30,3 +31,4 @@ class Rate extends BaseEntity {
 }
 
 export { Rate };
+ */

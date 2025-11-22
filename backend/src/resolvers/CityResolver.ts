@@ -25,8 +25,20 @@ class CreateCityInput {
     @Field()
     imageUrl: string;
 
-    @Field(() => ID) 
-    createdBy: User;
+    // @Field(() => ID) 
+    // createdBy: User;
+
+    @Field()
+    // @IsNumber()
+    // @Min(-90)
+    // @Max(90)
+    cityLatitude!: number;
+
+    @Field()
+    // @IsNumber()
+    // @Min(-180)
+    // @Max(180)
+    cityLongitude!: number;
 }
 
 // Lors de la modification de la ville, on NE doit PAS modifier l'utilisateur créateur de la ville
@@ -40,6 +52,18 @@ class UpdateCityInput {
 
     @Field()
     imageUrl: string;
+
+    @Field()
+    // @IsNumber()
+    // @Min(-90)
+    // @Max(90)
+    cityLatitude!: number;
+
+    @Field()
+    // @IsNumber()
+    // @Min(-180)
+    // @Max(180)
+    cityLongitude!: number;
 }
 
 @Resolver(City)
@@ -61,7 +85,6 @@ export default class CityResolver {
         const city = await City.findOneByOrFail({cityId: id});
         return city;
     } 
-
 
     // Créer une ville
     @Mutation(() => ID)
