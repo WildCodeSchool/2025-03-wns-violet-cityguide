@@ -4,15 +4,15 @@ import { StrictMode } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Styles
+import 'leaflet/dist/leaflet.css';
 import './scss/index.scss';
-import '~leaflet-css';
 
 // Components
 import App from './App.tsx'
 import Signup from './pages/Signup.tsx'
 import Login from './pages/Login.tsx'
 import HomePage from './pages/HomePage.tsx'
-import Cities from './pages/City.tsx'
+import City from './pages/City.tsx'
 import Pois from './pages/Pois.tsx'
 import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
@@ -46,8 +46,8 @@ const router = createBrowserRouter([
                 element: <Login />,
             },
             {
-                path: '/cities',
-                element: <Cities />,
+                path: '/city/:cityId',
+                element: <City />,
             },
             {
                 path: '/pois',
