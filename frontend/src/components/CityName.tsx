@@ -4,14 +4,14 @@ import type { GetOneCityQuery } from "../generated/graphql-types";
 type CityFromQuery = NonNullable<GetOneCityQuery["getCityById"]>;
 
 type CityProps = {
-    city: CityFromQuery;
+	city: CityFromQuery;
 };
 
 export default function CityName({ city }: CityProps) {
 
-    return (
-        <>
-            <h1>{city.cityName}</h1>
-        </>
-    )
+	return (
+		<>
+			<h1>{city.cityName}</h1>
+		</>
+	)
 }

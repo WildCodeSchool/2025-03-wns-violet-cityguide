@@ -6,49 +6,49 @@ import { City } from "./City";
 // exemple de permission: CREATE, READ, UPDATE, DELETE
 
 export enum Role {
-    USER = "USER",
-    ADMIN = "ADMIN",
+		USER = "USER",
+		ADMIN = "ADMIN",
 }
 
 registerEnumType(Role, {
-    name: "Role",
-    description: "Roles for users in this app",
+		name: "Role",
+		description: "Roles for users in this app",
 });
 
 @Entity()
 @ObjectType()
 class User extends BaseEntity {
 
-    @PrimaryGeneratedColumn()
-    @Field()
-    userId: number;
+		@PrimaryGeneratedColumn()
+		@Field()
+		userId: number;
 
-    @Column({ unique: true })
-    @Field()
-    email: string;
+		@Column({ unique: true })
+		@Field()
+		email: string;
 
-    @Column()
-    @Field()
-    hashedPassword: string;
+		@Column()
+		@Field()
+		hashedPassword: string;
 
-    @Column({
-    type: "enum",
-    enum: Role,
-    array: true,
-    default: [Role.USER],
-    enumName: "role" 
-    })
-    @Field(() => [Role])
-    roles: Role[];
+		@Column({
+		type: "enum",
+		enum: Role,
+		array: true,
+		default: [Role.USER],
+		enumName: "role" 
+		})
+		@Field(() => [Role])
+		roles: Role[];
 
-    @OneToOne(() => UserInfo, userInfo => userInfo.user)
-    @JoinColumn()
-    @Field(() => UserInfo, { nullable: true })
-    userInfo?: UserInfo;
+		@OneToOne(() => UserInfo, userInfo => userInfo.user)
+		@JoinColumn()
+		@Field(() => UserInfo, { nullable: true })
+		userInfo?: UserInfo;
 
-    // @OneToMany(() => City, city => city.createdBy)
-    // @Field(() => [City], { nullable: true })
-    // createdCities: City[];
+		// @OneToMany(() => City, city => city.createdBy)
+		// @Field(() => [City], { nullable: true })
+		// createdCities: City[];
 }
 
 export { User };

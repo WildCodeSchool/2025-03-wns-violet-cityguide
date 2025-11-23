@@ -8,19 +8,19 @@ $black: #000000;
 
 // fonts
 @font-face {
-  font-family: 'Poppins';
-  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: 500;
+	font-family: 'Poppins';
+	src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-weight: 500;
 }
 @font-face {
-  font-family: 'JosefinSlab';
-  src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+	font-family: 'JosefinSlab';
+	src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900;
 }
 @font-face {
-  font-family: 'Work_Sans';
-  src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900; // si c'est une variable font
+	font-family: 'Work_Sans';
+	src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900; // si c'est une variable font
 }
 
 // Variables SCSS pour les familles de polices

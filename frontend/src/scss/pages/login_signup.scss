@@ -1,101 +1,101 @@
 @use '../variables' as *;
 
 .signup {
-  background-size: cover;
-  background-position: center;
-  margin-top: -7.8rem;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0 1rem;
-  @media (min-width: $breakpoint-small) {
-    margin-top: -9.8rem;
-  }
+	background-size: cover;
+	background-position: center;
+	margin-top: -7.8rem;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 0 1rem;
+	@media (min-width: $breakpoint-small) {
+		margin-top: -9.8rem;
+	}
 
-  &__card {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    margin-top: 5rem;
-    border-radius: 1rem;
-    background-color: $light-beige;
-    box-shadow: $box-shadow;
-    @media (min-width: $breakpoint-small) {
-      width: 20rem;
-      padding: 4rem 2rem;
-    }
+	&__card {
+		display: flex;
+		flex-direction: column;
+		padding: 2rem;
+		margin-top: 5rem;
+		border-radius: 1rem;
+		background-color: $light-beige;
+		box-shadow: $box-shadow;
+		@media (min-width: $breakpoint-small) {
+			width: 20rem;
+			padding: 4rem 2rem;
+		}
 
-    &__title {
-      color: $marron;
-      font-size: 1.5rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+		&__title {
+			color: $marron;
+			font-size: 1.5rem;
+			text-align: center;
+			margin-bottom: 2rem;
+		}
 
-    &__form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .5rem;
-      @media (min-width: $breakpoint-small) {
-        gap: 1rem;
-      }
+		&__form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: .5rem;
+			@media (min-width: $breakpoint-small) {
+				gap: 1rem;
+			}
 
-      &__input {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: .5rem;
-        @media (min-width: $breakpoint-small) {
-          gap: 1rem;
-        }
+			&__input {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+				gap: .5rem;
+				@media (min-width: $breakpoint-small) {
+					gap: 1rem;
+				}
 
 
-        label {
-          color: $marron;
-          font-size: 1rem;
-          font-weight: 500;
-        }
+				label {
+					color: $marron;
+					font-size: 1rem;
+					font-weight: 500;
+				}
 
-        input, select {
-          background-color: $beige;
-          border: solid 2px $sand;
-          border-radius: 5px;
-          font-family: $text;
-          font-size: 1rem;
-          font-weight: 500;
-          color: $beige;
-          padding: .5rem;
+				input, select {
+					background-color: $beige;
+					border: solid 2px $sand;
+					border-radius: 5px;
+					font-family: $text;
+					font-size: 1rem;
+					font-weight: 500;
+					color: $beige;
+					padding: .5rem;
 
-          option {
-            background-color: $beige;
-          }
-        }
-      }
-      &__button {
-        width: 12rem;
-        margin-top: 3rem;
-        padding: .5rem 1rem;
-        border: none;
-        border-radius: 5px;
-        color: $marron;
-        background-color: $sand;
-        font-family: $title;
-        font-size: 1.25rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color .25s ease, color .25s ease, transform .25s ease;
+					option {
+						background-color: $beige;
+					}
+				}
+			}
+			&__button {
+				width: 12rem;
+				margin-top: 3rem;
+				padding: .5rem 1rem;
+				border: none;
+				border-radius: 5px;
+				color: $marron;
+				background-color: $sand;
+				font-family: $title;
+				font-size: 1.25rem;
+				font-weight: bold;
+				cursor: pointer;
+				transition: background-color .25s ease, color .25s ease, transform .25s ease;
 
-        &:hover, &:focus-visible {
-          transform: scale(1.02);
-          background-color: $marron;
-          color: $sand;
-          outline: none;
-        }
-      }
-    }
-  }
+				&:hover, &:focus-visible {
+					transform: scale(1.02);
+					background-color: $marron;
+					color: $sand;
+					outline: none;
+				}
+			}
+		}
+	}
 }

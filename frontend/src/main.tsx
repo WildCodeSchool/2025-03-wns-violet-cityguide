@@ -19,60 +19,60 @@ import LegalNotice from "./pages/LegalNotice.tsx";
 
 // Apollo
 import {
-    ApolloClient,
-    InMemoryCache,
-    ApolloProvider,
+	ApolloClient,
+	InMemoryCache,
+	ApolloProvider,
 } from "@apollo/client";
 
 const client = new ApolloClient({
-    uri: "http://localhost:7000/api",
-    cache: new InMemoryCache(),
+	uri: "http://localhost:7000/api",
+	cache: new InMemoryCache(),
 });
 
 const router = createBrowserRouter([
-    {
-        element: <App />,
-        children: [
-            {
-                path: '',
-                element: <HomePage />
-            },
-            {
-                path: '/signup',
-                element: <Signup />,
-            },
-            {
-                path: '/login',
-                element: <Login />,
-            },
-            {
-                path: '/city/:cityId',
-                element: <City />,
-            },
-            {
-                path: '/pois',
-                element: <Pois />,
-            },
-            {
-                path: '/account',
-                element: <Account />,
-            },
-            {
-                path: '/legalNotice',
-                element: <LegalNotice />,
-            },
-            // {
-            //     path: '*',
-            //     element: <NotFound/>,
-            // },
-        ],
-    },
+	{
+		element: <App />,
+		children: [
+			{
+				path: '',
+				element: <HomePage />
+			},
+			{
+				path: '/signup',
+				element: <Signup />,
+			},
+			{
+				path: '/login',
+				element: <Login />,
+			},
+			{
+				path: '/city/:cityId',
+				element: <City />,
+			},
+			{
+				path: '/pois',
+				element: <Pois />,
+			},
+			{
+				path: '/account',
+				element: <Account />,
+			},
+			{
+				path: '/legalNotice',
+				element: <LegalNotice />,
+			},
+			// {
+			//   path: '*',
+			//   element: <NotFound/>,
+			// },
+		],
+	},
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <ApolloProvider client={client}>
-            <RouterProvider router={router}/>
-        </ApolloProvider>
-    </StrictMode>,
+	<StrictMode>
+		<ApolloProvider client={client}>
+			<RouterProvider router={router}/>
+		</ApolloProvider>
+	</StrictMode>,
 )

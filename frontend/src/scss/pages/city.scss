@@ -1,23 +1,23 @@
 @use '../variables' as *;
 
 .city {
-  position: relative;
-  background-color: $beige;
-  width: 100%;
-  height: calc(100vh - 10rem);
+	position: relative;
+	background-color: $beige;
+	width: 100%;
+	height: calc(100vh - 10rem);
 
-  &__map {
-    width: 100%;
-    height: 100%;
-    &-container {
-      width: 100%;
-      height: 100%;
-    }
-  }
+	&__map {
+		width: 100%;
+		height: 100%;
+		&-container {
+			width: 100%;
+			height: 100%;
+		}
+	}
 }
 
 .leaflet-container img {
-  max-width: none !important;
-  height: auto !important;
-  background: transparent;
+	max-width: none !important;
+	height: auto !important;
+	background: transparent;
 }

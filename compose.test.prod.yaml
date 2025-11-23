@@ -15,7 +15,7 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
-    
+
   backend-prod:
     restart: always
     container_name: backend-prod
@@ -44,7 +44,6 @@ services:
       database: 
         condition: service_healthy
 
-  
   frontend-prod:
     restart: always
     container_name: frontend-prod
