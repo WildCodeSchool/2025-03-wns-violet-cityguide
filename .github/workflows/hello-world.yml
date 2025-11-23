@@ -3,15 +3,15 @@ name: hello-world
 
 # déclenchée sur PR à l'ouverture de la PR :
 on:
-	pull_request:
-		types: [opened]
+  pull_request:
+    types: [opened]
 
 # missions : 
 jobs:
-	display-hello-world:
-		runs-on: ubuntu-latest
+  display-hello-world:
+    runs-on: ubuntu-latest
 
 # étapes :
-		steps:
-			- name: Display Helloworld
-				run: echo "Hello world ! "
+    steps:
+      - name: Display Helloworld
+        run: echo "Hello world ! "
