@@ -18,7 +18,7 @@ Exécuter les commandes suivantes :
 ## Conventions à respecter pour participer au développement du projet
 * Obligatoire
 	* Utiliser `LF` et non `CRLF`
-	* Utiliser les tabulations au lieu des espaces pour l'indentation du code **SAUF pour les fichiers compose.*.yaml** qui DOIVENT ÊTRE indentés avec des espaces
+	* Utiliser les tabulations au lieu des espaces pour l'indentation du code **SAUF pour les fichiers compose.*.yaml et les fichiers de worklows** qui DOIVENT ÊTRE indentés avec des espaces
 	* Ne pas utiliser de variables raccourcies (ex : utiliser "index" au lieu de "i" dans les boucles)
 	* __Commenter__ le code
 	* Respecter le formalisme des messages de commit (cf `Messages de commmit`)
@@ -89,7 +89,7 @@ Clone project using `git clone git@github.com:WildCodeSchool/2025-03-wns-violet-
 ## Project development conventions
 * Mandatory
 	* Use `LF` instead of `CRLF`
-	* Use tabulations and not spaces to indent code **EXCEPT in compose.*.yaml** which MUST BE indented with spaces
+	* Use tabulations and not spaces to indent code **EXCEPT in compose.*.yaml and workkflows files** which MUST BE indented with spaces
 	* Do not use short variables (eg: use "index" instead of "i" in loops)
 	* __Comment__ your code
 	* Commit messages must be compliant to the convention you can find in `Commit messages` section
