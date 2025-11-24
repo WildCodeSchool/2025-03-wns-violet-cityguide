@@ -6,24 +6,24 @@ import { persist, devtools } from "zustand/middleware";
 import { type State, type Actions } from "../types/authentication.ts";
 
 export const useUserStore = create<State & Actions>()(
-    devtools(
-        persist(
-        (set) => ({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-            login: (profile) =>
-                set({
-                    user: profile.user ?? null,
-                    token: profile.token ?? null,
-                    isAuthenticated: !!profile.user && !!profile.token,
-                }),
-            logout: () => set({ user: null, token: null, isAuthenticated: false }),
-        }), {
-            name: "user-store",
-        }
-        )
-    )
+	devtools(
+		persist(
+			(set) => ({
+				user: null,
+				token: null,
+				isAuthenticated: false,
+				login: (profile) =>
+					set({
+						user: profile.user ?? null,
+						token: profile.token ?? null,
+						isAuthenticated: !!profile.user && !!profile.token,
+					}),
+				logout: () => set({ user: null, token: null, isAuthenticated: false }),
+			}), {
+				name: "user-store",
+			}
+		)
+	)
 );
 
 export const useCurrentUser = () => useUserStore((set) => set.user);

@@ -13,14 +13,14 @@ const { DB_HOST, DB_USER, DB_DATABASE, DB_PASSWORD } = process.env;
 
 // DataSource permet de définir la configuration de connexion à la DB
 const dataSource = new DataSource({
-    type: "postgres", 
-    host: DB_HOST,
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    entities: [User, City, Poi, Category, UserInfo],
-    synchronize: true,
-    logging: ["error", "query"],
+		type: "postgres", 
+		host: DB_HOST,
+		username: DB_USER,
+		password: DB_PASSWORD,
+		database: DB_DATABASE,
+		entities: [User, City, Poi, Category, UserInfo],
+		synchronize: true,
+		logging: ["error", "query"],
 });
 
 export default dataSource;

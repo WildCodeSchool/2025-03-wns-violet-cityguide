@@ -18,16 +18,16 @@ class CreatePoiInput {
 	address: string;
 
 	@Field()
-    // @IsNumber()
-    // @Min(-90)
-    // @Max(90)
-    poiLatitude!: number;
+		// @IsNumber()
+		// @Min(-90)
+		// @Max(90)
+		poiLatitude!: number;
 
-    @Field()
-    // @IsNumber()
-    // @Min(-180)
-    // @Max(180)
-    poiLongitude!: number;
+		@Field()
+		// @IsNumber()
+		// @Min(-180)
+		// @Max(180)
+		poiLongitude!: number;
 
 	@Field()
 	externalLink: string;
@@ -42,13 +42,13 @@ class CreatePoiInput {
 @Resolver(Poi)
 export default class PoiResolver {
 
-    // On récupère tous les pois
-    @Query(() => [Poi])
-    async getAllPois() {
-        return await Poi.find({
-            relations: ["poiCategory"],
-        });
-    }
+		// On récupère tous les pois
+		@Query(() => [Poi])
+		async getAllPois() {
+				return await Poi.find({
+						relations: ["poiCategory"],
+				});
+		}
 
 	// On récupère un poi en fonction de son id
 	@Query(() => Poi)

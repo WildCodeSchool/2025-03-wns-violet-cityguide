@@ -18,7 +18,7 @@ Exécuter les commandes suivantes :
 ## Conventions à respecter pour participer au développement du projet
 * Obligatoire
 	* Utiliser `LF` et non `CRLF`
-	* Utiliser les tabulations au lieu des espaces pour l'indentation du code
+	* Utiliser les tabulations au lieu des espaces pour l'indentation du code **SAUF pour les fichiers compose.*.yaml et les fichiers de worklows** qui DOIVENT ÊTRE indentés avec des espaces
 	* Ne pas utiliser de variables raccourcies (ex : utiliser "index" au lieu de "i" dans les boucles)
 	* __Commenter__ le code
 	* Respecter le formalisme des messages de commit (cf `Messages de commmit`)
@@ -36,7 +36,7 @@ Exécuter les commandes suivantes :
 		* JetBrains : `https://www.jetbrains.com/help/webstorm/configuring-line-endings-and-line-separators.html`
 * Utiliser des tabulations au lieu des espaces (VSCode): 
 	* Configuration : `File > Preferences > Settings`, taper `insert spaces` dans la barre de recherche, décocher `Editor: Detect Indentation` et `Editor: Insert Spaces`
-	* Réparation : Dans les fichier existants, utiliser `CTRL + ,` et taper `Convert indentation to tabs` dans le champ qui apparaît
+	* Réparation : Dans les fichier existants, utiliser `CTRL + Shift + P` et taper `Convert indentation to tabs` dans le champ qui apparaît
 
 ### Messages de commmit :
 Format :
@@ -89,7 +89,7 @@ Clone project using `git clone git@github.com:WildCodeSchool/2025-03-wns-violet-
 ## Project development conventions
 * Mandatory
 	* Use `LF` instead of `CRLF`
-	* Use tabulations and not spaces to indent code 
+	* Use tabulations and not spaces to indent code **EXCEPT in compose.*.yaml and workkflows files** which MUST BE indented with spaces
 	* Do not use short variables (eg: use "index" instead of "i" in loops)
 	* __Comment__ your code
 	* Commit messages must be compliant to the convention you can find in `Commit messages` section
@@ -107,7 +107,7 @@ Clone project using `git clone git@github.com:WildCodeSchool/2025-03-wns-violet-
 		* JetBrains : `https://www.jetbrains.com/help/webstorm/configuring-line-endings-and-line-separators.html`
 * How to use tabs instead of spaces (VSCode): 
 	* Config: `File > Preferences > Settings`, type `insert spaces` in search bar and uncheck `Editor: Detect Indentation` and `Editor: Insert Spaces`
-	* Fix: in existing files, use `CTRL + ,` and type `Convert indentation to tabs` in the generated input
+	* Fix: in existing files, use `CTRL + Shift + P` and type `Convert indentation to tabs` in the generated input
 
 ### Commit messages:
 Format:

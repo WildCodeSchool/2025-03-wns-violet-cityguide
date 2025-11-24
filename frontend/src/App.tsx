@@ -7,14 +7,14 @@ import Footer from './components/Footer';
 import SignupHeader from "./components/SignupHeader";
 
 export default function App() {
-    const { pathname } = useLocation();
-    const showSignupHeader = pathname === '/login' || pathname === '/signup';
+	const { pathname } = useLocation();
+	const showSignupHeader = pathname === '/login' || pathname === '/signup';
 
-  return (
-    <>
-        {showSignupHeader ? <SignupHeader /> : <Header />}
-        <Outlet />
-        <Footer />
-    </>
-  )
+	return (
+		<>
+			{showSignupHeader ? <SignupHeader /> : <Header />}
+			<Outlet />
+			<Footer />
+		</>
+	)
 }
