@@ -1,73 +1,67 @@
 import { ObjectType, Field } from "type-graphql";
-import { BaseEntity, JoinTable, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { City } from "./City";
-import { Comment } from "./Comment";
-import { User } from "./User";
 import { Category } from "./Category";
-import { Rate } from "./Rate";
 
 @Entity()
 @ObjectType()
 class Poi extends BaseEntity {
-    
-    @PrimaryGeneratedColumn()
-    @Field()
-    poiId: number;
+		
+		@PrimaryGeneratedColumn()
+		@Field()
+		poiId: number;
 
-    // Attention : la contrainte d'unicité risque d'être un souci exemple deux poi =!= l'uin sur l'autre (ex magasin dans un centre commercial) ont les mêmes coordonnées GPS
-    @Column({ unique: true })
-    @Field()
-    coordinates: string;
+		@Column()
+		@Field()
+		poiName: string;
 
-    @Column()
-    @Field()
-    pin: string;
+		@Column()
+		@Field()
+		poiDescription: string;
 
-    // Attention, idem que pour coordinates
-    @Column({ unique: true })
-    @Field()
-    address: string;
+		@Column()
+		@Field()
+		externalLink: string;
 
-    @Column()
-    @Field()
-    poiName: string;
+		@Column()
+		@Field()
+		imageUrl: string;
 
-    @Column()
-    @Field()
-    poiDescription: string;
+		@Column()
+		@Field()
+		address: string;
 
-    @Column()
-    @Field()
-    imageUrl: string;
+		@Field()
+		@Column("float")
+		poiLatitude!: number;
 
-    @ManyToOne(() => User, user => user.createdPois)
-    @Field(() => User)
-    createdBy: User;
+		@Field()
+		@Column("float")
+		poiLongitude!: number;
+		
+		@ManyToOne(() => City, city => city.cityPois)
+		@Field(() => City)
+		cityId: City; 
 
-    @ManyToMany(() => Category, category => category.categoryPois)
-    @JoinTable()
-    @Field(() => [Category],{ nullable: true })
-    poiCategories: Category[];
+		@ManyToOne(() => Category, category => category.categoryPois)
+		@Field(() => Category, {nullable: true})
+		poiCategory: Category;
 
-    @ManyToOne(() => City, city => city.cityPois)
-    @JoinColumn()
-    cityId: City; 
+		// @OneToMany(() => Rate, rate => rate.ratePoi)
+		// @Field(() => [Rate],{ nullable: true })
+		// rates: Rate[];
 
-    @OneToMany(() => Rate, rate => rate.ratePoi)
-    @Field(() => [Rate],{ nullable: true })
-    rates: Rate[];
+		// @OneToMany(() => Comment, comment => comment.commentPoi)
+		// @Field(() => [Comment],{ nullable: true })
+		// comment: Comment[];
 
-    @OneToMany(() => Comment, comment => comment.commentPoi)
-    @Field(() => [Comment],{ nullable: true })
-    comment: Comment[];
+		@CreateDateColumn()
+		@Field()
+		createdAt: Date;
 
-    @CreateDateColumn()
-    @Field()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    @Field({ nullable: true })
-    updatedAt?: Date;
+		@UpdateDateColumn()
+		@Field({ nullable: true })
+		updatedAt?: Date;
 }
 
 export { Poi };
