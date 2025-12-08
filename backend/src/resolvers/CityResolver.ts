@@ -47,25 +47,10 @@ class CreateCityInput {
 @InputType()
 class UpdateCityInput {
 		@Field()
-		cityName: string;
-
-		@Field()
 		description: string;
 
 		@Field()
 		imageUrl: string;
-
-		@Field()
-		// @IsNumber()
-		// @Min(-90)
-		// @Max(90)
-		cityLatitude!: number;
-
-		@Field()
-		// @IsNumber()
-		// @Min(-180)
-		// @Max(180)
-		cityLongitude!: number;
 }
 
 @Resolver(City)
@@ -96,6 +81,7 @@ export default class CityResolver {
 				return city.cityId;
 		}
 
+		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Modifier une ville
 		@Mutation(() => ID)
 		async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {

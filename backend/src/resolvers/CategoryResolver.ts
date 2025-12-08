@@ -40,7 +40,27 @@ export default class CategoryResolver {
 				return category.categoryId;
 		}
 
+		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Modifier une catégorie
+		@Mutation(() => ID)
+		async updateCategory(@Arg("categoryId") categoryId: number, @Arg("data") data: CategoryInput) {
 
-		// Supprimer une catégorie      
+			// Récupérer la catégorie à modifier
+			let category = await Category.findOneByOrFail({categoryId});
+
+			// Assigner les nouvelles données à la catégorie à modifier
+			category = Object.assign(category, data);
+
+			// Enregistrer les nouvelles données de la catégorie
+			await category.save();
+			return category.categoryId;
+		}
+
+		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+		// Supprimer une catégorie
+		@Mutation(() => ID)
+		async deleteCategory(@Arg("categoryId") categoryId: number) {
+			await Category.delete({ categoryId });
+			return categoryId;
+		}
 }

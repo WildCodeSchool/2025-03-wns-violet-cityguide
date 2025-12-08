@@ -52,28 +52,22 @@ export type CreateCityInput = {
   imageUrl: Scalars['String']['input'];
 };
 
-export type CreatePoiInput = {
-  address: Scalars['String']['input'];
-  cityId: Scalars['ID']['input'];
-  externalLink: Scalars['String']['input'];
-  imageUrl: Scalars['String']['input'];
-  poiCategory: Scalars['ID']['input'];
-  poiDescription: Scalars['String']['input'];
-  poiLatitude: Scalars['Float']['input'];
-  poiLongitude: Scalars['Float']['input'];
-  poiName: Scalars['String']['input'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Scalars['ID']['output'];
   createCity: Scalars['ID']['output'];
   createPoi: Scalars['ID']['output'];
+  deleteCategory: Scalars['ID']['output'];
   deleteCity: Scalars['ID']['output'];
+  deletePoi: Scalars['ID']['output'];
+  deleteUser: Scalars['ID']['output'];
   login: UserResponse;
   logout: UserResponse;
   signup: UserResponse;
+  updateCategory: Scalars['ID']['output'];
   updateCity: Scalars['ID']['output'];
+  updatePoi: Scalars['ID']['output'];
+  updateUser: Scalars['ID']['output'];
 };
 
 
@@ -88,12 +82,27 @@ export type MutationCreateCityArgs = {
 
 
 export type MutationCreatePoiArgs = {
-  data: CreatePoiInput;
+  data: PoiInput;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  categoryId: Scalars['Float']['input'];
 };
 
 
 export type MutationDeleteCityArgs = {
   cityId: Scalars['Float']['input'];
+};
+
+
+export type MutationDeletePoiArgs = {
+  poiId: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  userId: Scalars['Float']['input'];
 };
 
 
@@ -107,9 +116,27 @@ export type MutationSignupArgs = {
 };
 
 
+export type MutationUpdateCategoryArgs = {
+  categoryId: Scalars['Float']['input'];
+  data: CategoryInput;
+};
+
+
 export type MutationUpdateCityArgs = {
   cityId: Scalars['Float']['input'];
   data: UpdateCityInput;
+};
+
+
+export type MutationUpdatePoiArgs = {
+  data: PoiInput;
+  poiId: Scalars['Float']['input'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UpdateUserInput;
+  userId: Scalars['Float']['input'];
 };
 
 export type NewUserInput = {
@@ -120,17 +147,29 @@ export type NewUserInput = {
 export type Poi = {
   __typename?: 'Poi';
   address: Scalars['String']['output'];
-  cityId: City;
   createdAt: Scalars['DateTimeISO']['output'];
   externalLink: Scalars['String']['output'];
   imageUrl: Scalars['String']['output'];
   poiCategory?: Maybe<Category>;
+  poiCity: City;
   poiDescription: Scalars['String']['output'];
   poiId: Scalars['Float']['output'];
   poiLatitude: Scalars['Float']['output'];
   poiLongitude: Scalars['Float']['output'];
   poiName: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+};
+
+export type PoiInput = {
+  address: Scalars['String']['input'];
+  externalLink: Scalars['String']['input'];
+  imageUrl: Scalars['String']['input'];
+  poiCategory: Scalars['ID']['input'];
+  poiCity: Scalars['ID']['input'];
+  poiDescription: Scalars['String']['input'];
+  poiLatitude: Scalars['Float']['input'];
+  poiLongitude: Scalars['Float']['input'];
+  poiName: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -141,6 +180,9 @@ export type Query = {
   getAllUsers: Array<User>;
   getCityById: City;
   getPoiById: Poi;
+  getPoisByCategory: Array<Poi>;
+  getPoisByCity: Array<Poi>;
+  getPoisByCityAndCategory: Array<Poi>;
   getUserById?: Maybe<User>;
 };
 
@@ -155,6 +197,22 @@ export type QueryGetPoiByIdArgs = {
 };
 
 
+export type QueryGetPoisByCategoryArgs = {
+  categoryId: Scalars['Float']['input'];
+};
+
+
+export type QueryGetPoisByCityArgs = {
+  cityId: Scalars['Float']['input'];
+};
+
+
+export type QueryGetPoisByCityAndCategoryArgs = {
+  categoryId: Scalars['Float']['input'];
+  cityId: Scalars['Float']['input'];
+};
+
+
 export type QueryGetUserByIdArgs = {
   userId: Scalars['ID']['input'];
 };
@@ -166,11 +224,12 @@ export enum Role {
 }
 
 export type UpdateCityInput = {
-  cityLatitude: Scalars['Float']['input'];
-  cityLongitude: Scalars['Float']['input'];
-  cityName: Scalars['String']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
+};
+
+export type UpdateUserInput = {
+  roles: Array<Role>;
 };
 
 export type User = {

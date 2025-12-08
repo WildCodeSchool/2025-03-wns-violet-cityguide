@@ -48,6 +48,13 @@ class UserResponse {
 	message?: string;
 }
 
+// Input pour les modifications d'utilisateur (changement de role notamment)
+@InputType()
+class UpdateUserInput {
+	@Field(() => [Role])
+	roles: Role[];
+}
+
 /* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
 Le cookie possède une date d'expiration (expires=XXX) : après l'expiration du cookie l'utilisateur sera obligé de se re-connecter pour accéder à l'application */
 function setCookie(ctx: Context, token: string) {
@@ -126,7 +133,7 @@ export default class UserResolver {
 		// Enregistrement du nouvel utilisateur
 		await user.save();
 		
-		/* Lesutilisateurs ont la possibilité de fournir d'autres informations les concernant ultérieurement
+		/* Les utilisateurs ont la possibilité de fournir d'autres informations les concernant ultérieurement
 		Toutefois, on crée ces informations avec des valeurs par défaut pour qu'elles soient associées avec le nouvel utilisateur */
 		const userInfo = UserInfo.create({
 			firstName: "",
@@ -135,6 +142,10 @@ export default class UserResolver {
 			user: user
 		});
 		await userInfo.save();
+
+		// Ajouter le userInfo qu'on vient de créer à l'utilisateur qu'on vient de créer
+		user.userInfo = userInfo;
+		user.save();
 
 		// Fabrication du payload
 		const payload = createUserToken(user);
@@ -200,5 +211,29 @@ export default class UserResolver {
 			token: "",
 			message: "Logged out successfully"
 		};
+	}
+
+	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+	// Modification d'un utilisateur
+	@Mutation(() => ID)
+	async updateUser(@Arg("userId") userId: number, @Arg("data") data: UpdateUserInput) {
+
+		// Récupérer l'utilisateur à modifier
+		let user = await User.findOneByOrFail({ userId });
+
+		// Assigner les nouvelles données à l'utilisateur
+		user = Object.assign(user, data);
+
+		// Enregistrer l'utilisateur modifié
+		await user.save();
+		return user.userId;
+	}
+
+	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+	// Suppression d'un utilisateur
+	@Mutation(() => ID)
+	async deleteUser(@Arg("userId") userId: number) {
+		await User.delete({ userId });
+		return userId;
 	}
 }

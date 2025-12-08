@@ -10,6 +10,7 @@ import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
 import PoiResolver from "./resolvers/PoiResolver";
+import UserInfoResolver from "./resolvers/UserInfoResolver";
 
 const port = 3000;
 
@@ -26,6 +27,7 @@ async function startServer() {
 			CityResolver, 
 			CategoryResolver, 
 			PoiResolver,
+			UserInfoResolver,
 		],
 
 		authChecker: ({context: { user } }, neededRoles: Role[]) => {

@@ -4,7 +4,7 @@ import { City } from "../entities/City";
 import { Category } from "../entities/Category";
 
 @InputType()
-class CreatePoiInput {
+class PoiInput {
 	@Field()
 	poiName: string;
 	
@@ -18,16 +18,16 @@ class CreatePoiInput {
 	address: string;
 
 	@Field()
-		// @IsNumber()
-		// @Min(-90)
-		// @Max(90)
-		poiLatitude!: number;
+	// @IsNumber()
+	// @Min(-90)
+	// @Max(90)
+	poiLatitude!: number;
 
-		@Field()
-		// @IsNumber()
-		// @Min(-180)
-		// @Max(180)
-		poiLongitude!: number;
+	@Field()
+	// @IsNumber()
+	// @Min(-180)
+	// @Max(180)
+	poiLongitude!: number;
 
 	@Field()
 	externalLink: string;
@@ -99,16 +99,35 @@ export default class PoiResolver {
 
 	// Créer un poi
 	@Mutation(() => ID)
-	async createPoi(@Arg("data") data: CreatePoiInput) {
+	async createPoi(@Arg("data") data: PoiInput) {
 		const poi = Poi.create({...data});
 		await poi.save();
 		return poi.poiId;
 	}
 
+	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 	// Modifier un poi
+	@Mutation(() => ID)
+	async updatePoi(@Arg("poiId") poiId: number, @Arg("data") data: PoiInput) {
 
+		// Récupérer le Poi
+		let poi = await Poi.findOneByOrFail({poiId});
+
+		// Assigner les nouvelles valeurs au Poi
+		poi = Object.assign(poi, data);
+		
+		// Enregistrer le Poi
+		await poi.save();
+		return poi.poiId;
+	}
+
+	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 	// Supprimer un poi
-
+	@Mutation(() => ID)
+	async deletePoi(@Arg("poiId") poiId: number) {
+		await Poi.delete({ poiId });
+		return poiId;
+	}
 }
 
 

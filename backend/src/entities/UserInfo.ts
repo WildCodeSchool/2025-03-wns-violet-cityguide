@@ -22,7 +22,9 @@ class UserInfo extends BaseEntity {
 		@Field()
 		avatarUrl: string;
 
-		@OneToOne(() => User, user => user.userInfo)
+		@OneToOne(() => User, user => user.userInfo, {
+			onDelete: "CASCADE",
+		})
 		@JoinColumn({ name: "userId" })
 		@Field(() => User)
 		user: User;
