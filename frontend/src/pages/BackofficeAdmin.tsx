@@ -121,6 +121,8 @@ export default function BackofficeAdmin() {
 
 	const coordinateFormatError = "Le format de votre coordonnée n'est pas correcte. Veullez utilisez le format approprié : degrées, décimal et minutes. Soit :  00°00.000' N "
 
+
+	const [isValidUser, setIsValidUser] = useState(false)
 	return (
 		<div id="admin">
 			<div className="backoffice-banner">
@@ -189,7 +191,16 @@ export default function BackofficeAdmin() {
 			<div className="separator"></div>
 			<section id="admin-users">
 				<h2>Utilisateurs</h2>
-
+			<form>
+				<label htmlFor="nom-utilisateur">Nom
+					<input type="text" name="nom-utilisateur" placeholder="Jean-Miche" required />
+				</label>
+					<input type="submit" name="isNameValid" value="Vérifier utilisateur" />
+			</form>
+			{ !isValidUser && 
+			<div>
+				<h3>Utilisateur trouvé</h3>
+			</div>}
 			</section>
 		</div>
 	)
