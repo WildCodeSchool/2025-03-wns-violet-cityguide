@@ -68,3 +68,63 @@ export const GET_ONE_CITY = gql`
 		}
 	}
 `;
+
+export const GET_ALL_POIS = gql`
+	query GetAllPois {
+		getAllPois {
+			poiName
+			poiLongitude
+			poiLatitude
+			imageUrl
+			externalLink
+			poiDescription
+			address
+			poiCategory {
+				style
+				categoryName
+			}
+		}
+	}
+`;
+
+export const GET_POI_BY_ID = gql`
+	query GetPoiById($getPoiByIdId: Float!) {
+        getPoiById(id: $getPoiByIdId) {
+            address
+            poiCity {
+                cityId
+            }
+            externalLink
+            imageUrl
+            poiCategory {
+                categoryName
+            }
+            poiDescription
+            poiId
+            poiLatitude
+            poiLongitude
+            poiName
+        }
+	}
+`;
+
+export const GET_POIS_BY_CITY = gql`
+query GetPoisByCity($cityId: Float!) {
+  getPoisByCity(cityId: $cityId) {
+    address
+    externalLink
+    imageUrl
+    poiCategory {
+      categoryName
+    }
+    poiCity {
+      cityName
+    }
+    poiDescription
+    poiId
+    poiLatitude
+    poiLongitude
+    poiName
+  }
+}
+`;
