@@ -65,6 +65,13 @@ mutation Signup($data: NewUserInput!) {
     "style": "DarkKhaki"
   }
 }
+
+{
+  "data": {
+    "categoryName": "Point de soupe",
+    "style": "Tomato"
+  }
+}
 // ----------------------------- FIN CATEGORIES (createCategory) ----------------------------- 
 
 // ----------------------------- DÉBUT POI (createPoi) -----------------------------
@@ -75,11 +82,39 @@ mutation Signup($data: NewUserInput!) {
     "address": "Angle Cours Berriat x Avenue de Vizille",
     "imageUrl": "https://picsum.photos/id/210/200/200",
     "externalLink": "https://www.grenoble.fr",
-    "cityId": "1",
+    "poiCity": "1",
     "poiCategory": "1",
     "poiLatitude": 45.188210,
     "poiLongitude": 45.188210,
     "poiDescription": "Meilleur point de deal de la ville. Attention toutefois aux réglements de comptes"
+  }
+}
+
+{
+  "data": {
+    "poiName": "Capitole",
+    "address": "Place du Capitole",
+    "imageUrl": "https://metropole.toulouse.fr/sites/toulouse-fr/files/styles/paragraphe_image/public/2023-01/capitoleentree.jpg.webp?itok=J1rUl8bd",
+    "externalLink": "https://metropole.toulouse.fr/annuaire/accueil-general-du-capitole",
+    "poiCity": "2",
+    "poiCategory": "1",
+    "poiLatitude": 43.60446,
+    "poiLongitude": 1.44403,
+    "poiDescription": "Le Capitole encule la Capitale"
+  }
+}
+
+{
+  "data": {
+    "poiName": "Banque alimentaire de l'Isère",
+    "address": "11 Allée de la Pinéa",
+    "imageUrl": "https://www.ici-grenoble.org/media/cache/slide/uploads/medias/2021/09/0914/repas-gratuits-614070732b6c2448191981.jpeg",
+    "externalLink": "https://www.ici-grenoble.org/question-answer/ou-peut-on-manger-gratuitement-ou-recevoir-des-colis-alimentaires",
+    "poiCity": "1",
+    "poiCategory": "2",
+    "poiLatitude": 45.2023729015077,
+    "poiLongitude": 5.683509184013007,
+    "poiDescription": "Meilleur point de soupe de la ville. Attention toutefois aux louches"
   }
 }
 // ----------------------------- FIN POI (createPoi) ----------------------------- 

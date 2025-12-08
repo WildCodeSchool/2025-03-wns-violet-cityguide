@@ -32,7 +32,7 @@ class City extends BaseEntity {
 		cityLongitude!: number;
 
 		// Pour le chemin "retour" Poi -> City, on trouve la ville associée au poi sur la propriété poi.cityId
-		@OneToMany(() => Poi, poi => poi.cityId)
+		@OneToMany(() => Poi, poi => poi.poiCity)
 		@Field(() => [Poi], { nullable: true }) 
 		cityPois: Poi[];
 

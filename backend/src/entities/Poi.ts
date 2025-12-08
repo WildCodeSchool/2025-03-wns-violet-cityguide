@@ -41,7 +41,7 @@ class Poi extends BaseEntity {
 		
 		@ManyToOne(() => City, city => city.cityPois)
 		@Field(() => City)
-		cityId: City; 
+		poiCity: City; 
 
 		@ManyToOne(() => Category, category => category.categoryPois)
 		@Field(() => Category, {nullable: true})

@@ -1,4 +1,4 @@
-import { InputType, Field, Resolver, Query, Mutation, ID, Arg } from "type-graphql";
+import { InputType, Field, Resolver, Query, Mutation, ID, Arg, Args } from "type-graphql";
 import { Poi } from "../entities/Poi";
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
@@ -33,7 +33,7 @@ class CreatePoiInput {
 	externalLink: string;
 
 	@Field(() => ID)
-	cityId: City;
+	poiCity: City;
 
 	@Field(() => ID)
 	poiCategory: Category;
@@ -46,7 +46,7 @@ export default class PoiResolver {
 		@Query(() => [Poi])
 		async getAllPois() {
 				return await Poi.find({
-						relations: ["poiCategory"],
+						relations: ["poiCategory", "cityId"],
 				});
 		}
 
@@ -57,14 +57,42 @@ export default class PoiResolver {
 		return poi;
 	}
 
-	// On récupère les pois en fonction d'une catégorie 
+	// On récupère les pois en fonction d'une catégorie
+	@Query(() => [Poi])
+	async getPoisByCategory(@Arg("categoryId") categoryId: number): Promise<Poi[]> {
+		return await Poi.find({
+			where: {
+				poiCategory: { categoryId }
+			},
+
+			relations: ["poiCategory", "cityId"],
+		})
+	}
 
 	// On récupère les pois en fonction d'une ville
+	@Query(() => [Poi])
+	async getPoisByCity(@Arg("cityId") cityId: number): Promise<Poi[]> {
+		return await Poi.find({
+			where: {
+				poiCity: { cityId }
+			},
+
+			relations: ["poiCategory", "poiCity"],
+		})
+	}
 
 	// On récupère les pois en fonction d'une ville et d'une catégorie
+	@Query(() => [Poi])
+	async getPoisByCityAndCategory(@Arg("cityId") cityId: number, @Arg("categoryId") categoryId: number): Promise<Poi[]> {
+		return await Poi.find({
+			where: {
+				poiCity: { cityId },
+				poiCategory: { categoryId }
+			},
 
-	// On récupère l'id de la ville associée au POI via cityId
-
+			relations: ["poiCategory", "poiCity"]
+		})
+	}
 
 	// Créer un poi
 	@Mutation(() => ID)
@@ -78,7 +106,6 @@ export default class PoiResolver {
 
 	// Supprimer un poi
 
-	
 }
 
 
