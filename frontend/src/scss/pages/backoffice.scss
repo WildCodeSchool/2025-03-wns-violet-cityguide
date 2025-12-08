@@ -47,11 +47,18 @@
 #admin {
 	section {
 	@include flex-column; 
-	background-color: $sand;
-
 	width: 100%;
 	padding: 0.8rem; 
 	margin-bottom: 1rem;
+
+	.section-part {
+	background-color: $sand;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 2rem;
+	}
 
 	h2 {
 		text-align: center;
@@ -115,3 +122,34 @@
 		height: 100%;
 	}
 }
+.tabBtn {
+	background-color: $beige;
+	padding: 8px 20px; 
+	cursor: pointer; 
+	font-weight: 600;
+ }
+
+ .flex-center {
+	display: flex; 
+	margin: 1rem; 
+	gap: auto; 
+	width: 100%;
+	height: fit-content;
+	justify-content: space-evenly;
+	align-items: center;
+ }
+
+.active {
+		background-color: $sand;
+	}
+
+	.category-tag {
+		border: 1px solid $marron; 
+		padding: .3rem 1rem; 
+		border-radius: 5px;
+		cursor: pointer; 
+
+		&:hover {
+			background-color: $light-beige;
+		}
+	}

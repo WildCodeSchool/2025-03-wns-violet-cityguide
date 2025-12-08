@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const GET_ALL_USERS = gql`
 query GetAllUsers {
@@ -29,7 +29,7 @@ export const SIGNUP = gql`
     }
 `;
 
-export const LOGIN = gql `
+export const LOGIN = gql`
   mutation Login($data: UserInput!) {
   login(data: $data) {
     token
@@ -60,3 +60,19 @@ export const GET_ALL_CITIES = gql`
         }
     }
 `;
+
+// categorie ! 
+export const GET_ALL_CATEGORIES = gql`
+	query GetAllCategories {
+		getAllCategories {
+		categoryName, 
+		categoryId
+		}
+	}
+`
+
+export const CREATE_CATEGORY = gql`
+	mutation CreateCategory($data: CategoryInput!) {
+  createCategory(data: $data)
+}
+`
