@@ -8,10 +8,12 @@ import {
 		Query,
 		Resolver,
 		Authorized,
+		Args,
 } from "type-graphql";
 
 import { City } from "../entities/City";
 import { User } from "../entities/User";
+import { Poi } from "../entities/Poi";
 
 // Lors de la création d'une ville il est impératif de fourni son nom, sa description, une image et l'utilisateur qui la crée
 @InputType()
@@ -84,7 +86,7 @@ export default class CityResolver {
 		async getCityById(@Arg("id") id: number) {
 				const city = await City.findOneByOrFail({cityId: id});
 				return city;
-		} 
+		}
 
 		// Créer une ville
 		@Mutation(() => ID)
