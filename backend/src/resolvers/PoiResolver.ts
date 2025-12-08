@@ -41,19 +41,22 @@ class CreatePoiInput {
 
 @Resolver(Poi)
 export default class PoiResolver {
-
-		// On récupère tous les pois
-		@Query(() => [Poi])
-		async getAllPois() {
-				return await Poi.find({
-						relations: ["poiCategory", "cityId"],
-				});
-		}
+	
+	// On récupère tous les pois
+	@Query(() => [Poi])
+	async getAllPois() {
+			return await Poi.find({
+					relations: ["poiCategory", "cityId"],
+			});
+	}
 
 	// On récupère un poi en fonction de son id
-	@Query(() => Poi)
+@Query(() => Poi)
 	async getPoiById(@Arg("id") id: number) {
-		const poi = await Poi.findOneByOrFail({poiId: id});
+		const poi = await Poi.findOneOrFail({
+			where: { poiId: id },
+			relations: ["poiCity", "poiCategory"],
+		});
 		return poi;
 	}
 
