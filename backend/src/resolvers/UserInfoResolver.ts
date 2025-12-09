@@ -24,6 +24,9 @@ export default class UserInfoResolver {
 		});
 	}
 
+
+	// Get UserInfo by User
+
 	// On ne crée pas d'élément UserInfo ici : à chaque inscription d'un utilisateur, son UserInfo associé est créé
 	// On ne supprime pas non plus de UserInfo ici : à chaque suppression d'un User, son UserInfo associé est supprimé grâce à l'utilisation de onDelete: "CASCADE"
 	

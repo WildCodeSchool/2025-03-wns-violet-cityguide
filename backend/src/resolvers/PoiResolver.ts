@@ -46,7 +46,7 @@ export default class PoiResolver {
 	@Query(() => [Poi])
 	async getAllPois() {
 			return await Poi.find({
-					relations: ["poiCategory", "cityId"],
+					relations: ["poiCategory", "poiCity"],
 			});
 	}
 
@@ -68,7 +68,7 @@ export default class PoiResolver {
 				poiCategory: { categoryId }
 			},
 
-			relations: ["poiCategory", "cityId"],
+			relations: ["poiCategory", "poiCity"],
 		})
 	}
 

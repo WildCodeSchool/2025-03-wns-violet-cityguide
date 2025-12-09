@@ -32,6 +32,8 @@ export default class CategoryResolver {
 				return await Category.find();
 		}
 		
+		// Catégorie par Id
+
 		//Créer une catégorie
 		@Mutation(() => ID)
 		async createCategory(@Arg("data") data: CategoryInput) {

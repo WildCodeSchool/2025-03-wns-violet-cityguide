@@ -39,6 +39,7 @@ class Poi extends BaseEntity {
 		@Column("float")
 		poiLongitude!: number;
 		
+		// TODO Delete on cascade
 		@ManyToOne(() => City, city => city.cityPois)
 		@Field(() => City)
 		poiCity: City; 
