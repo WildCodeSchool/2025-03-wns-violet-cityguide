@@ -32,9 +32,22 @@ mutation Signup($data: NewUserInput!) {
   }
 }
 
-// ----------------------------- FIN UTILISATEURS (signup) ----------------------------- 
+{
+  "data": {
+    "email": "elan.naralbol@yopmail.fr",
+    "password": "123456789"
+  }
+}
 
-// ----------------------------- DÉBUT VILLES (createCity) ----------------------------- 
+{
+  "data": {
+    "email": "rodeo.danger@yopmail.fr",
+    "password": "123465789"
+  }
+}
+// ----------------------------- FIN UTILISATEURS (signup) -----------------------------
+
+// ----------------------------- DÉBUT VILLES (createCity) -----------------------------
 // Saisir dans "Variables" (une ville à la fois)
 {
 "data": {
@@ -139,8 +152,8 @@ mutation Signup($data: NewUserInput!) {
     "externalLink": "https://www.grenoble.fr",
     "poiCity": "1",
     "poiCategory": "1",
-    "poiLatitude": 45.188210,
-    "poiLongitude": 45.188210,
+    "poiLatitude": 45.18740,
+    "poiLongitude": 5.70834,
     "poiDescription": "Meilleur point de deal de la ville. Attention toutefois aux réglements de comptes"
   }
 }
@@ -185,6 +198,7 @@ mutation Signup($data: NewUserInput!) {
     "poiDescription": "Meilleur point de soupe de la ville. Attention toutefois aux louches"
   }
 }
+
 {
   "data": {
     "poiName": "Musée du Louvre",

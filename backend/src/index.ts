@@ -10,6 +10,7 @@ import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
 import PoiResolver from "./resolvers/PoiResolver";
+import UserInfoResolver from "./resolvers/UserInfoResolver";
 
 const port = 3000;
 
@@ -26,6 +27,7 @@ async function startServer() {
 			CityResolver, 
 			CategoryResolver, 
 			PoiResolver,
+			UserInfoResolver,
 		],
 
 		authChecker: ({context: { user } }, neededRoles: Role[]) => {
@@ -36,12 +38,12 @@ async function startServer() {
 			// si neededRoles est vide, on retourne true
 			if (!neededRoles.length) return true;
 
-			// si user a ADMIN, on retourne true
-			if (user.roles.includes(Role.ADMIN)) return true;
+			// si user a ADMIN_SITE, on retourne true
+			if (user.roles.includes(Role.ADMIN_SITE)) return true;
 
 			// si user a au moins un role inclus dans neededRoles, on retourne true
 			// sinon on retourne false
-			return neededRoles.some(user.roles.includes);
+			return neededRoles.some((neededRole) => user.roles.includes(neededRole));
 		}
 	});
 

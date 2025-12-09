@@ -1,13 +1,14 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from "typeorm";
 import {Field, ObjectType, registerEnumType} from "type-graphql";
 import { UserInfo } from "./UserInfo";
-import { City } from "./City";
 // exemple de Role: USER, ADMIN
 // exemple de permission: CREATE, READ, UPDATE, DELETE
 
 export enum Role {
 		USER = "USER",
-		ADMIN = "ADMIN",
+		ADMIN_SITE = "ADMIN_SITE",
+		ADMIN_CITY = "ADMIN_CITY",
+		POI_CREATOR = "POI_CREATOR",
 }
 
 registerEnumType(Role, {
@@ -36,7 +37,7 @@ class User extends BaseEntity {
 		enum: Role,
 		array: true,
 		default: [Role.USER],
-		enumName: "role" 
+		enumName: "roles"
 		})
 		@Field(() => [Role])
 		roles: Role[];
