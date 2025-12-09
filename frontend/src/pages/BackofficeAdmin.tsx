@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { useCreateCategoryMutation, useGetAllCategoriesQuery } from "../generated/graphql-types";
 
+import useStyleColors from "./backofficeHandler/styleColors";
+
 type Category = {
 	categoryName: string,
 	categoryId: number
@@ -15,7 +17,7 @@ type NewCategoryInput = {
 }
 
 export default function BackofficeAdmin() {
-
+	
 	// handle the admin tab + get and set the date
 	const [adminTabCities, setAdminTabCities] = useState('createCity')
 	const handleAdminTabCities = (tab: string) => {
@@ -154,7 +156,6 @@ export default function BackofficeAdmin() {
 		})
 	}
 
-
 	// to handle adding an image see below
 	const [isImageValid, setImageValid] = useState('unverified');
 	const [imageError, setImageError] = useState('');
@@ -201,9 +202,7 @@ export default function BackofficeAdmin() {
 					return e.target.value = '';
 				}
 			}
-
 			imageSecurityCheck(file)
-
 		}
 	}
 
@@ -216,10 +215,20 @@ export default function BackofficeAdmin() {
 		const formJsonAddCity = Object.fromEntries(formAddCityData.entries())
 	}
 
-	const [adminTabCategories, setAdminTabsCategories] = useState('add-category');
+	const [adminTabCategories, setAdminTabsCategories] = useState('add-categories');
 	const { data: allCategoriesData, loading: allCategoriesLoading, error: allCategoriesError } = useGetAllCategoriesQuery();
+	const [importedColors, setImportedColors] = useState(true); 
+	const { colors } = useStyleColors()
+	const importedColorsHandler = () => {
+		if (!colors) {
+			return setImportedColors(false)
+		} else {
+			return setImportedColors(true)
+		}
+	}
 	const handleAdminTabCategories = (tab: string) => {
-		setAdminTabsCategories(tab)
+		setAdminTabsCategories(tab); 
+		if (adminTabCategories === 'add-categories') importedColorsHandler()
 	}
 
 	const [createCategory] = useCreateCategoryMutation()
@@ -380,6 +389,15 @@ export default function BackofficeAdmin() {
 								<label htmlFor="cityName">Nom de la catégorie à ajouter
 									<input type="text" name="cityName" placeholder="Musée, restaurant..." required />
 									<input type="submit" value="Créer la nouvelle catégorie" />
+									{importedColors &&
+									<label>Sélectionnez une couleur de pin
+										<select>
+											{Object.entries(colors).map(([key, value]) => (
+												<option key={key} value={value} style={{color:value}}>{key}</option>
+											))}
+										</select>
+									</label>
+									}
 								</label>
 							</form>
 						</div>}
@@ -389,7 +407,7 @@ export default function BackofficeAdmin() {
 							<div className="flex-center">
 								{allCategoriesData &&
 									allCategoriesData?.getAllCategories.map((category: Category) => (
-										<span className="category-tag" key={category.categoryId}>{category.categoryName}</span>
+										<span className="category-tag" key={category.categoryId} >{category.categoryName}</span>
 									))}
 							</div>
 						</div>}
