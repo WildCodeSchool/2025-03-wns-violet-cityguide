@@ -38,9 +38,11 @@ async function startServer() {
 			// si neededRoles est vide, on retourne true
 			if (!neededRoles.length) return true;
 
-			// si user a ADMIN, on retourne true
-			if (user.roles.includes(Role.ADMIN)) return true;
+			// si user a ADMIN_SITE, on retourne true
+			if (user.roles.includes(Role.ADMIN_SITE)) return true;
 
+		console.log(user.roles);
+		console.log(neededRoles);
 			// si user a au moins un role inclus dans neededRoles, on retourne true
 			// sinon on retourne false
 			return neededRoles.some(user.roles.includes);

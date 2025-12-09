@@ -307,6 +307,25 @@ export type GetOneCityQueryVariables = Exact<{
 
 export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?: 'City', cityId: number, cityName: string, imageUrl: string, description: string } };
 
+export type GetAllPoisQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPoisQuery = { __typename?: 'Query', getAllPois: Array<{ __typename?: 'Poi', poiName: string, poiLongitude: number, poiLatitude: number, imageUrl: string, externalLink: string, poiDescription: string, address: string, poiCategory?: { __typename?: 'Category', style: string, categoryName: string } | null }> };
+
+export type GetPoiByIdQueryVariables = Exact<{
+  getPoiByIdId: Scalars['Float']['input'];
+}>;
+
+
+export type GetPoiByIdQuery = { __typename?: 'Query', getPoiById: { __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCity: { __typename?: 'City', cityId: number }, poiCategory?: { __typename?: 'Category', categoryName: string } | null } };
+
+export type GetPoisByCityQueryVariables = Exact<{
+  cityId: Scalars['Float']['input'];
+}>;
+
+
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+
 
 export const GetAllUsersDocument = gql`
     query GetAllUsers {
@@ -517,3 +536,158 @@ export type GetOneCityQueryHookResult = ReturnType<typeof useGetOneCityQuery>;
 export type GetOneCityLazyQueryHookResult = ReturnType<typeof useGetOneCityLazyQuery>;
 export type GetOneCitySuspenseQueryHookResult = ReturnType<typeof useGetOneCitySuspenseQuery>;
 export type GetOneCityQueryResult = Apollo.QueryResult<GetOneCityQuery, GetOneCityQueryVariables>;
+export const GetAllPoisDocument = gql`
+    query GetAllPois {
+  getAllPois {
+    poiName
+    poiLongitude
+    poiLatitude
+    imageUrl
+    externalLink
+    poiDescription
+    address
+    poiCategory {
+      style
+      categoryName
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllPoisQuery__
+ *
+ * To run a query within a React component, call `useGetAllPoisQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllPoisQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllPoisQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllPoisQuery(baseOptions?: Apollo.QueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllPoisQuery, GetAllPoisQueryVariables>(GetAllPoisDocument, options);
+      }
+export function useGetAllPoisLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllPoisQuery, GetAllPoisQueryVariables>(GetAllPoisDocument, options);
+        }
+export function useGetAllPoisSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllPoisQuery, GetAllPoisQueryVariables>(GetAllPoisDocument, options);
+        }
+export type GetAllPoisQueryHookResult = ReturnType<typeof useGetAllPoisQuery>;
+export type GetAllPoisLazyQueryHookResult = ReturnType<typeof useGetAllPoisLazyQuery>;
+export type GetAllPoisSuspenseQueryHookResult = ReturnType<typeof useGetAllPoisSuspenseQuery>;
+export type GetAllPoisQueryResult = Apollo.QueryResult<GetAllPoisQuery, GetAllPoisQueryVariables>;
+export const GetPoiByIdDocument = gql`
+    query GetPoiById($getPoiByIdId: Float!) {
+  getPoiById(id: $getPoiByIdId) {
+    address
+    poiCity {
+      cityId
+    }
+    externalLink
+    imageUrl
+    poiCategory {
+      categoryName
+    }
+    poiDescription
+    poiId
+    poiLatitude
+    poiLongitude
+    poiName
+  }
+}
+    `;
+
+/**
+ * __useGetPoiByIdQuery__
+ *
+ * To run a query within a React component, call `useGetPoiByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoiByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoiByIdQuery({
+ *   variables: {
+ *      getPoiByIdId: // value for 'getPoiByIdId'
+ *   },
+ * });
+ */
+export function useGetPoiByIdQuery(baseOptions: Apollo.QueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables> & ({ variables: GetPoiByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPoiByIdQuery, GetPoiByIdQueryVariables>(GetPoiByIdDocument, options);
+      }
+export function useGetPoiByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPoiByIdQuery, GetPoiByIdQueryVariables>(GetPoiByIdDocument, options);
+        }
+export function useGetPoiByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPoiByIdQuery, GetPoiByIdQueryVariables>(GetPoiByIdDocument, options);
+        }
+export type GetPoiByIdQueryHookResult = ReturnType<typeof useGetPoiByIdQuery>;
+export type GetPoiByIdLazyQueryHookResult = ReturnType<typeof useGetPoiByIdLazyQuery>;
+export type GetPoiByIdSuspenseQueryHookResult = ReturnType<typeof useGetPoiByIdSuspenseQuery>;
+export type GetPoiByIdQueryResult = Apollo.QueryResult<GetPoiByIdQuery, GetPoiByIdQueryVariables>;
+export const GetPoisByCityDocument = gql`
+    query GetPoisByCity($cityId: Float!) {
+  getPoisByCity(cityId: $cityId) {
+    address
+    externalLink
+    imageUrl
+    poiCategory {
+      categoryName
+    }
+    poiCity {
+      cityName
+    }
+    poiDescription
+    poiId
+    poiLatitude
+    poiLongitude
+    poiName
+  }
+}
+    `;
+
+/**
+ * __useGetPoisByCityQuery__
+ *
+ * To run a query within a React component, call `useGetPoisByCityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoisByCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoisByCityQuery({
+ *   variables: {
+ *      cityId: // value for 'cityId'
+ *   },
+ * });
+ */
+export function useGetPoisByCityQuery(baseOptions: Apollo.QueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables> & ({ variables: GetPoisByCityQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPoisByCityQuery, GetPoisByCityQueryVariables>(GetPoisByCityDocument, options);
+      }
+export function useGetPoisByCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPoisByCityQuery, GetPoisByCityQueryVariables>(GetPoisByCityDocument, options);
+        }
+export function useGetPoisByCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPoisByCityQuery, GetPoisByCityQueryVariables>(GetPoisByCityDocument, options);
+        }
+export type GetPoisByCityQueryHookResult = ReturnType<typeof useGetPoisByCityQuery>;
+export type GetPoisByCityLazyQueryHookResult = ReturnType<typeof useGetPoisByCityLazyQuery>;
+export type GetPoisByCitySuspenseQueryHookResult = ReturnType<typeof useGetPoisByCitySuspenseQuery>;
+export type GetPoisByCityQueryResult = Apollo.QueryResult<GetPoisByCityQuery, GetPoisByCityQueryVariables>;

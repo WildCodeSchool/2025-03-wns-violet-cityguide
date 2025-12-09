@@ -7,6 +7,7 @@ import {
 		Mutation,
 		Query,
 		Resolver,
+		Authorized,
 } from "type-graphql";
 
 import { City } from "../entities/City";
@@ -74,6 +75,7 @@ export default class CityResolver {
 		}
 
 		// Créer une ville
+		@Authorized(["ADMIN_SITE", "ADMIN_CITY"])
 		@Mutation(() => ID)
 		async createCity(@Arg("data") data: CreateCityInput) {
 				const city = City.create({ ...data });
