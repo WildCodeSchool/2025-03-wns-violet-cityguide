@@ -74,7 +74,7 @@ export default class CityResolver {
 		}
 
 		// Créer une ville
-		@Authorized(["ADMIN_SITE", "ADMIN_CITY"])
+		@Authorized("ADMIN_SITE", "ADMIN_CITY")
 		@Mutation(() => ID)
 		async createCity(@Arg("data") data: CreateCityInput) {
 				const city = City.create({ ...data });

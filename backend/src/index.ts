@@ -41,11 +41,9 @@ async function startServer() {
 			// si user a ADMIN_SITE, on retourne true
 			if (user.roles.includes(Role.ADMIN_SITE)) return true;
 
-		console.log(user.roles);
-		console.log(neededRoles);
 			// si user a au moins un role inclus dans neededRoles, on retourne true
 			// sinon on retourne false
-			return neededRoles.some(user.roles.includes);
+			return neededRoles.some((neededRole) => user.roles.includes(neededRole));
 		}
 	});
 
@@ -59,8 +57,6 @@ async function startServer() {
 
 			// Initialisation de user à null
 			let user: string | jwt.JwtPayload | null = null;
-
-			console.log(user);
 
 			// Compare le cookie trouvé dans le header de la requête avec le format (cf regexp) que doivent avoir les cookie de notre appli
 			const match = req.headers.cookie?.match(/cityGuide-auth=([^;]+)/);
