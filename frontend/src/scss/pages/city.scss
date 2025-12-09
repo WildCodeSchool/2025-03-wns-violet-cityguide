@@ -3,5 +3,79 @@
 .city {
   background-color: $beige;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 10rem);
+
+  &__map {
+	position: relative;
+    width: 100%;
+    height: 100%;
+
+    &-container {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__right-panel {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+    width: 320px;
+    max-width: 100%;
+	height: 100%;
+    background: $white;
+    border-left: 1px solid #e5e7eb;
+    padding: 1rem;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 1000;
+	  color: $marron;
+	  gap: 1rem;
+	  &__header {
+		  width: 100%;
+		display: flex;
+		  flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		  margin-top: 3rem;
+		  gap: 1rem;
+
+		img {
+			width: 100%;
+			height: auto;
+			border-radius: 10px;
+			border: 2px solid $sand;
+		}
+	  }
+
+	  &__cross {
+		  position: absolute;
+		  top: 1rem;
+		  right: 1rem;
+		  display: inline-flex;
+		  align-items: center;
+		  justify-content: center;
+		  width: 2.25rem;
+		  height: 2.25rem;
+		  border: 0;
+		  background: transparent;
+		  cursor: pointer;
+
+		  &__icon {
+			  color: $marron;
+			  transition: transform .25s ease;
+
+			  &:hover, &:focus-visible {
+				  transform: scale(1.1);
+			  }
+		  }
+	  }
+  }
+}
+
+.leaflet-container img {
+  max-width: none !important;
+  height: auto !important;
+  background: transparent;
 }

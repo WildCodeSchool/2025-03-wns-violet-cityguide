@@ -10,19 +10,19 @@ $accent: #d1a680; //ajout de Roxane, à modifier si besoin
 
 // fonts
 @font-face {
-  font-family: 'Poppins';
-  src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-weight: 500;
+	font-family: 'Poppins';
+	src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-weight: 500;
 }
 @font-face {
-  font-family: 'JosefinSlab';
-  src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+	font-family: 'JosefinSlab';
+	src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900;
 }
 @font-face {
-  font-family: 'Work_Sans';
-  src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900; // si c'est une variable font
+	font-family: 'Work_Sans';
+	src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900; // si c'est une variable font
 }
 
 // Variables SCSS pour les familles de polices
@@ -32,6 +32,8 @@ $text: 'Work_Sans', sans-serif;
 
 // Responsive
 $breakpoint-small: 480px;
+$breakpoint-medium: 768px;
+$breakpoint-large: 1920px;
 
 // Shadows
 $text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);

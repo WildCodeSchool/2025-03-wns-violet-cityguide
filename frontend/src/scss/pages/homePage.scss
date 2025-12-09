@@ -1,31 +1,38 @@
 @use '../variables' as *;
 
 .heroBanner {
-  text-align: center;
-  color: $marron;
-  padding: 1.5rem 0;
-  font-weight: 900;
-  letter-spacing: .1rem;
-  background-color: $sand;
-  margin: 1rem;
-  border-radius: 0.5rem;
-  @media (min-width: $breakpoint-small) {
-    font-size: 2.5rem;
-    padding: 5rem 0;
-    margin: 3rem 6rem;
-  }
+	text-align: center;
+	color: $marron;
+	padding: 1.5rem 0;
+	font-weight: 900;
+	letter-spacing: .1rem;
+	background-color: $sand;
+	margin: 1rem;
+	border-radius: 0.5rem;
+	@media (min-width: $breakpoint-small) {
+		font-size: 2.5rem;
+		padding: 5rem 0;
+		margin: 3rem 6rem;
+	}
+	@media (min-width: $breakpoint-large) {
+		margin: 3rem 10rem;
+	}
 }
 
 .cityCards {
-  display: flex;
-  flex-direction: column;
-  background-color: $beige;
-  padding: 1.25rem;
-  gap: 1.5rem;
-  @media (min-width: $breakpoint-small) {
-    padding: 2rem 7rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
-  }
+	display: flex;
+	flex-direction: column;
+	background-color: $beige;
+	padding: 1.25rem;
+	gap: 2%;
+	@media (min-width: $breakpoint-small) {
+		padding: 2rem 6rem;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+	}
+	@media (min-width: $breakpoint-large) {
+		padding: 2rem 10rem;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+	}
 }

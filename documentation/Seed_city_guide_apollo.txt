@@ -1,0 +1,120 @@
+// MUTATIONS DE CRÉATIONS
+// ----------------------------- DÉBUT UTILISATEURS (signup) ----------------------------- 
+// Saisir dans "Operation" 
+mutation Signup($data: NewUserInput!) {
+  signup(data: $data) {
+    user {
+      userId
+      email
+    }
+  }
+}
+
+// Saisir dans "Variables" (un utilisateur à la fois)
+{
+  "data": {
+    "email": "jesus.choucroute@yopmail.fr",
+    "password": "123456789"
+  }
+}
+
+{
+  "data": {
+    "email": "jeep.renault@yopmail.fr",
+    "password": "123456789"
+  }
+}
+
+{
+  "data": {
+    "email": "john.doudou@yopmail.fr",
+    "password": "123456789"
+  }
+}
+
+// ----------------------------- FIN UTILISATEURS (signup) ----------------------------- 
+
+// ----------------------------- DÉBUT VILLES (createCity) ----------------------------- 
+// Saisir dans "Variables" (une ville à la fois)
+{
+"data": {
+    "cityName": "Grenoble",
+    "imageUrl": "https://picsum.photos/id/101/200/200",
+    "cityLongitude": 5.71667,
+    "cityLatitude": 45.166672,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id. "
+  }
+}
+
+{
+"data": {
+    "cityName": "Toulouse",
+    "imageUrl": "https://picsum.photos/id/57/200/200",
+    "cityLongitude": 1.4428480,
+    "cityLatitude": 43.6048462,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+  }
+}
+// ----------------------------- FIN VILLES (createCity) ----------------------------- 
+
+// ----------------------------- DÉBUT CATEGORIES (createCategory) -----------------------------
+// Saisir dans "Variables" (une categorie à la fois)
+{
+  "data": {
+    "categoryName": "Point de deal",
+    "style": "DarkKhaki"
+  }
+}
+
+{
+  "data": {
+    "categoryName": "Point de soupe",
+    "style": "Tomato"
+  }
+}
+// ----------------------------- FIN CATEGORIES (createCategory) ----------------------------- 
+
+// ----------------------------- DÉBUT POI (createPoi) -----------------------------
+// Saisir dans "Variables" (un poi à la fois)
+{
+  "data": {
+    "poiName": "quartier Chorier-Berriat",
+    "address": "Angle Cours Berriat x Avenue de Vizille",
+    "imageUrl": "https://picsum.photos/id/210/200/200",
+    "externalLink": "https://www.grenoble.fr",
+    "poiCity": "1",
+    "poiCategory": "1",
+    "poiLatitude": 45.188210,
+    "poiLongitude": 45.188210,
+    "poiDescription": "Meilleur point de deal de la ville. Attention toutefois aux réglements de comptes"
+  }
+}
+
+{
+  "data": {
+    "poiName": "Capitole",
+    "address": "Place du Capitole",
+    "imageUrl": "https://metropole.toulouse.fr/sites/toulouse-fr/files/styles/paragraphe_image/public/2023-01/capitoleentree.jpg.webp?itok=J1rUl8bd",
+    "externalLink": "https://metropole.toulouse.fr/annuaire/accueil-general-du-capitole",
+    "poiCity": "2",
+    "poiCategory": "1",
+    "poiLatitude": 43.60446,
+    "poiLongitude": 1.44403,
+    "poiDescription": "Le Capitole encule la Capitale"
+  }
+}
+
+{
+  "data": {
+    "poiName": "Banque alimentaire de l'Isère",
+    "address": "11 Allée de la Pinéa",
+    "imageUrl": "https://www.ici-grenoble.org/media/cache/slide/uploads/medias/2021/09/0914/repas-gratuits-614070732b6c2448191981.jpeg",
+    "externalLink": "https://www.ici-grenoble.org/question-answer/ou-peut-on-manger-gratuitement-ou-recevoir-des-colis-alimentaires",
+    "poiCity": "1",
+    "poiCategory": "2",
+    "poiLatitude": 45.2023729015077,
+    "poiLongitude": 5.683509184013007,
+    "poiDescription": "Meilleur point de soupe de la ville. Attention toutefois aux louches"
+  }
+}
+// ----------------------------- FIN POI (createPoi) ----------------------------- 

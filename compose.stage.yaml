@@ -15,7 +15,7 @@ services:
       POSTGRES_HOST: ${DB_HOST}
     volumes:
       - ./persist/database:/var/lib/postgresql
-    
+
   backend-prod:
     restart: always
     container_name: backend-prod
@@ -43,7 +43,6 @@ services:
       database: 
         condition: service_healthy
 
-  
   frontend-prod:
     restart: always
     container_name: frontend-prod

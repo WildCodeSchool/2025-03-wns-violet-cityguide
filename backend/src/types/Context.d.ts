@@ -1,10 +1,10 @@
 export type UserToken = {
-    id: number;
-    roles: Role[];
+	id: number;
+	roles: Role[];
 };
 
 type Context = {
-    req: IncomingMessage;
-    res: ServerResponse;
-    user?: UserToken;
+	req: IncomingMessage;
+	res: ServerResponse;
+	user?: UserToken;
 };
