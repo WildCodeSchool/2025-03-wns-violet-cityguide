@@ -6,10 +6,13 @@ import L from 'leaflet';
 import { useCreateCategoryMutation, useGetAllCategoriesQuery } from "../generated/graphql-types";
 
 import useStyleColors from "./backofficeHandler/styleColors";
+import imageVerificationFrontend from "./backofficeHandler/imageVerification";
+import useImageVerificationFrontend from "./backofficeHandler/imageVerification";
 
 type Category = {
 	categoryName: string,
-	categoryId: number
+	categoryId: number, 
+	style: string
 }
 
 type NewCategoryInput = {
@@ -74,7 +77,6 @@ export default function BackofficeAdmin() {
 			setValid(false)
 			coordinateFormatError = "Le format de votre coordonnée n'est pas correcte. Veullez utilisez le format approprié : Degrées décimal. Par exemple : Longitude -48.876667 ; latitude : -123.393333 "
 		}
-
 		return setValid
 	}
 
@@ -92,71 +94,9 @@ export default function BackofficeAdmin() {
 		console.log('showMapHandler', showMap)
 	}
 
-	// Verify the image can be loaded as an image
-	const verifyImageLoad = (file: File): Promise<boolean> => {
-		console.log('Verify image load has been called ! ')
-		return new Promise((resolve) => {
-			const img = new Image();
-			const url = URL.createObjectURL(file);
-			console.log('image url =  ', url)
-			
-			img.onload = () => {
-				URL.revokeObjectURL(url);
-				resolve(true)
-			}
-
-			img.onerror = () => {
-				URL.revokeObjectURL(url); 
-				resolve(false)
-			}
-			
-			img.src = url
-			console.log('End of verifyImageLoad ')
-		})
-	}
-
-	// Magic bytes check to be sure the image is indeed an image
-	const checkFileSignature = (file: File): Promise<boolean> => {
-		console.log("check file signature has been called ! ")
-		return new Promise((resolve) => {
-			const reader = new FileReader();
-
-			reader.onloadend = (e) => {
-				if (!e.target?.result) {
-					resolve(false)
-					return
-				}
-
-				const arr = new Uint8Array(e.target?.result as ArrayBuffer).subarray(0, 4);
-				console.log("const arr = ", arr)
-				let header = '';
-				for (let i = 0; i < arr.length; i++) {
-					header += arr[i].toString(16).padStart(2, '0');
-				}
-
-				const signatures: { [key: string]: string[] } = {
-					'image/jpeg': ['ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', 'ffd8ffe3', 'ffd8ffe8'],
-					'image/png': ['89504e47'],
-					'image/webp': ['52494646'], // RIFF (WebP starts with RIFF)
-				}
-
-				const isValid = Object.values(signatures)
-					.flat()
-					.some(sig => header.startsWith(sig));
-				console.log('is valid fdrom check file sig : ', {
-					isValid: isValid,
-					header: header,
-					arr: arr
-				})
-				resolve(isValid)
-			};
-
-			reader.onerror = () => resolve(false);
-			reader.readAsArrayBuffer(file.slice(0, 4))
-		})
-	}
 
 	// to handle adding an image see below
+	const { checkFileSignature, verifyImageLoad } = useImageVerificationFrontend()
 	const [isImageValid, setImageValid] = useState('unverified');
 	const [imageError, setImageError] = useState('');
 	const validateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -206,8 +146,6 @@ export default function BackofficeAdmin() {
 		}
 	}
 
-
-
 	const handleAddCitySubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const form = e.target;
@@ -233,16 +171,21 @@ export default function BackofficeAdmin() {
 
 	const [createCategory] = useCreateCategoryMutation()
 	const handleAddCategory = async (e: FormEvent<HTMLFormElement>) => {
+		console.log("handleAddCategory has been called ! ")
 		e.preventDefault();
 		const form = e.target;
+		console.log("form is : ", form)
 		const formAddCategoryData = new FormData(form as HTMLFormElement);
+		console.log("formAddCategoryData is : ", formAddCategoryData)
 		const fromJsonAddCategory = Object.fromEntries(formAddCategoryData.entries())
+		console.log("formJsonAddCategory : ", fromJsonAddCategory)
 
 		try {
 			const result = await createCategory({
 				variables: {
 					data: {
-						categoryName: fromJsonAddCategory['cityName'] as string
+						categoryName: fromJsonAddCategory['categoryName'] as string,
+						style: fromJsonAddCategory['style'] as string
 					}
 				}
 			});
@@ -258,6 +201,29 @@ export default function BackofficeAdmin() {
 			console.error('Error creating new category : ', error)
 		}
 	}
+	const [editCategory, setEditCategory] = useState(false); 
+	const [editCategoryName, setEditCategoryName] = useState('')
+	const [editCategoryStyle, setEditCategoryStyle] = useState('')
+	const handleEditCategory = (name:string, style:string) => {
+		if (editCategory === true) setEditCategory(false)
+		if (editCategory === false) setEditCategory(true)
+		
+			if (editCategoryName === name){
+				setEditCategory(false)
+			} else {
+				setEditCategory(true)
+				setEditCategoryName(name);
+				setEditCategoryStyle(style);
+			}
+			//TODO : add resolver here once it's done
+	}
+	const [userWantsToDeleteCategory, setUserWantsToDeleteCategory] = useState(false); 
+	const handleDeleteCategory = () => {
+		// TODO : add resolver here once it's done
+		console.log('handle delete category has been called !')
+		setUserWantsToDeleteCategory(true)
+		return alert('Attention, supprimer la catégorie peut supprimer les POI qui y sont associé. Assurez-vous que cette catégorie n\'est associé à aucun POI')
+	}
 
 
 	const [isValidUser, setIsValidUser] = useState(false);
@@ -271,11 +237,11 @@ export default function BackofficeAdmin() {
 				</div>
 				<section id="admin-ville">
 					<h2>Villes</h2>
-					<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>Ajouter une ville</div><div className={"tabBtn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>Administrer une ville</div></div></h3>
+					<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCities === 'input-field' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>Ajouter une ville</div><div className={"tabBtn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>Administrer une ville</div></div></h3>
 
 					{/* ajouter une ville */}
 					{adminTabCities === "createCity" &&
-						<div className="createCity section-part">
+						<div className="input-field section-part">
 							<form onSubmit={handleAddCitySubmit}>
 								<label htmlFor="cityName">Nom de la ville
 									<input type="text" name="cityName" placeholder="Lyon" required />
@@ -385,20 +351,20 @@ export default function BackofficeAdmin() {
 					<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCategories === 'add-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('add-categories')}>Ajouter une catégorie</div><div className={"tabBtn " + (adminTabCategories === 'admin-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('admin-categories')}>Administrer les catégories</div></div></h3>
 					{adminTabCategories === "add-categories" &&
 						<div className="add-categories section-part">
-							<form onSubmit={handleAddCategory}>
-								<label htmlFor="cityName">Nom de la catégorie à ajouter
-									<input type="text" name="cityName" placeholder="Musée, restaurant..." required />
-									<input type="submit" value="Créer la nouvelle catégorie" />
+							<form onSubmit={handleAddCategory} className="flex-column">
+								<label htmlFor="categoryName">Nom de la catégorie à ajouter
+									<input type="text" name="categoryName" placeholder="Musée, restaurant..." required />
+									</label>
 									{importedColors &&
-									<label>Sélectionnez une couleur de pin
-										<select>
+									<label htmlFor="style">Sélectionnez une couleur de pin
+										<select name="style">
 											{Object.entries(colors).map(([key, value]) => (
-												<option key={key} value={value} style={{color:value}}>{key}</option>
+												<option key={key} value={key} style={{color:value}}>{key}</option>
 											))}
 										</select>
 									</label>
 									}
-								</label>
+								<input type="submit" value="Créer la nouvelle catégorie" />
 							</form>
 						</div>}
 					{adminTabCategories === 'admin-categories' &&
@@ -407,9 +373,45 @@ export default function BackofficeAdmin() {
 							<div className="flex-center">
 								{allCategoriesData &&
 									allCategoriesData?.getAllCategories.map((category: Category) => (
-										<span className="category-tag" key={category.categoryId} >{category.categoryName}</span>
+										<div className="category-tag" key={category.categoryId} onClick={() => handleEditCategory(category.categoryName, category.style)}>
+											<div className="category-tag__pin" style={{backgroundColor:category.style}} ></div>
+											<div className="category-tag__name">{category.categoryName}</div>
+										</div>
 									))}
+									
 							</div>
+							{editCategory === true && 
+									<div className="flex-center input-field">Editer la catégorie
+										<label htmlFor="current-category-name">Nom actuel de la catégorie
+											<input type="text" name="current-category-name" value={editCategoryName} readOnly />
+										</label>
+										<label htmlFor="categoryName">Nouveau nom
+											<input type="text" name="categorName" placeholder={editCategoryName}/>
+										</label>
+										<label htmlFor="current-style">Couleur actuelle de la catégorie
+											<div style={{width:'50px', height:'50px', borderRadius:'90px', backgroundColor:editCategoryStyle}}></div>
+										</label>
+										<label htmlFor="style">Sélectionnez une nouvelle couleure de pin
+										<select name="style">
+											{Object.entries(colors).map(([key, value]) => (
+												<option key={key} value={key} style={{color:value}}>{key}</option>
+											))}
+										</select>
+									</label>
+									<input type="submit" value="modifier la catégorie"/>
+									<hr></hr>
+									<div className="danger-zone">
+									<span style={{textTransform:'uppercase'}}>Zone de danger !</span>
+									 {userWantsToDeleteCategory === false &&<button onClick={() => handleDeleteCategory()}>Supprimer la catégorie</button>}
+									 {userWantsToDeleteCategory === true && 
+									 <>
+										<button onClick={() => setUserWantsToDeleteCategory(false)}>Annuler la suppresion</button>
+										<input type="submit" value={`Confirmer la suppression de la catégorie ${editCategoryName}`}/>
+									</>
+									 }
+									</div>
+									</div>
+							}
 						</div>}
 				</section>
 			</div>
