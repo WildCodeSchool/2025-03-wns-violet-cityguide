@@ -29,12 +29,22 @@ export default class CategoryResolver {
 		// Récupérer toutes les catégories en base
 		@Query(() => [Category])
 		async getAllCategories() {
-				return await Category.find();
+				return await Category.find({
+					relations: ["categoryPois"],
+				}
+				);
 		}
-		
-		// Catégorie par Id
 
-		//Créer une catégorie
+		// Récupérer une catégorie par son id
+		@Query(() => Category)
+		async getCategoryById(@Arg("categoryId") categoryId: number) {
+			return await Category.findOneOrFail({ 
+				where: { categoryId: categoryId },
+				relations: ["categoryPois"],
+			});
+		}
+
+		// Créer une catégorie
 		@Mutation(() => ID)
 		async createCategory(@Arg("data") data: CategoryInput) {
 				const category = Category.create({ ...data });

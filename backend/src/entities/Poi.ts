@@ -6,7 +6,7 @@ import { Category } from "./Category";
 @Entity()
 @ObjectType()
 class Poi extends BaseEntity {
-		
+
 		@PrimaryGeneratedColumn()
 		@Field()
 		poiId: number;
@@ -38,9 +38,10 @@ class Poi extends BaseEntity {
 		@Field()
 		@Column("float")
 		poiLongitude!: number;
-		
-		// TODO Delete on cascade
-		@ManyToOne(() => City, city => city.cityPois)
+
+		@ManyToOne(() => City, city => city.cityPois, {
+			onDelete: "CASCADE",
+		})
 		@Field(() => City)
 		poiCity: City; 
 

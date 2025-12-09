@@ -7,13 +7,9 @@ import {
 		Mutation,
 		Query,
 		Resolver,
-		Authorized,
-		Args,
 } from "type-graphql";
 
 import { City } from "../entities/City";
-import { User } from "../entities/User";
-import { Poi } from "../entities/Poi";
 
 // Lors de la création d'une ville il est impératif de fourni son nom, sa description, une image et l'utilisateur qui la crée
 @InputType()
@@ -63,14 +59,18 @@ export default class CityResolver {
 		// Récupérer toutes les villes en base
 		@Query(() => [City])
 		async getAllCities() {
-				return await City.find();
+				return await City.find({
+					relations: ["cityPois"],
+				});
 		}
 
 		// Récupérer une ville à partir de son id
 		@Query(() => City) 
-		async getCityById(@Arg("id") id: number) {
-				const city = await City.findOneByOrFail({cityId: id});
-				return city;
+		async getCityById(@Arg("cityId") cityId: number) {
+			return await City.findOneOrFail({
+				where: { cityId: cityId },
+				relations: ["cityPois"],
+			})
 		}
 
 		// Créer une ville

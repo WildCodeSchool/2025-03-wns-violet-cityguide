@@ -24,12 +24,20 @@ export default class UserInfoResolver {
 		});
 	}
 
-
-	// Get UserInfo by User
+	// Récupérer un UserInfo en fonction de l'utilisataut auquel il est lié
+	@Query(() => UserInfo)
+	async getUserInfoByUserId(@Arg("userId") userId: number) {
+		return await UserInfo.findOne({
+			where: {
+				user: { userId }
+			},
+			relations: ["user"],
+		})
+	}
 
 	// On ne crée pas d'élément UserInfo ici : à chaque inscription d'un utilisateur, son UserInfo associé est créé
 	// On ne supprime pas non plus de UserInfo ici : à chaque suppression d'un User, son UserInfo associé est supprimé grâce à l'utilisation de onDelete: "CASCADE"
-	
+
 	// Modifier un UserInfo
 	// @Authorized("USER", "ADMIN") TODO décommenter @Authorized("USER", "ADMIN") lorsque ce sera testable 
 	// + verifier que USER id == UserInfo.user si pas ADMIN
@@ -46,5 +54,4 @@ export default class UserInfoResolver {
 		await userInfo.save();
 		return userInfo.userInfoId;
 	}
-
 }

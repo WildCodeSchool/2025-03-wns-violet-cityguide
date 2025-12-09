@@ -28,7 +28,6 @@ class UserInfo extends BaseEntity {
 		@JoinColumn({ name: "userId" })
 		@Field(() => User)
 		user: User;
-
 }
 
 export { UserInfo };

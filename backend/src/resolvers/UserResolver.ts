@@ -95,7 +95,7 @@ export default class UserResolver {
 	@Query(() => [User])
 	async getAllUsers() {
 		return await User.find({
-			relations: ["userInfo"]
+			relations: ["userInfo"],
 		});
 	}
 
