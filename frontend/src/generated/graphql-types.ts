@@ -68,6 +68,7 @@ export type Mutation = {
   updateCity: Scalars['ID']['output'];
   updatePoi: Scalars['ID']['output'];
   updateUser: Scalars['ID']['output'];
+  updateUserInfo: Scalars['ID']['output'];
 };
 
 
@@ -139,6 +140,12 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['Float']['input'];
 };
 
+
+export type MutationUpdateUserInfoArgs = {
+  data: UserInfoInput;
+  userInfoId: Scalars['Float']['input'];
+};
+
 export type NewUserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -177,6 +184,7 @@ export type Query = {
   getAllCategories: Array<Category>;
   getAllCities: Array<City>;
   getAllPois: Array<Poi>;
+  getAllUserInfos: Array<UserInfo>;
   getAllUsers: Array<User>;
   getCityById: City;
   getPoiById: Poi;
@@ -248,6 +256,12 @@ export type UserInfo = {
   lastName: Scalars['String']['output'];
   user: User;
   userInfoId: Scalars['Float']['output'];
+};
+
+export type UserInfoInput = {
+  avatarUrl: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
 };
 
 export type UserInput = {

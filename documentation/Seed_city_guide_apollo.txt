@@ -38,6 +38,13 @@ mutation Signup($data: NewUserInput!) {
     "password": "123456789"
   }
 }
+
+{
+  "data": {
+    "email": "rodeo.danger@yopmail.fr",
+    "password": "123465789"
+  }
+}
 // ----------------------------- FIN UTILISATEURS (signup) -----------------------------
 
 // ----------------------------- DÉBUT VILLES (createCity) -----------------------------
