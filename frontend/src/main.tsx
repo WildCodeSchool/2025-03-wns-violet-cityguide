@@ -59,6 +59,10 @@ const router = createBrowserRouter([
 				element: <Account />,
 			},
 			{
+				path: '/admin',
+				element: <BackofficeAdmin />,
+			},
+			{
 				path: '/legalNotice',
 				element: <LegalNotice />,
 			},
