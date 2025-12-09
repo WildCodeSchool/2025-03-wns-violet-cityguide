@@ -15,3 +15,15 @@ export type City = {
 	createdAt?: string | null;
 	updatedAt?: string | null;
 }
+
+export type Poi = {
+	poiName: string;
+	poiLongitude: number;
+	poiLatitude: number;
+	imageUrl: string;
+	externalLink: string;
+	poiDescription: string;
+	address: string;
+	poiCategory?: Category;
+	poiId: number;
+}

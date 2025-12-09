@@ -41,19 +41,19 @@ export default function CitySearch() {
 	};
 
 	return (
-		<div className="city-search">
-			<form onSubmit={handleSubmit}>
+		<div className="city__search">
+			<form onSubmit={handleSubmit} className="city__search__form">
 				<input
 					type="text"
 					placeholder="Rechercher une ville..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 				/>
-				<button type="submit">OK</button>
+				<button type="submit">Recherche</button>
 			</form>
 
 			{query.length >= 3 && (
-				<ul className="city-search__results">
+				<ul className="city__search__results">
 					{filteredCities.length === 0 && <li>Aucune ville trouvée.</li>}
 
 					{filteredCities.map((city) => (
