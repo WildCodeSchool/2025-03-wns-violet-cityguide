@@ -1,7 +1,6 @@
 import {
 		Arg,
 		Field,
-		Ctx,
 		ID,
 		InputType,
 		Mutation,

@@ -80,9 +80,10 @@ function createJwt(payload: UserToken) {
 }
 
 // Crée un élément de type UserToken qui sera utilisé pour fournir les payloads dans les mutations signup et login
-function createUserToken(user: User): UserToken {
+function createUserPayload(user: User): UserToken {
 	const profile: UserToken = {
 		id: user.userId,
+		firstname: user.userInfo?.firstName as string,
 		roles: user.roles,
 	};
 	return profile;
@@ -148,7 +149,7 @@ export default class UserResolver {
 		user.save();
 
 		// Fabrication du payload
-		const payload = createUserToken(user);
+		const payload = createUserPayload(user);
 
 		// utilisation du payload pour la fabrication du token
 		const token = createJwt(payload);
@@ -181,7 +182,7 @@ export default class UserResolver {
 			if (!isValid) throw new Error("Invalid password");
 
 			// Fabrication du payload puis du token à partir de celui-ci.
-			const payload = createUserToken(user);
+			const payload = createUserPayload(user);
 			const token = createJwt(payload);
 
 			// Création et ajout du cookie dans le navigateur

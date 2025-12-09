@@ -37,7 +37,7 @@ class User extends BaseEntity {
 		enum: Role,
 		array: true,
 		default: [Role.USER],
-		enumName: "role" 
+		enumName: "roles"
 		})
 		@Field(() => [Role])
 		roles: Role[];

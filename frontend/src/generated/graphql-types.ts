@@ -186,17 +186,24 @@ export type Query = {
   getAllPois: Array<Poi>;
   getAllUserInfos: Array<UserInfo>;
   getAllUsers: Array<User>;
+  getCategoryById: Category;
   getCityById: City;
   getPoiById: Poi;
   getPoisByCategory: Array<Poi>;
   getPoisByCity: Array<Poi>;
   getPoisByCityAndCategory: Array<Poi>;
   getUserById?: Maybe<User>;
+  getUserInfoByUserId: UserInfo;
+};
+
+
+export type QueryGetCategoryByIdArgs = {
+  categoryId: Scalars['Float']['input'];
 };
 
 
 export type QueryGetCityByIdArgs = {
-  id: Scalars['Float']['input'];
+  cityId: Scalars['Float']['input'];
 };
 
 
@@ -225,9 +232,16 @@ export type QueryGetUserByIdArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
+export type QueryGetUserInfoByUserIdArgs = {
+  userId: Scalars['Float']['input'];
+};
+
 /** Roles for users in this app */
 export enum Role {
-  Admin = 'ADMIN',
+  AdminCity = 'ADMIN_CITY',
+  AdminSite = 'ADMIN_SITE',
+  PoiCreator = 'POI_CREATOR',
   User = 'USER'
 }
 
@@ -495,7 +509,7 @@ export type GetAllCitiesSuspenseQueryHookResult = ReturnType<typeof useGetAllCit
 export type GetAllCitiesQueryResult = Apollo.QueryResult<GetAllCitiesQuery, GetAllCitiesQueryVariables>;
 export const GetOneCityDocument = gql`
     query GetOneCity($getCityByIdId: Float!) {
-  getCityById(id: $getCityByIdId) {
+  getCityById(cityId: $getCityByIdId) {
     cityId
     cityName
     imageUrl

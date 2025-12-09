@@ -60,6 +60,8 @@ async function startServer() {
 			// Initialisation de user à null
 			let user: string | jwt.JwtPayload | null = null;
 
+			console.log(user);
+
 			// Compare le cookie trouvé dans le header de la requête avec le format (cf regexp) que doivent avoir les cookie de notre appli
 			const match = req.headers.cookie?.match(/cityGuide-auth=([^;]+)/);
 

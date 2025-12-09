@@ -57,7 +57,7 @@ export const GET_ALL_CITIES = gql`
 // Pois à dé-commenter lorsque la requête sera ok
 export const GET_ONE_CITY = gql`
 	query GetOneCity($getCityByIdId: Float!) {
-		getCityById(id: $getCityByIdId) {
+		getCityById(cityId: $getCityByIdId) {
 			cityId
 			cityName
 			imageUrl

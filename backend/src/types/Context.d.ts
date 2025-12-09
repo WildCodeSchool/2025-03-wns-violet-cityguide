@@ -1,5 +1,6 @@
 export type UserToken = {
 	id: number;
+	firstname: string;
 	roles: Role[];
 };
 
