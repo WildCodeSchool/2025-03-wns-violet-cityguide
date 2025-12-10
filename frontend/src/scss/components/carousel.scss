@@ -1,0 +1,8 @@
+@use '../variables' as *;
+
+.carousel {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+}
