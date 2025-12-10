@@ -1,19 +1,15 @@
 import {
 		Arg,
 		Field,
-		Ctx,
 		ID,
 		InputType,
 		Mutation,
 		Query,
 		Resolver,
 		Authorized,
-		Args,
 } from "type-graphql";
 
 import { City } from "../entities/City";
-import { User } from "../entities/User";
-import { Poi } from "../entities/Poi";
 
 // Lors de la création d'une ville il est impératif de fourni son nom, sa description, une image et l'utilisateur qui la crée
 @InputType()
@@ -47,25 +43,10 @@ class CreateCityInput {
 @InputType()
 class UpdateCityInput {
 		@Field()
-		cityName: string;
-
-		@Field()
 		description: string;
 
 		@Field()
 		imageUrl: string;
-
-		@Field()
-		// @IsNumber()
-		// @Min(-90)
-		// @Max(90)
-		cityLatitude!: number;
-
-		@Field()
-		// @IsNumber()
-		// @Min(-180)
-		// @Max(180)
-		cityLongitude!: number;
 }
 
 @Resolver(City)
@@ -78,17 +59,22 @@ export default class CityResolver {
 		// Récupérer toutes les villes en base
 		@Query(() => [City])
 		async getAllCities() {
-				return await City.find();
+				return await City.find({
+					relations: ["cityPois"],
+				});
 		}
 
 		// Récupérer une ville à partir de son id
 		@Query(() => City) 
-		async getCityById(@Arg("id") id: number) {
-				const city = await City.findOneByOrFail({cityId: id});
-				return city;
+		async getCityById(@Arg("cityId") cityId: number) {
+			return await City.findOneOrFail({
+				where: { cityId: cityId },
+				relations: ["cityPois"],
+			})
 		}
 
 		// Créer une ville
+		@Authorized("ADMIN_SITE", "ADMIN_CITY")
 		@Mutation(() => ID)
 		async createCity(@Arg("data") data: CreateCityInput) {
 				const city = City.create({ ...data });
@@ -96,6 +82,7 @@ export default class CityResolver {
 				return city.cityId;
 		}
 
+		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Modifier une ville
 		@Mutation(() => ID)
 		async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {
