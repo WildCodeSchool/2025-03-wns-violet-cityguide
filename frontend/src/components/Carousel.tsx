@@ -6,7 +6,7 @@ type CarouselProps = {
     visibleCount?: number;
 };
 
-export default function Carousel({ children, visibleCount = 1 }: CarouselProps) {
+export default function Carousel({ children, visibleCount = 4 }: CarouselProps) {
     const [index, setIndex] = useState(0);
 
     const total = children.length;

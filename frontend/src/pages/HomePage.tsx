@@ -8,8 +8,17 @@ import Carousel from "../components/Carousel";
 // GraphQL
 import { useGetAllCitiesQuery } from "../generated/graphql-types";
 
+
+
 export default function HomePage() {
 	const { data, loading, error } = useGetAllCitiesQuery();
+
+	const windowSize = window.innerWidth;
+
+	console.log(windowSize);
+	useEffect(() => {
+		console.log(windowSize);
+	}, [windowSize]);
 
 	useEffect(() => {
 		const target = sessionStorage.getItem("scrollTo");
@@ -34,9 +43,15 @@ export default function HomePage() {
 	return (
 		<>
 			<h2 className="heroBanner">Découvrez les points d'intérêts de votre ville</h2>
-			<section className="cityCards" id="cities">
-				{citiesCards.length === 0 ? (
-					<p>Aucune ville trouvée</p>
+			<section id="cities">
+				{citiesCards.length === 0 && <p>Aucune ville trouvée</p>}
+				{windowSize < 768 ? (
+					<section className="cities-mobile">
+						{citiesCards.map((currCity) => (
+							<CityCard key={currCity.cityId} city={currCity}/>
+						))}
+					</section>
+
 				) : (
 					<Carousel visibleCount={4}>
 						{citiesCards.map((currCity) => (
