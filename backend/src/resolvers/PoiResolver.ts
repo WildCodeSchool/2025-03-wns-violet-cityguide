@@ -1,4 +1,4 @@
-import { InputType, Field, Resolver, Query, Mutation, ID, Arg, Args } from "type-graphql";
+import { InputType, Field, Resolver, Query, Mutation, ID, Arg, Args, Authorized } from "type-graphql";
 import { Poi } from "../entities/Poi";
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
@@ -98,6 +98,7 @@ export default class PoiResolver {
 	}
 
 	// Créer un poi
+	@Authorized("ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR")
 	@Mutation(() => ID)
 	async createPoi(@Arg("data") data: PoiInput) {
 		const poi = Poi.create({...data});
@@ -105,8 +106,8 @@ export default class PoiResolver {
 		return poi.poiId;
 	}
 
-	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 	// Modifier un poi
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
 	@Mutation(() => ID)
 	async updatePoi(@Arg("poiId") poiId: number, @Arg("data") data: PoiInput) {
 
@@ -121,8 +122,8 @@ export default class PoiResolver {
 		return poi.poiId;
 	}
 
-	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 	// Supprimer un poi
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
 	@Mutation(() => ID)
 	async deletePoi(@Arg("poiId") poiId: number) {
 		await Poi.delete({ poiId });

@@ -82,8 +82,8 @@ export default class CityResolver {
 				return city.cityId;
 		}
 
-		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Modifier une ville
+		@Authorized("ADMIN_SITE", "ADMIN_CITY")
 		@Mutation(() => ID)
 		async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {
 
@@ -99,7 +99,7 @@ export default class CityResolver {
 		}
 
 		// Supprimer une ville
-		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+		@Authorized("ADMIN_SITE")
 		@Mutation(() => ID)
 		async deleteCity(@Arg("cityId") cityId: number) {
 				await City.delete({ cityId });
