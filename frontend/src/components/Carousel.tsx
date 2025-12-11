@@ -10,6 +10,7 @@ export default function Carousel({ children, visibleCount = 4 }: CarouselProps) 
     const [index, setIndex] = useState(0);
     const total = children.length;
 
+    // Si aucun élément à afficher
     if (total === 0) {
         return (
             <section className="carousel carousel--empty">
