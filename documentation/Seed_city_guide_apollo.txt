@@ -50,7 +50,7 @@ mutation Signup($data: NewUserInput!) {
 // ----------------------------- DÉBUT ROLES (update user) -------------------------------
 {
   "data": {
-    "roles": ["ADMIN_SITE", "USER"]
+    "roles": ["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER"]
   },
   "userId": 1
 }
