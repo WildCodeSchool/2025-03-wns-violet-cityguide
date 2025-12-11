@@ -338,7 +338,7 @@ export type GetPoisByCityQueryVariables = Exact<{
 }>;
 
 
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
 
 
 export const GetAllUsersDocument = gql`
@@ -661,6 +661,7 @@ export const GetPoisByCityDocument = gql`
     imageUrl
     poiCategory {
       categoryName
+      style
     }
     poiCity {
       cityName
