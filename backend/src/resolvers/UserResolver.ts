@@ -8,6 +8,7 @@ import {
 	Query,
 	Resolver,
 	ObjectType,
+	Authorized,
 } from "type-graphql";
 import { User, Role } from "../entities/User";
 import * as argon2 from "argon2";
@@ -48,11 +49,18 @@ class UserResponse {
 	message?: string;
 }
 
-// Input pour les modifications d'utilisateur (changement de role notamment)
+// Input pour les modifications du role d'un utilisateur
 @InputType()
-class UpdateUserInput {
+class UpdateUserRoleInput {
 	@Field(() => [Role])
 	roles: Role[];
+}
+
+@InputType()
+class UpdateUserDataInput {
+	@Field()
+	email: string;
+	// TODO voir pour le mot de passe dans un second temps
 }
 
 /* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
@@ -214,10 +222,10 @@ export default class UserResolver {
 		};
 	}
 
-	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
-	// Modification d'un utilisateur
+	// Modification du role d'un utilisateur (Prévoir de rendre possible à l'utilisateur de modifier son mot de passe)
+	@Authorized("ADMIN_SITE")
 	@Mutation(() => ID)
-	async updateUser(@Arg("userId") userId: number, @Arg("data") data: UpdateUserInput) {
+	async updateUserRole(@Arg("userId") userId: number, @Arg("data") data: UpdateUserRoleInput) {
 
 		// Récupérer l'utilisateur à modifier
 		let user = await User.findOneByOrFail({ userId });
@@ -230,8 +238,41 @@ export default class UserResolver {
 		return user.userId;
 	}
 
-	// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
+	// Modification du mail d'un utilisateur
+	@Authorized("ADMIN_SITE", "USER")
+		@Mutation(() => ID)
+	async updateUserData(
+		@Arg("userId") userId: number, 
+		@Arg("data") data: UpdateUserDataInput,
+		@Ctx() ctx: Context) {
+
+		// Récupérer l'utilisateur à modifier
+		let user = await User.findOneByOrFail({ userId });
+
+		// Récupération de l'utilisateur connecté
+		const currentUser = ctx.user;
+
+		// Est-ce que l'utilisateur connecté est ADMIN_SITE
+		const isAdmin = currentUser?.roles.includes("ADMIN_SITE");
+
+		// Est-ce que l'utilisateur connecté est "lui-même" (aka l'id de l'utilisateur connecté correspond-il à l'id de l'utilisateur à modifier)
+		const isSelf = currentUser?.id === userId;
+
+		// Si l'utilisateur n'est ni administrateur site ni "lui-même"
+		if (!isAdmin && !isSelf) {
+			throw new Error ("Vous n'êtes pas autorisé à faire cette modification");
+		}
+
+		// Assigner les nouvelles données à l'utilisateur
+		user = Object.assign(user, data);
+
+		// Enregistrer l'utilisateur modifié
+		await user.save();
+		return user.userId;
+	}
+
 	// Suppression d'un utilisateur
+	@Authorized("ADMIN_SITE")
 	@Mutation(() => ID)
 	async deleteUser(@Arg("userId") userId: number) {
 		await User.delete({ userId });

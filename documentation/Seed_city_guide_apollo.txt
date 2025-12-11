@@ -42,31 +42,31 @@ mutation Signup($data: NewUserInput!) {
 {
 	"data": {
 		"email": "rodeo.danger@yopmail.fr",
-		"password": "123465789"
+		"password": "123456789"
 	}
 }
 // ----------------------------- FIN UTILISATEURS (signup) -------------------------------
 
 // ----------------------------- DÉBUT ROLES (update user) -------------------------------
 {
-  "data": {
-    "roles": ["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER"]
-  },
-  "userId": 1
+	"data": {
+		"roles": ["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER"]
+	},
+	"userId": 1
 }
 
 {
-  "data": {
-    "roles": ["ADMIN_CITY", "USER"]
-  },
-  "userId": 2
+	"data": {
+		"roles": ["ADMIN_CITY", "USER"]
+	},
+	"userId": 2
 }
 
 {
-  "data": {
-    "roles": ["POI_CREATOR", "USER"]
-  },
-  "userId": 3
+	"data": {
+		"roles": ["POI_CREATOR", "USER"]
+	},
+	"userId": 3
 }
 // ----------------------------- FIN ROLES (update user) ---------------------------------
 

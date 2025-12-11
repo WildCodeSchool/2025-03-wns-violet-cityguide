@@ -41,7 +41,6 @@ export default function HomePage() {
 			<h2 className="heroBanner">Découvrez les points d'intérêts de votre ville</h2>
 			<section id="cities">
 				{/*<SearchBar cities={cities} currentCity={currentCity} onSelectCity={handleSelectCity} errorMessage={"Aucune ville trouvée"} />*/}
-				{citiesCards.length === 0 && <p>Aucune ville trouvée</p>}
 				{windowSize < 768 ? (
 					<section className="cities-mobile">
 						{citiesCards.map((currCity) => (
