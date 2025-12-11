@@ -43,7 +43,7 @@ export default function useStyleColors() {
 		maroon: "#800000",
 
 		// ============================
-		// RED
+		// RED = Restaurants
 		// ============================
 		indianred: "#cd5c5c",
 		lightcoral: "#f08080",
@@ -66,7 +66,7 @@ export default function useStyleColors() {
 		darkorange: "#ff8c00",
 
 		// ============================
-		// YELLOW
+		// YELLOW / drinks
 		// ============================
 		lightyellow: "#ffffe0",
 		lemonchiffon: "#fffacd",
@@ -80,7 +80,7 @@ export default function useStyleColors() {
 		yellow: "#ffff00",
 
 		// ============================
-		// GREEN
+		// GREEN = green space/ parc
 		// ============================
 		lawngreen: "#7cfc00",
 		chartreuse: "#7fff00",
@@ -103,7 +103,7 @@ export default function useStyleColors() {
 		teal: "#008080",
 
 		// ============================
-		// BLUE
+		// BLUE = points d'eau
 		// ============================
 		aqua: "#00ffff",
 		cyan: "#00ffff",
@@ -167,8 +167,5 @@ export default function useStyleColors() {
 		palevioletred: "#db7093",
 		mediumvioletred: "#c71585"
 	};
-
-
-
 	return { colors }
 }

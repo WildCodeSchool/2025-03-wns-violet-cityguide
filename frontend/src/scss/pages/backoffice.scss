@@ -98,7 +98,7 @@
 		font-weight: 500;
 	}
 
-	input[type="text"],
+	input[type="text"], input[type="number"],
 	select {
 		background-color: $beige;
 		border: solid 2px $sand;
@@ -112,6 +112,9 @@
 		option {
 			background-color: $beige;
 		}
+	}
+	input[type="number"] {
+		min-width: 200px;
 	}
 
 	select {

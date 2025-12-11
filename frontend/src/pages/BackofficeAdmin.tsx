@@ -6,17 +6,12 @@ import L from 'leaflet';
 import { useCreateCategoryMutation, useGetAllCategoriesQuery } from "../generated/graphql-types";
 
 import useStyleColors from "./backofficeHandler/styleColors";
-import imageVerificationFrontend from "./backofficeHandler/imageVerification";
 import useImageVerificationFrontend from "./backofficeHandler/imageVerification";
 
 type Category = {
 	categoryName: string,
 	categoryId: number, 
 	style: string
-}
-
-type NewCategoryInput = {
-	categoryName: string,
 }
 
 export default function BackofficeAdmin() {
@@ -28,55 +23,69 @@ export default function BackofficeAdmin() {
 	}
 
 	// to handle coordinateFormatError, see below
-	const [mapLatitude, setMapLatitude] = useState('');
+	const [mapLatitude, setMapLatitude] = useState(0);
 	const [isLatitudeValid, setIsLatitudeValid] = useState(true)
-	const [mapLongitude, setMapLongitude] = useState('');
+	const [mapLongitude, setMapLongitude] = useState(0);
 	const [isLongitudeValid, setIsLongitudeValid] = useState(true);
 	const [showMap, setShowMap] = useState(false);
 	let coordinateFormatError = ""
 	const checkCoordinateInput = (e: React.ChangeEvent<HTMLInputElement>, setValid: (valid: boolean) => void, type: string) => {
-		const coordinate = e.target.value;
+		const coordinate = Number(e.target.value);
 		console.log('checkCoordinate : ', e, type, coordinate)
 
-		// 1. Decimal Degrees (DD): 48.8566, -123.3847
-		const regex = type === "latitude"
-			? /^-?([0-8]?\d(\.\d+)?|90(\.0+)?)$/
-			: /^-?(1[0-7]\d(\.\d+)?|180(\.0+)?|\d{1,2}(\.\d+)?)$/;
-		// Examples: 48.8566, -123.3847, 90, -180
-		const match = coordinate.match(regex)
+		// // 1. Decimal Degrees (DD): 48.8566, -123.3847
+		// const regex = type === "latitude"
+		// 	? /^-?([0-8]?\d(\.\d+)?|90(\.0+)?)$/
+		// 	: /^-?(1[0-7]\d(\.\d+)?|180(\.0+)?|\d{1,2}(\.\d+)?)$/;
+		// // Examples: 48.8566, -123.3847, 90, -180
+		// const match = coordinate.match(regex)
 		console.log('match in check coordinate : ', {
-			regex: regex,
+			// regex: regex,
 			coordinate: coordinate,
 			type: type,
-			try: (coordinate.match(regex)),
-			match: match
+			// try: (coordinate.match(regex)),
+			// match: match
 		})
-		if (coordinate === '') {
-			if (type === "latitude") setIsLatitudeValid(false)
-			if (type === "longitude") setIsLongitudeValid(false)
+		if (coordinate) {
+			if (type === "latitude") {
+				if (coordinate <= 90 || coordinate >= -90) {
+					setMapLatitude(coordinate)
+					setIsLatitudeValid(true)
+				} else {
+					setIsLatitudeValid(false)
+					coordinateFormatError('Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180')
+				}
+			}
+			if (type === "longitude") {
+				if (coordinate <= 180 || coordinate >= -180) {
+					 setIsLongitudeValid(false)
+				} else {
+					setIsLongitudeValid(false)
+				}
+			}
 			coordinateFormatError = "Veuillez renseigner une coordonnée."
 			return setValid(false)
 		}
 
-		if (match) {
-			console.log('there is a match in coordinate !')
-			if (type === "latitude") {
-				setMapLatitude(coordinate)
-				setIsLatitudeValid(true)
-			}
-			if (type === "longitude") {
-				setMapLongitude(coordinate)
-				setIsLongitudeValid(true)
-			}
-			setValid(true)
-			showMapHandler();
-		} else {
-			console.log('regex is false for coordinate')
-			setIsLatitudeValid(false)
-			setIsLongitudeValid(false)
-			setValid(false)
-			coordinateFormatError = "Le format de votre coordonnée n'est pas correcte. Veullez utilisez le format approprié : Degrées décimal. Par exemple : Longitude -48.876667 ; latitude : -123.393333 "
-		}
+		// if (match) {
+		// 	console.log('there is a match in coordinate !')
+		// 	if (type === "latitude") {
+		// 		setMapLatitude(coordinate)
+		// 		setIsLatitudeValid(true)
+		// 	}
+		// 	if (type === "longitude") {
+		// 		setMapLongitude(coordinate)
+		// 		setIsLongitudeValid(true)
+		// 	}
+		// 	setValid(true)
+		// 	showMapHandler();
+		// } else {
+		// 	console.log('regex is false for coordinate')
+		// 	setIsLatitudeValid(false)
+		// 	setIsLongitudeValid(false)
+		// 	setValid(false)
+		// 	coordinateFormatError = "Le format de votre coordonnée n'est pas correcte. Veullez utilisez le format approprié : Degrées décimal. Par exemple : Longitude -48.876667 ; latitude : -123.393333 "
+		// }
 		return setValid
 	}
 
@@ -112,7 +121,7 @@ export default function BackofficeAdmin() {
 			setImageValid('false');
 		} else {
 
-			const validType = ['image/jpeg', 'image/jpeg', 'image/png', 'image/webp'];
+			const validType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 			console.log('file type is : ', file.type)
 			if (!validType.includes(file.type) || file === null) {
 				console.log('file type is not valid')
@@ -121,7 +130,7 @@ export default function BackofficeAdmin() {
 				return e.target.value = '';
 			}
 
-			const maxSize = 1 * 1024 * 1024 // 5 MB in bytes
+			const maxSize = 5 * 1024 * 1024 // 5 MB in bytes
 			console.log('file size is : ', file.size, ' max size is : ', maxSize)
 			if (file.size > maxSize) {
 				console.log('file size is not valid')
@@ -137,7 +146,7 @@ export default function BackofficeAdmin() {
 				if (fileMagicSignatureIsValid === true && fileVerifiedOnBrowserIsValid === true) {
 						return setImageValid('true')
 				} else {
-					setImageError('Image invalide. Veuillez fournir une autre image.');
+					setImageError('Image invalide. Veuillez fournir une autre image (formats autorisés : png, jpeg, webp, jpg)');
 					setImageValid('false')
 					return e.target.value = '';
 				}
@@ -237,7 +246,7 @@ export default function BackofficeAdmin() {
 				</div>
 				<section id="admin-ville">
 					<h2>Villes</h2>
-					<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCities === 'input-field' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>Ajouter une ville</div><div className={"tabBtn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>Administrer une ville</div></div></h3>
+					<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>Ajouter une ville</div><div className={"tabBtn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>Administrer une ville</div></div></h3>
 
 					{/* ajouter une ville */}
 					{adminTabCities === "createCity" &&
@@ -276,11 +285,11 @@ export default function BackofficeAdmin() {
 								<p>Coordonnées</p>
 								<div className="add-ville-coordonnees">
 									<label htmlFor="cityLatitude">Latitude
-										<input type="text" name="cityLatitude" placeholder="-48.876667" onBlur={(e) => checkCoordinateInput(e, setIsLatitudeValid, 'latitude')} required />
+										<input type="number" name="cityLatitude" min="-90" max="90" placeholder="-48.876667" onBlur={(e) => checkCoordinateInput(e, setIsLatitudeValid, 'latitude')} required />
 										{isLatitudeValid === false && <p>{coordinateFormatError}</p>}
 									</label>
 									<label htmlFor="cityLongitude">Longitude
-										<input type="text" name="cityLongitude" placeholder="-123.393333" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} required />
+										<input type="number" name="cityLongitude" min="-180" max="180" placeholder="-123.393333" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} required />
 										{isLongitudeValid === false && <p>{coordinateFormatError}</p>}
 									</label>
 								</div>
@@ -406,7 +415,7 @@ export default function BackofficeAdmin() {
 									 {userWantsToDeleteCategory === true && 
 									 <>
 										<button onClick={() => setUserWantsToDeleteCategory(false)}>Annuler la suppresion</button>
-										<input type="submit" value={`Confirmer la suppression de la catégorie ${editCategoryName}`}/>
+										<input type="submit" value={`Confirmer la suppression de la catégorie '${editCategoryName}'`}/>
 									</>
 									 }
 									</div>

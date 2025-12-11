@@ -127,7 +127,8 @@ export const GET_ALL_CATEGORIES = gql`
 	query GetAllCategories {
 		getAllCategories {
 		categoryName, 
-		categoryId
+		categoryId, 
+		style
 		}
 	}
 `
