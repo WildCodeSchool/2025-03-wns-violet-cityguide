@@ -8,9 +8,20 @@ type CarouselProps = {
 
 export default function Carousel({ children, visibleCount = 4 }: CarouselProps) {
     const [index, setIndex] = useState(0);
-
     const total = children.length;
-    const maxIndex = total - visibleCount;
+
+    // Si aucun élément à afficher
+    if (total === 0) {
+        return (
+            <section className="carousel carousel--empty">
+                <p>Aucun élément à afficher.</p>
+            </section>
+        );
+    }
+
+    const safeVisibleCount = Math.min(visibleCount, total);
+
+    const maxIndex = total - safeVisibleCount;
 
     const prev = () => setIndex((cardNumber) => (cardNumber <= 0 ? maxIndex : cardNumber - 1));
     const next = () => setIndex((cardNumber) => (cardNumber >= maxIndex ? 0 : cardNumber + 1));
@@ -30,8 +41,8 @@ export default function Carousel({ children, visibleCount = 4 }: CarouselProps) 
                 <div
                     className="carousel__track"
                     style={{
-                        width: `${(total / visibleCount) * 100}%`,
-                        transform: `translateX(-${(index * 100) / total * visibleCount}%)`,
+                        width: `${(total / safeVisibleCount) * 100}%`,
+                        transform: `translateX(-${(index * 100) / total}%)`,
                     }}
                 >
                     {children.map((child, idx) => (
