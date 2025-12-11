@@ -117,6 +117,7 @@ query GetPoisByCity($cityId: Float!) {
     imageUrl
     poiCategory {
       categoryName
+	  style
     }
     poiCity {
       cityName

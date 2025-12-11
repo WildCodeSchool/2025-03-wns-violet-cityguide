@@ -1,30 +1,30 @@
 // React & React Router
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 // Components
 import Map from "../components/Map.tsx";
-import CitySearch from "../components/CitySearch.tsx";
+import SearchBar from "../components/SearchBar.tsx";
 
 // GraphQL
-import { useGetAllCitiesQuery, useGetPoisByCityQuery } from "../generated/graphql-types";
+import { useGetAllCitiesQuery, useGetPoisByCityQuery, type GetAllCitiesQuery } from "../generated/graphql-types";
 
 // Zustand - Context
 import { useCityStore, useCityAllPoiStore } from "../zustand/cityStore";
 
+// Types
+export type CityType = GetAllCitiesQuery["getAllCities"][number];
 
 export default function City() {
-	const {cityId} = useParams<{ cityId: string }>();
+	const { cityId } = useParams<{ cityId: string }>();
 	const numericId = Number(cityId);
 
-	// requête pour les villes
 	const {
 		data: citiesData,
 		loading: loadingCities,
 		error: errorCities,
 	} = useGetAllCitiesQuery();
 
-	// requête pour les POIs
 	const {
 		data: poisData,
 		loading: loadingPois,
@@ -34,6 +34,11 @@ export default function City() {
 		skip: isNaN(numericId),
 	});
 
+	const navigate = useNavigate();
+
+	const cities = useCityStore((s) => s.cities);
+	const currentCity = useCityStore((s) => s.currentCity);
+
 	const setCities = useCityStore((s) => s.setCities);
 	const setCurrentCity = useCityStore((s) => s.setCurrentCity);
 	const setPois = useCityAllPoiStore((s) => s.setPois);
@@ -42,11 +47,11 @@ export default function City() {
 	useEffect(() => {
 		if (!citiesData?.getAllCities) return;
 
-		const cities = citiesData.getAllCities;
-		setCities(cities);
+		const citiesFromApi = citiesData.getAllCities;
+		setCities(citiesFromApi);
 
 		const current =
-			cities.find((c) => c.cityId === numericId) ?? cities[0];
+			citiesFromApi.find((c) => c.cityId === numericId) ?? citiesFromApi[0];
 
 		setCurrentCity(current);
 	}, [citiesData, numericId, setCities, setCurrentCity]);
@@ -57,7 +62,9 @@ export default function City() {
 		setPois(poisData.getPoisByCity);
 	}, [poisData, setPois]);
 
-	const currentCity = useCityStore((s) => s.currentCity);
+	const handleSelectCity = (city: CityType) => {
+		navigate(`/city/${city.cityId}`);
+	};
 
 	if (loadingCities || loadingPois) return <p>Loading...</p>;
 	if (errorCities || errorPois) return <p>Erreur de chargement</p>;
@@ -66,8 +73,13 @@ export default function City() {
 
 	return (
 		<section className="city">
-			<CitySearch />
+			<SearchBar
+				cities={cities}
+				currentCity={currentCity}
+				onSelectCity={handleSelectCity}
+				errorMessage={"Aucune ville trouvée"}
+			/>
 			<Map />
 		</section>
-	)
+	);
 }

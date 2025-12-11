@@ -45,7 +45,6 @@ console.log(pois)
         return <div>Aucune ville sélectionnée</div>;
     }
 
-    // const markerIcon = createColoredIcon(city.style ?? "#ff0000");
     const markerIcon = createColoredIcon("#ff0000");
 
     return (
@@ -73,7 +72,7 @@ console.log(pois)
                         <Marker
                             key={poi.poiId}
                             position={[poi.poiLatitude, poi.poiLongitude]}
-                            icon={createColoredIcon("#1e90ff")}
+                            icon={createColoredIcon(poi.poiCategory?.style)}
                             eventHandlers={{
                                 click: () => {
                                     setSelectedPoi(poi);
