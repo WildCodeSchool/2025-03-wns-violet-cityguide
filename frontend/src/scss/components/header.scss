@@ -9,7 +9,7 @@
 	margin: .75rem 1rem;
 	background: transparent;
 	color: white;
-	@media (min-width: $breakpoint-small) {
+	@media (min-width: $breakpoint-medium-large) {
 		margin: 1rem 6rem;
 		padding: 0;
 	}
@@ -29,7 +29,7 @@
 			width: 2rem;
 			height: 2rem;
 			color: #F6BB61;
-			@media (min-width: $breakpoint-small) {
+			@media (min-width: $breakpoint-medium-large) {
 				width: 3rem;
 				height: 3rem;
 			}
@@ -60,7 +60,7 @@
 
 	&__nav {
 		display: flex;
-		width: 45rem;
+		width: 35rem;
 		justify-content: space-between;
 		align-items: center;
 
@@ -190,7 +190,7 @@
 	}
 
 	/* --- BREAKPOINT: desktop --- */
-	@media (min-width: $breakpoint-small) {
+	@media (min-width: $breakpoint-medium-large) {
 		&__burger { display: none; }
 		&__backdrop, &__panel { display: none; }
 		&__nav--desktop { display: flex; }
