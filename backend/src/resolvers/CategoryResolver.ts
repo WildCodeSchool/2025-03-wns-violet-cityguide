@@ -5,7 +5,8 @@ import {
 		Query,
 		Mutation,
 		ID,
-		Arg
+		Arg,
+		Authorized
 } from "type-graphql";
 import { Category } from "../entities/Category";
 
@@ -22,9 +23,6 @@ class CategoryInput {
 
 @Resolver(Category)
 export default class CategoryResolver {
-
-		// Utilisateur (tous) => peut consulter les categories 
-		// Adminstrateur site => peut ajouter/modifier categories
 
 		// Récupérer toutes les catégories en base
 		@Query(() => [Category])
@@ -45,6 +43,7 @@ export default class CategoryResolver {
 		}
 
 		// Créer une catégorie
+		@Authorized("ADMIN_SITE")
 		@Mutation(() => ID)
 		async createCategory(@Arg("data") data: CategoryInput) {
 				const category = Category.create({ ...data });
@@ -52,8 +51,8 @@ export default class CategoryResolver {
 				return category.categoryId;
 		}
 
-		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Modifier une catégorie
+		@Authorized("ADMIN_SITE")
 		@Mutation(() => ID)
 		async updateCategory(@Arg("categoryId") categoryId: number, @Arg("data") data: CategoryInput) {
 
@@ -68,8 +67,8 @@ export default class CategoryResolver {
 			return category.categoryId;
 		}
 
-		// @Authorized("ADMIN") TODO décommenter @Authorized("ADMIN") lorsque ce sera testable
 		// Supprimer une catégorie
+		@Authorized("ADMIN_SITE")
 		@Mutation(() => ID)
 		async deleteCategory(@Arg("categoryId") categoryId: number) {
 			await Category.delete({ categoryId });
