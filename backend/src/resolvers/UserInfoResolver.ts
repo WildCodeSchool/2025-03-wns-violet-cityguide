@@ -1,4 +1,5 @@
-import { Arg, 
+import { 
+	Arg, 
 	Authorized, 
 	Field, 
 	ID, 
@@ -8,19 +9,27 @@ import { Arg,
 	Resolver,
 	Ctx,
 } from "type-graphql";
-import { UserInfo } from "../entities/UserInfo";
+
+import { IsString } from "class-validator";
+
 import { Context } from "../types/Context";
+
+// Entité
+import { UserInfo } from "../entities/UserInfo";
 
 @InputType()
 class UserInfoInput {
 
 	@Field()
+	@IsString({ message: "Le nom doit être un texte." })
 	lastName: string;
 
 	@Field()
+	@IsString({ message: "Le prénom doit être un texte." })
 	firstName: string;
 
 	@Field()
+	@IsString()
 	avatarUrl: string;
 }
 
