@@ -28,3 +28,5 @@ dist-ssr
 .env.stage
 .env.dev
 persist/
+
+./frontend/src/generated
