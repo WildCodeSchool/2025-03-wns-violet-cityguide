@@ -1,0 +1,58 @@
+@use '../variables' as *;
+
+.category {
+  position: absolute;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 1rem;
+  //background-color: $light-beige;
+  //padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid $sand;
+  z-index: 1000;
+  @media (max-width: $breakpoint-medium) {
+    top: 5rem;
+    left: 3rem;
+  }
+  @media (min-width: $breakpoint-medium) {
+    left: 30%;
+  }
+  @media (min-width: $breakpoint-large) {
+    left: 25%;
+  }
+  &__select {
+    display: block;
+    font-family: $text;
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: $marron;
+    border-radius: 5px;
+    border: 2px solid $sand;
+    padding: 0.5rem;
+    width: 17rem;
+    max-width: 17rem;
+    &__results {
+      width: 17rem!important;
+      max-width: 17rem!important;
+      font-family: $text;
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: $marron;
+      background-color: $light-beige;
+      padding: .5rem 1rem;
+      border-radius: 5px;
+      border: 2px solid $sand;
+      transition: background-color .25s ease, color .25s ease, transform .25s ease;
+
+      &:hover, &:focus-visible {
+        transform: scale(1.02);
+        background-color: $marron;
+        color: $sand;
+        outline: none;
+      }
+    }
+  }
+}

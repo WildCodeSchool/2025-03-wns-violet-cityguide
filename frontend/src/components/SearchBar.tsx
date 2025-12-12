@@ -60,6 +60,7 @@ export default function SearchBar({ cities, currentCity, onSelectCity, errorMess
 						setShowList(true);
 					}}
 					onClick={() => setShowList(true)}
+					onBlur={() => setShowList(false)}
 				/>
 			</form>
 

@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
 // Zustand
-import {useCityStore, useCityAllPoiStore } from "../zustand/cityStore";
+import { useCityStore, useCityAllPoiStore, useCityCategoryStore } from "../zustand/cityStore";
 
 // Types
 import type { City, Poi } from "../types/CityType";
@@ -32,8 +32,14 @@ function createColoredIcon(color: string) {
 
 export default function Map() {
     const city = useCityStore((s) => s.currentCity) as City | null;
-    const pois = useCityAllPoiStore((s) => s.pois) as Poi[];
-console.log(pois)
+    const selectedCategoryId = useCityCategoryStore((s) => s.selectedCategoryId);
+    const allPois = useCityAllPoiStore((s) => s.pois) as Poi[];
+    const filteredPois = useCityCategoryStore((s) => s.poisByCategory) as Poi[];
+
+    // si une catégorie est sélectionnée => on affiche les POIs filtrés
+    // sinon => on affiche tous les POIs de la ville
+    const pois = selectedCategoryId ? filteredPois : allPois;
+
     // POI sélectionné pour le panneau de droite
     const [selectedPoi, setSelectedPoi] = useState<Poi | null>(null);
 

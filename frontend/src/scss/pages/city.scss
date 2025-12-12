@@ -18,7 +18,7 @@
 		//padding: 1rem;
 		border-radius: 10px;
 		border: 2px solid $sand;
-		z-index: 1000;
+		z-index: 1003;
 		@media (max-width: $breakpoint-medium) {
 			left: 3rem;
 		}
@@ -40,28 +40,11 @@
 				font-weight: bold;
 				font-size: 1.25rem;
 				color: $marron;
-			}
-			button {
-				padding: .5rem 1rem;
-				border: none;
-				border-radius: 5px;
-				color: $marron;
-				background-color: $sand;
-				font-family: $title;
-				font-size: 1.25rem;
-				font-weight: bold;
-				cursor: pointer;
-				transition: background-color .25s ease, color .25s ease, transform .25s ease;
-
-				&:hover, &:focus-visible {
-					transform: scale(1.02);
-					background-color: $marron;
-					color: $sand;
-					outline: none;
-				}
+				width: 17rem;
 			}
 		}
 		&__list {
+			position: relative;
 			display: flex;
 			flex-direction: column;
 			width: 100%;
@@ -72,7 +55,9 @@
 			margin-top: -1rem;
 			max-height: 8.5rem;
 			overflow-y: auto;
+			z-index: 1003;
 			&__results {
+				position: relative;
 				text-decoration: none;
 				list-style-type: none;
 				padding: .5rem 1rem;
@@ -82,6 +67,7 @@
 				font-size: 1.25rem;
 				color: $marron;
 				background-color: $light-beige;
+				z-index: 2;
 				transition: background-color .25s ease, color .25s ease, transform .25s ease;
 				&:hover, &:focus-visible {
 					transform: scale(1.02);
@@ -117,7 +103,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	z-index: 1000;
+	z-index: 1004;
 	  color: $marron;
 	  gap: 1rem;
 	  &__header {
