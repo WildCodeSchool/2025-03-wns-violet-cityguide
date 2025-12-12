@@ -72,10 +72,10 @@ export default function SearchBar({ cities, currentCity, onSelectCity, errorMess
 						</div>
 					}
 					{filteredCities.map((city) => (
-						<div className="city__search__list__results">
+						<div className="city__search__list__results" key={city.cityId}>
 							<li
-								key={city.cityId}
-								onClick={() => {
+								onMouseDown={(e) => {
+									e.preventDefault();
 									onSelectCity(city);
 									setQuery(city.cityName);
 									setShowList(false);

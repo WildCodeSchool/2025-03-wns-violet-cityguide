@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: start;
   gap: 1rem;
-  //background-color: $light-beige;
+
   //padding: 1rem;
   border-radius: 10px;
   border: 2px solid $sand;
@@ -29,11 +29,13 @@
     font-weight: bold;
     font-size: 1.25rem;
     color: $marron;
+    background-color: $white;
     border-radius: 5px;
     border: 2px solid $sand;
     padding: 0.5rem;
     width: 17rem;
     max-width: 17rem;
+    height: 2.75rem;
     &__results {
       width: 17rem!important;
       max-width: 17rem!important;
