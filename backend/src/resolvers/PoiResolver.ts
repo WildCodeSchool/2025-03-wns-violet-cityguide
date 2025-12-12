@@ -1,4 +1,25 @@
-import { InputType, Field, Resolver, Query, Mutation, ID, Arg, Args, Authorized } from "type-graphql";
+// Librairies
+import { 
+	InputType, 
+	Field, 
+	Resolver, 
+	Query, 
+	Mutation, 
+	ID, 
+	Arg, 
+	Authorized 
+} from "type-graphql";
+
+import { 
+	IsFQDN, 
+	IsNumber, 
+	IsString, 
+	Max, 
+	Min, 
+	MinLength
+} from "class-validator";
+
+// Entités
 import { Poi } from "../entities/Poi";
 import { City } from "../entities/City";
 import { Category } from "../entities/Category";
@@ -6,42 +27,52 @@ import { Category } from "../entities/Category";
 @InputType()
 class PoiInput {
 	@Field()
-	poiName: string;
-	
+	@IsString({ message: "Le nom du point d'intérêt doit être un texte." })
+	@MinLength(2, { message: "Le nom du point d'intérêt doit comporter au moins 2 caractères." })
+	poiName!: string;
+
 	@Field()
+	@IsString({ message: "La description du point d'intérêt doit être un texte." })
+	@MinLength(10, { message: "La descritpion du point d'intérêt doit compter au moins 10 caractères." })
 	poiDescription: string;
 
 	@Field()
+	@IsString()
 	imageUrl: string;
 
 	@Field()
+	@IsString({ message: "L'adresse du point d'intérêt doit être un texte."})
+	@MinLength(10, { message: "L'adresse du point d'intérêt doit comporter au moins 10 caractères." })
 	address: string;
 
 	@Field()
-	// @IsNumber()
-	// @Min(-90)
-	// @Max(90)
+	@IsNumber()
+	@Min(-90, { message: "La latitude doit être supérieure à -90." })
+	@Max(90, { message: "La longitude doit être inférieure à 90." })
 	poiLatitude!: number;
 
 	@Field()
-	// @IsNumber()
-	// @Min(-180)
-	// @Max(180)
+	@IsNumber()
+	@Min(-180, { message: "La latitude doit être supérieure à -180." })
+	@Max(180, { message: "La longitude doit être inférieure à 180." })
 	poiLongitude!: number;
 
 	@Field()
+	@IsFQDN()
 	externalLink: string;
 
 	@Field(() => ID)
+	@IsNumber()
 	poiCity: City;
 
 	@Field(() => ID)
+	@IsNumber()
 	poiCategory: Category;
 }
 
 @Resolver(Poi)
 export default class PoiResolver {
-	
+
 	// On récupère tous les pois
 	@Query(() => [Poi])
 	async getAllPois() {
@@ -51,7 +82,7 @@ export default class PoiResolver {
 	}
 
 	// On récupère un poi en fonction de son id
-@Query(() => Poi)
+	@Query(() => Poi)
 	async getPoiById(@Arg("id") id: number) {
 		const poi = await Poi.findOneOrFail({
 			where: { poiId: id },
