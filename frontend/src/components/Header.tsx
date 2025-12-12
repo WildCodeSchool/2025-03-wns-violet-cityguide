@@ -104,7 +104,6 @@ export default function Header() {
 						}}
 						className="header__nav--desktop__linkLikeButton"
 					>Villes</button>
-					<Link to="/pois">Points d'intérêts</Link>
 					{isAuth ? (
 						<>
 							<Link to="/account">Mon compte</Link>
@@ -139,7 +138,6 @@ export default function Header() {
 							}}
 							className="header__nav--mobile__linkLikeButton"
 						>Villes</button>
-						<Link to="/pois">Points d'intérêts</Link>
 						{isAuth ? (
 							<>
 								<Link to="/account" onClick={() => setOpen(false)}>Mon compte</Link>

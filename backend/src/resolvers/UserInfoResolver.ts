@@ -1,5 +1,15 @@
-import { Arg, Field, ID, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, 
+	Authorized, 
+	Field, 
+	ID, 
+	InputType, 
+	Mutation, 
+	Query, 
+	Resolver,
+	Ctx,
+} from "type-graphql";
 import { UserInfo } from "../entities/UserInfo";
+import { Context } from "../types/Context";
 
 @InputType()
 class UserInfoInput {
@@ -16,6 +26,9 @@ class UserInfoInput {
 
 @Resolver(UserInfo)
 export default class UserInfoResolver {
+
+	// Pas de création d'élément UserInfo ici : à chaque inscription d'un utilisateur, son UserInfo associé est créé
+	// Pas de suppression de UserInfo ici : à chaque suppression d'un User, son UserInfo associé est supprimé grâce à l'utilisation de onDelete: "CASCADE"
 
 	@Query(() => [UserInfo])
 	async getAllUserInfos() {
@@ -35,17 +48,31 @@ export default class UserInfoResolver {
 		})
 	}
 
-	// On ne crée pas d'élément UserInfo ici : à chaque inscription d'un utilisateur, son UserInfo associé est créé
-	// On ne supprime pas non plus de UserInfo ici : à chaque suppression d'un User, son UserInfo associé est supprimé grâce à l'utilisation de onDelete: "CASCADE"
-
-	// Modifier un UserInfo
-	// @Authorized("USER", "ADMIN") TODO décommenter @Authorized("USER", "ADMIN") lorsque ce sera testable 
-	// + verifier que USER id == UserInfo.user si pas ADMIN
+	// Modifier un UserInfo (Prévoir de rendre possible à l'utilisateur de modifier ses informations)
+	@Authorized("ADMIN_SITE","USER")
 	@Mutation(() => ID)
-	async updateUserInfo(@Arg("userInfoId") userInfoId: number, @Arg("data") data: UserInfoInput) {
+	async updateUserInfo(
+		@Arg("userInfoId") userInfoId: number, 
+		@Arg("data") data: UserInfoInput,
+		@Ctx() ctx: Context,
+	) {
 
 		// Récupérer le UserInfo à modifier
 		let userInfo = await UserInfo.findOneByOrFail({ userInfoId });
+
+		// Récupération de l'utilisateur connecté
+		const currentUser = ctx.user;
+
+		// Est-ce que l'utilisateur connecté est administrateur site ?
+		const isAdmin = currentUser?.roles.includes("ADMIN_SITE");
+
+		// Est-ce que l'utilisateur connecté est propriétaire du UserInfo ?
+		const isOwner = currentUser?.id === userInfoId;
+
+		// Si l'utilisateur n'est ni administrateur site ni le propriétaire du UserInfo
+		if(!isAdmin && !isOwner) {
+			throw new Error ("Vous n'êtes pas autorisé à faire cette modification");
+		}
 
 		// Assigner les nouvelles valeurs au UserInfo
 		userInfo = Object.assign(userInfo, data);

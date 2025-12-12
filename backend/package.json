@@ -5,7 +5,10 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "ts-node-dev ./src/index.ts",
-		"prod": "node ./build/index.js"
+		"prod": "node ./build/index.js",
+		"seed": "ts-node ./src/scripts/seed.ts",
+		"seed:clear": "ts-node ./src/scripts/seed.ts --clear",
+		"seed:clear-only": "ts-node ./src/scripts/seed.ts --clear-only"
 	},
 	"author": "",
 	"license": "ISC",

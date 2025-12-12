@@ -1,306 +1,357 @@
 // MUTATIONS DE CRÉATIONS
-// ----------------------------- DÉBUT UTILISATEURS (signup) ----------------------------- 
+// ----------------------------- DÉBUT UTILISATEURS (signup) -----------------------------
 // Saisir dans "Operation" 
 mutation Signup($data: NewUserInput!) {
-  signup(data: $data) {
-    user {
-      userId
-      email
-    }
-  }
+	signup(data: $data) {
+		user {
+			userId
+			email
+		}
+	}
 }
 
 // Saisir dans "Variables" (un utilisateur à la fois)
 {
-  "data": {
-    "email": "jesus.choucroute@yopmail.fr",
-    "password": "123456789"
-  }
+	"data": {
+		"email": "jesus.choucroute@yopmail.fr",
+		"password": "123456789"
+	}
 }
 
 {
-  "data": {
-    "email": "jeep.renault@yopmail.fr",
-    "password": "123456789"
-  }
+	"data": {
+		"email": "jeep.renault@yopmail.fr",
+		"password": "123456789"
+	}
 }
 
 {
-  "data": {
-    "email": "john.doudou@yopmail.fr",
-    "password": "123456789"
-  }
+	"data": {
+		"email": "john.doudou@yopmail.fr",
+		"password": "123456789"
+	}
 }
 
 {
-  "data": {
-    "email": "elan.naralbol@yopmail.fr",
-    "password": "123456789"
-  }
+	"data": {
+		"email": "elan.naralbol@yopmail.fr",
+		"password": "123456789"
+	}
 }
 
 {
-  "data": {
-    "email": "rodeo.danger@yopmail.fr",
-    "password": "123465789"
-  }
+	"data": {
+		"email": "rodeo.danger@yopmail.fr",
+		"password": "123456789"
+	}
 }
-// ----------------------------- FIN UTILISATEURS (signup) -----------------------------
+// ----------------------------- FIN UTILISATEURS (signup) -------------------------------
 
-// ----------------------------- DÉBUT VILLES (createCity) -----------------------------
+// ----------------------------- DÉBUT ROLES (update user) -------------------------------
+{
+	"data": {
+		"roles": ["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER"]
+	},
+	"userId": 1
+}
+
+{
+	"data": {
+		"roles": ["ADMIN_CITY", "USER"]
+	},
+	"userId": 2
+}
+
+{
+	"data": {
+		"roles": ["POI_CREATOR", "USER"]
+	},
+	"userId": 3
+}
+// ----------------------------- FIN ROLES (update user) ---------------------------------
+
+// ----------------------------- DÉBUT VILLES (createCity) -------------------------------
 // Saisir dans "Variables" (une ville à la fois)
 {
 "data": {
-    "cityName": "Grenoble",
-    "imageUrl": "https://picsum.photos/id/101/200/200",
-    "cityLatitude": 45.166672,
-    "cityLongitude": 5.71667,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id. "
-  }
+		"cityName": "Grenoble",
+		"imageUrl": "https://picsum.photos/id/101/200/200",
+		"cityLatitude": 45.166672,
+		"cityLongitude": 5.71667,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id. "
+	}
 }
 
 {
 "data": {
-    "cityName": "Toulouse",
-    "imageUrl": "https://picsum.photos/id/57/200/200",
-    "cityLatitude": 43.6048462,
-    "cityLongitude": 1.4428480,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
-  }
+		"cityName": "Toulouse",
+		"imageUrl": "https://picsum.photos/id/57/200/200",
+		"cityLatitude": 43.6048462,
+		"cityLongitude": 1.4428480,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+	}
 }
-{
-"data": {
-    "cityName": "Paris",
-    "imageUrl": "https://images.pexels.com/photos/1850619/pexels-photo-1850619.jpeg",
-    "cityLatitude": 48.85889,
-    "cityLongitude": 2.320041,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
-  }
-}
-{
-"data": {
-    "cityName": "Lyon",
-    "imageUrl": "https://t3.ftcdn.net/jpg/01/49/37/14/240_F_149371466_N8UYp1otnim3CoC7NaA1PdgFTFTgNOUa.jpg",
-    "cityLatitude": 45.757814,
-    "cityLongitude": 4.832011,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
-  }
-}
-{
-"data": {
-    "cityName": "Marseille",
-    "imageUrl": "https://media.routard.com/image/06/5/photo.1536065.w1000.jpg",
-    "cityLatitude": 43.296174,
-    "cityLongitude": 5.369953,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
-  }
-  }
-{
-  "data": {
-      "cityName": "Biarritz",
-      "imageUrl": "https://imgs.search.brave.com/-W3RXU9Bypk7A8QQ8_7_peFkpKYSc_xtT9OT5ZNkGIE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM1/MDAzNzkzNC9mci9w/aG90by9iaWFycml0/ei5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Y0R1TzNJWjBC/ZTZDZzdnTnhLcGdr/TlhjT1Q0X1FpX0w3/ZThicHlQZWxVcz0",
-      "cityLatitude": 43.4832523,
-      "cityLongitude": -1.5592776,
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
-    }
-}
-// ----------------------------- FIN VILLES (createCity) ----------------------------- 
 
-// ----------------------------- DÉBUT CATEGORIES (createCategory) -----------------------------
+{
+"data": {
+		"cityName": "Paris",
+		"imageUrl": "https://images.pexels.com/photos/1850619/pexels-photo-1850619.jpeg",
+		"cityLatitude": 48.85889,
+		"cityLongitude": 2.320041,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+	}
+}
+
+{
+"data": {
+		"cityName": "Lyon",
+		"imageUrl": "https://t3.ftcdn.net/jpg/01/49/37/14/240_F_149371466_N8UYp1otnim3CoC7NaA1PdgFTFTgNOUa.jpg",
+		"cityLatitude": 45.757814,
+		"cityLongitude": 4.832011,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+	}
+}
+
+{
+"data": {
+		"cityName": "Marseille",
+		"imageUrl": "https://media.routard.com/image/06/5/photo.1536065.w1000.jpg",
+		"cityLatitude": 43.296174,
+		"cityLongitude": 5.369953,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+	}
+}
+
+{
+"data": {
+		"cityName": "Biarritz",
+		"imageUrl": "https://imgs.search.brave.com/-W3RXU9Bypk7A8QQ8_7_peFkpKYSc_xtT9OT5ZNkGIE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM1/MDAzNzkzNC9mci9w/aG90by9iaWFycml0/ei5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Y0R1TzNJWjBC/ZTZDZzdnTnhLcGdr/TlhjT1Q0X1FpX0w3/ZThicHlQZWxVcz0",
+		"cityLatitude": 43.4832523,
+		"cityLongitude": -1.5592776,
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."
+	}
+}
+// ----------------------------- FIN VILLES (createCity) ---------------------------------
+
+// ----------------------------- DÉBUT CATEGORIES (createCategory) -----------------------
 // Saisir dans "Variables" (une categorie à la fois)
 {
-  "data": {
-    "categoryName": "Point de deal",
-    "style": "DarkKhaki"
-  }
+	"data": {
+		"categoryName": "Point de deal",
+		"style": "DarkKhaki"
+	}
 }
 
 {
-  "data": {
-    "categoryName": "Point de soupe",
-    "style": "Tomato"
-  }
+	"data": {
+		"categoryName": "Point de soupe",
+		"style": "Tomato"
+	}
 }
 
 {
-  "data": {
-    "categoryName": "Verdure",
-    "style": "Balade"
-  }
+	"data": {
+		"categoryName": "Verdure",
+		"style": "Green"
+	}
 }
-{
-  "data": {
-    "categoryName": "Casser la croûte",
-    "style": "Restaurant"
-  }
-}
-{
-  "data": {
-    "categoryName": "Boire un coup",
-    "style": "Bar"
-  }
-}
-// ----------------------------- FIN CATEGORIES (createCategory) ----------------------------- 
 
-// ----------------------------- DÉBUT POI (createPoi) -----------------------------
+{
+	"data": {
+		"categoryName": "Casser la croûte",
+		"style": "DarkRed"
+	}
+}
+
+{
+	"data": {
+		"categoryName": "Boire un coup",
+		"style": "Gold"
+	}
+}
+
+{
+	"data": {
+		"categoryName": "Musée",
+		"style": "SteelBlue"
+	}
+}
+
+{
+	"data": {
+		"categoryName": "Monument",
+		"style": "Sienna"
+	}
+}
+// ----------------------------- FIN CATEGORIES (createCategory) -------------------------
+
+// ----------------------------- DÉBUT POI (createPoi) -----------------------------------
 // Saisir dans "Variables" (un poi à la fois)
 {
-  "data": {
-    "poiName": "quartier Chorier-Berriat",
-    "address": "Angle Cours Berriat x Avenue de Vizille",
-    "imageUrl": "https://picsum.photos/id/210/200/200",
-    "externalLink": "https://www.grenoble.fr",
-    "poiCity": "1",
-    "poiCategory": "1",
-    "poiLatitude": 45.18740,
-    "poiLongitude": 5.70834,
-    "poiDescription": "Meilleur point de deal de la ville. Attention toutefois aux réglements de comptes"
-  }
+	"data": {
+		"poiName": "quartier Chorier-Berriat",
+		"address": "Angle Cours Berriat x Avenue de Vizille",
+		"imageUrl": "https://picsum.photos/id/210/200/200",
+		"externalLink": "https://www.grenoble.fr",
+		"poiCity": "1",
+		"poiCategory": "1",
+		"poiLatitude": 45.18740,
+		"poiLongitude": 5.70834,
+		"poiDescription": "Meilleur point de deal de la ville. Attention toutefois aux réglements de comptes"
+	}
 }
 
 {
-  "data": {
-    "poiName": "Capitole",
-    "address": "Place du Capitole",
-    "imageUrl": "https://metropole.toulouse.fr/sites/toulouse-fr/files/styles/paragraphe_image/public/2023-01/capitoleentree.jpg.webp?itok=J1rUl8bd",
-    "externalLink": "https://metropole.toulouse.fr/annuaire/accueil-general-du-capitole",
-    "poiCity": "2",
-    "poiCategory": "3",
-    "poiLatitude": 43.60446,
-    "poiLongitude": 1.44403,
-    "poiDescription": "Le Capitole encule la Capitale"
-  }
-}
-{
-  "data": {
-    "poiName": "Jardin des Plantes",
-    "address": "31 All. Jules Guesde",
-    "imageUrl": "https://www.grizette.com/wp-content/uploads/2019/06/JardindesPlantesdeToulouse©ML.jpg",
-    "externalLink": "https://metropole.toulouse.fr/",
-    "poiCity": "2",
-    "poiCategory": "3",
-    "poiLatitude": 43.59359,
-    "poiLongitude": 1.447186,
-    "poiDescription": "Jardin botanique du XVIIIe et jardin public avec étang, aire de jeux et collection de plantes médicinales."
-  }
+	"data": {
+		"poiName": "Capitole",
+		"address": "Place du Capitole",
+		"imageUrl": "https://metropole.toulouse.fr/sites/toulouse-fr/files/styles/paragraphe_image/public/2023-01/capitoleentree.jpg.webp?itok=J1rUl8bd",
+		"externalLink": "https://metropole.toulouse.fr/annuaire/accueil-general-du-capitole",
+		"poiCity": "2",
+		"poiCategory": "7",
+		"poiLatitude": 43.60446,
+		"poiLongitude": 1.44403,
+		"poiDescription": "Le Capitole encule la Capitale"
+	}
 }
 
 {
-  "data": {
-    "poiName": "Banque alimentaire de l'Isère",
-    "address": "11 Allée de la Pinéa",
-    "imageUrl": "https://www.ici-grenoble.org/media/cache/slide/uploads/medias/2021/09/0914/repas-gratuits-614070732b6c2448191981.jpeg",
-    "externalLink": "https://www.ici-grenoble.org/question-answer/ou-peut-on-manger-gratuitement-ou-recevoir-des-colis-alimentaires",
-    "poiCity": "1",
-    "poiCategory": "2",
-    "poiLatitude": 45.2023729015077,
-    "poiLongitude": 5.683509184013007,
-    "poiDescription": "Meilleur point de soupe de la ville. Attention toutefois aux louches"
-  }
+	"data": {
+		"poiName": "Jardin des Plantes",
+		"address": "31 All. Jules Guesde",
+		"imageUrl": "https://www.grizette.com/wp-content/uploads/2019/06/JardindesPlantesdeToulouse©ML.jpg",
+		"externalLink": "https://metropole.toulouse.fr/",
+		"poiCity": "2",
+		"poiCategory": "3",
+		"poiLatitude": 43.59359,
+		"poiLongitude": 1.447186,
+		"poiDescription": "Jardin botanique du XVIIIe et jardin public avec étang, aire de jeux et collection de plantes médicinales."
+	}
 }
 
 {
-  "data": {
-    "poiName": "Musée du Louvre",
-    "address": "75000 Paris",
-    "imageUrl": "https://imgs.search.brave.com/WBiSAdTDjUP71Y9xrK_2vv5MwKLSTrIBDA3CNX0anlI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMjY3/NTI2Ni9wZXhlbHMt/cGhvdG8tMjY3NTI2/Ni5qcGVnP2F1dG89/Y29tcHJlc3MmY3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA",
-    "externalLink": "https://www.louvre.fr/",
-    "poiCity": "3",
-    "poiCategory": "3",
-    "poiLatitude": 48.861147,
-    "poiLongitude": 2.338028,
-    "poiDescription": "Forteresse médiévale et résidence royale du XIVe siècle abritant aujourd'hui le célèbre musée du Louvre."
-  }
+	"data": {
+		"poiName": "Banque alimentaire de l'Isère",
+		"address": "11 Allée de la Pinéa",
+		"imageUrl": "https://www.ici-grenoble.org/media/cache/slide/uploads/medias/2021/09/0914/repas-gratuits-614070732b6c2448191981.jpeg",
+		"externalLink": "https://www.ici-grenoble.org/question-answer/ou-peut-on-manger-gratuitement-ou-recevoir-des-colis-alimentaires",
+		"poiCity": "1",
+		"poiCategory": "2",
+		"poiLatitude": 45.2023729015077,
+		"poiLongitude": 5.683509184013007,
+		"poiDescription": "Meilleur point de soupe de la ville. Attention toutefois aux louches"
+	}
 }
+
 {
-  "data": {
-    "poiName": "Tour Eiffel",
-    "address": "Av. Gustave Eiffel",
-    "imageUrl": "https://imgs.search.brave.com/_JvI4XpzuQBm6_xklHUsVwukoK6HZB7_r8EZevXLIX4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGFyaXNjaXR5dmlz/aW9uLmNvbS9saWJy/YXJ5L2ltYWdlLzcx/NDEuanBn",
-    "externalLink": "https://www.toureiffel.paris/fr",
-    "poiCity": "3",
-    "poiCategory": "3",
-    "poiLatitude": 48.85826,
-    "poiLongitude": 2.294501,
-    "poiDescription": "Célèbre tour en fer de Gustave Eiffel (1889), terrasses panoramiques accessibles par escaliers et ascenseurs."
-  }
+	"data": {
+		"poiName": "Musée du Louvre",
+		"address": "75000 Paris",
+		"imageUrl": "https://imgs.search.brave.com/WBiSAdTDjUP71Y9xrK_2vv5MwKLSTrIBDA3CNX0anlI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMjY3/NTI2Ni9wZXhlbHMt/cGhvdG8tMjY3NTI2/Ni5qcGVnP2F1dG89/Y29tcHJlc3MmY3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA",
+		"externalLink": "https://www.louvre.fr/",
+		"poiCity": "3",
+		"poiCategory": "6",
+		"poiLatitude": 48.861147,
+		"poiLongitude": 2.338028,
+		"poiDescription": "Forteresse médiévale et résidence royale du XIVe siècle abritant aujourd'hui le célèbre musée du Louvre."
+	}
 }
+
 {
-  "data": {
-    "poiName": "Aklé",
-    "address": "85 Rue Paul Bert",
-    "imageUrl": "https://akle.fr/wp-content/uploads/2023/03/WhatsApp-Image-2023-03-10-at-17.22.34.jpeg",
-    "externalLink": "http://www.akle.fr/",
-    "poiCity": "4",
-    "poiCategory": "4",
-    "poiLatitude": 45.7609011,
-    "poiLongitude": 4.8388525,
-    "poiDescription": "Ce restaurant au cadre sobre et chic propose des saveurs libanaises avec menu enfants sur place ou à emporter."
-  }
+	"data": {
+		"poiName": "Tour Eiffel",
+		"address": "Av. Gustave Eiffel",
+		"imageUrl": "https://imgs.search.brave.com/_JvI4XpzuQBm6_xklHUsVwukoK6HZB7_r8EZevXLIX4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGFyaXNjaXR5dmlz/aW9uLmNvbS9saWJy/YXJ5L2ltYWdlLzcx/NDEuanBn",
+		"externalLink": "https://www.toureiffel.paris/fr",
+		"poiCity": "3",
+		"poiCategory": "7",
+		"poiLatitude": 48.85826,
+		"poiLongitude": 2.294501,
+		"poiDescription": "Célèbre tour en fer de Gustave Eiffel (1889), terrasses panoramiques accessibles par escaliers et ascenseurs."
+	}
 }
+
 {
-  "data": {
-    "poiName": "Lipopette Terreaux - Bistrot japonais",
-    "address": "17 Rue Hippolyte Flandrin",
-    "imageUrl": "https://imgs.search.brave.com/_5gQ4eIAPLhOi7-LN3-vTR9T7UJ_CXixgCeFlLP1fhI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMubWFwc3RyLmNv/bS80NzNkYTU0MTAx/MjYwYTJiYjhmOTlj/ZDJiNDA3OGEyYV9p/bWFnZV9lMDAzZjNi/My1iYTA4LTRmNjYt/YjI5MS1iMDE1OGY3/OWM4NjguanBlZw",
-    "externalLink": "https://www.lipopettelyon.fr/",
-    "poiCity": "4",
-    "poiCategory": "5",
-    "poiLatitude": 45.7671699,
-    "poiLongitude": 4.8347756,
-    "poiDescription": "Bar restaurant franco-japonnais, végé, ambiance sympa et délicieuse."
-  }
+	"data": {
+		"poiName": "Aklé",
+		"address": "85 Rue Paul Bert",
+		"imageUrl": "https://akle.fr/wp-content/uploads/2023/03/WhatsApp-Image-2023-03-10-at-17.22.34.jpeg",
+		"externalLink": "http://www.akle.fr/",
+		"poiCity": "4",
+		"poiCategory": "4",
+		"poiLatitude": 45.7609011,
+		"poiLongitude": 4.8388525,
+		"poiDescription": "Ce restaurant au cadre sobre et chic propose des saveurs libanaises avec menu enfants sur place ou à emporter."
+	}
 }
+
 {
-  "data": {
-    "poiName": "Basilique Notre-Dame de la Garde",
-    "address": "Domaine Notre Dame de la Garde, Rue Fort du Sanctuaire",
-    "imageUrl": "https://imgs.search.brave.com/2HpAqJ6Dc1LHYoFpvUhYy71ZAg3UY4jmB1hFfmUKX2Q/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cGFzc2Vyc29ucGVy/bWlzYmF0ZWF1LmNv/bS9wdWJsaWMvaW1n/L21lZGl1bS9tYXJz/ZWlsbGUzNzE2ODgy/MTI4MGpwZ182Njkx/MWVlYzAxODYyLmpw/Zw",
-    "externalLink": "https://basiliquenotredamedelagarde.com/",
-    "poiCity": "5",
-    "poiCategory": "3",
-    "poiLatitude": 43.283946,
-    "poiLongitude": 5.371242,
-    "poiDescription": "Immense basilique dominant la ville, couronnée par une statue dorée de la Vierge Marie sculptée par Lequesne."
-  }
+	"data": {
+		"poiName": "Lipopette Terreaux - Bistrot japonais",
+		"address": "17 Rue Hippolyte Flandrin",
+		"imageUrl": "https://imgs.search.brave.com/_5gQ4eIAPLhOi7-LN3-vTR9T7UJ_CXixgCeFlLP1fhI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMubWFwc3RyLmNv/bS80NzNkYTU0MTAx/MjYwYTJiYjhmOTlj/ZDJiNDA3OGEyYV9p/bWFnZV9lMDAzZjNi/My1iYTA4LTRmNjYt/YjI5MS1iMDE1OGY3/OWM4NjguanBlZw",
+		"externalLink": "https://www.lipopettelyon.fr/",
+		"poiCity": "4",
+		"poiCategory": "4",
+		"poiLatitude": 45.7671699,
+		"poiLongitude": 4.8347756,
+		"poiDescription": "Bar restaurant franco-japonnais, végé, ambiance sympa et délicieuse."
+	}
 }
+
 {
-  "data": {
-    "poiName": "Calanques de Marseille",
-    "address": "Marseille",
-    "imageUrl": "https://imgs.search.brave.com/7tAvDoz9R38Ux3t8GUH5uqF-UKPjqNVhKirtGcGC8tQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/ZGl2ZW50by5jb20v/MTg1NTQvbGVzLWNh/bGFucXVlcy1tYXJz/ZWlsbGUuanBn",
-    "externalLink": "https://www.marseille.fr/",
-    "poiCity": "5",
-    "poiCategory": "3",
-    "poiLatitude": 43.229434,
-    "poiLongitude": 5.403431,
-    "poiDescription": "Parc national sur littoral incluant formations géologiques uniques et grottes sous-marines avec inscriptions."
-  }
+	"data": {
+		"poiName": "Basilique Notre-Dame de la Garde",
+		"address": "Domaine Notre Dame de la Garde, Rue Fort du Sanctuaire",
+		"imageUrl": "https://imgs.search.brave.com/2HpAqJ6Dc1LHYoFpvUhYy71ZAg3UY4jmB1hFfmUKX2Q/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cGFzc2Vyc29ucGVy/bWlzYmF0ZWF1LmNv/bS9wdWJsaWMvaW1n/L21lZGl1bS9tYXJz/ZWlsbGUzNzE2ODgy/MTI4MGpwZ182Njkx/MWVlYzAxODYyLmpw/Zw",
+		"externalLink": "https://basiliquenotredamedelagarde.com/",
+		"poiCity": "5",
+		"poiCategory": "7",
+		"poiLatitude": 43.283946,
+		"poiLongitude": 5.371242,
+		"poiDescription": "Immense basilique dominant la ville, couronnée par une statue dorée de la Vierge Marie sculptée par Lequesne."
+	}
 }
+
 {
-  "data": {
-    "poiName": "Rocher de la Vierge",
-    "address": "Rocher de la Vierge",
-    "imageUrl": "https://imgs.search.brave.com/1UbccT8KS4vA8FI_PjO9Uw-U6Rs5uBlsZnrSVLtutOA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/YmFybmVzLWNvdGVi/YXNxdWUuY29tL3Jh/aWxzL2FjdGl2ZV9z/dG9yYWdlL3JlcHJl/c2VudGF0aW9ucy9y/ZWRpcmVjdC9leUpm/Y21GcGJITWlPbnNp/WkdGMFlTSTZNakF3/Tmpnc0luQjFjaUk2/SW1Kc2IySmZhV1Fp/ZlgwPS0tZTk0MjNm/ZTY4YTg4NjcyYmI2/M2Q5YTliMjY0ZWVl/ZGMxOTNmNWZjMi9l/eUpmY21GcGJITWlP/bnNpWkdGMFlTSTZl/eUptYjNKdFlYUWlP/aUpxY0djaUxDSnpZ/WFpsY2lJNmV5Snhk/V0ZzYVhSNUlqbzBN/SDE5TENKd2RYSWlP/aUoyWVhKcFlYUnBi/MjRpZlgwPS0tODk0/OGU2M2ZjOWJlMTU1/ZjI0MzBlZWZhYTZm/MGRmOTBiYzU5YjI1/Zi9yb2NoZXItZGUt/bGEtdmllcmdlLmpw/Zw",
-    "externalLink": "http://pays-basque.tourisme64.com/harmonie/lieux-choisis/rocher-de-la-vierge/",
-    "poiCity": "6",
-    "poiCategory": "3",
-    "poiLatitude": 43.484109,
-    "poiLongitude": -1.57047,
-    "poiDescription": "Célèbre formation rocheuse dans le golfe de Gascogne avec vue spectaculaire et statue de la Vierge au sommet."
-  }
+	"data": {
+		"poiName": "Calanques de Marseille",
+		"address": "Marseille",
+		"imageUrl": "https://imgs.search.brave.com/7tAvDoz9R38Ux3t8GUH5uqF-UKPjqNVhKirtGcGC8tQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/ZGl2ZW50by5jb20v/MTg1NTQvbGVzLWNh/bGFucXVlcy1tYXJz/ZWlsbGUuanBn",
+		"externalLink": "https://www.marseille.fr/",
+		"poiCity": "5",
+		"poiCategory": "3",
+		"poiLatitude": 43.229434,
+		"poiLongitude": 5.403431,
+		"poiDescription": "Parc national sur littoral incluant formations géologiques uniques et grottes sous-marines avec inscriptions."
+	}
 }
+
 {
-  "data": {
-    "poiName": "La Grande Plage",
-    "address": "La Grande Plage",
-    "imageUrl": "https://imgs.search.brave.com/uvIZSlP_pSsd00aw0UBCBgZeXOhOboGjzLqe_7bcV_8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdXJm/aW5nYmlhcnJpdHou/ZnIvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjIvMDQvR3JhbmRl/LVBsYWdlLWJpYXJy/aXR6LTEwMjR4NTM4/LmpwZw",
-    "externalLink": "https://www.biarritz.fr/",
-    "poiCity": "6",
-    "poiCategory": "3",
-    "poiLatitude": 43.469746,
-    "poiLongitude": -1.56821,
-    "poiDescription": "La promenade de la Grande Plage borde la plage de surf du Miramar. Elle est particulièrement appréciée pour la vue qu'elle offre sur l'océan Atlantique."
-  }
+	"data": {
+		"poiName": "Rocher de la Vierge",
+		"address": "Rocher de la Vierge",
+		"imageUrl": "https://imgs.search.brave.com/1UbccT8KS4vA8FI_PjO9Uw-U6Rs5uBlsZnrSVLtutOA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/YmFybmVzLWNvdGVi/YXNxdWUuY29tL3Jh/aWxzL2FjdGl2ZV9z/dG9yYWdlL3JlcHJl/c2VudGF0aW9ucy9y/ZWRpcmVjdC9leUpm/Y21GcGJITWlPbnNp/WkdGMFlTSTZNakF3/Tmpnc0luQjFjaUk2/SW1Kc2IySmZhV1Fp/ZlgwPS0tZTk0MjNm/ZTY4YTg4NjcyYmI2/M2Q5YTliMjY0ZWVl/ZGMxOTNmNWZjMi9l/eUpmY21GcGJITWlP/bnNpWkdGMFlTSTZl/eUptYjNKdFlYUWlP/aUpxY0djaUxDSnpZ/WFpsY2lJNmV5Snhk/V0ZzYVhSNUlqbzBN/SDE5TENKd2RYSWlP/aUoyWVhKcFlYUnBi/MjRpZlgwPS0tODk0/OGU2M2ZjOWJlMTU1/ZjI0MzBlZWZhYTZm/MGRmOTBiYzU5YjI1/Zi9yb2NoZXItZGUt/bGEtdmllcmdlLmpw/Zw",
+		"externalLink": "http://pays-basque.tourisme64.com/harmonie/lieux-choisis/rocher-de-la-vierge/",
+		"poiCity": "6",
+		"poiCategory": "3",
+		"poiLatitude": 43.484109,
+		"poiLongitude": -1.57047,
+		"poiDescription": "Célèbre formation rocheuse dans le golfe de Gascogne avec vue spectaculaire et statue de la Vierge au sommet."
+	}
 }
-// ----------------------------- FIN POI (createPoi) ----------------------------- 
+
+{
+	"data": {
+		"poiName": "La Grande Plage",
+		"address": "La Grande Plage",
+		"imageUrl": "https://imgs.search.brave.com/uvIZSlP_pSsd00aw0UBCBgZeXOhOboGjzLqe_7bcV_8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdXJm/aW5nYmlhcnJpdHou/ZnIvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjIvMDQvR3JhbmRl/LVBsYWdlLWJpYXJy/aXR6LTEwMjR4NTM4/LmpwZw",
+		"externalLink": "https://www.biarritz.fr/",
+		"poiCity": "6",
+		"poiCategory": "3",
+		"poiLatitude": 43.469746,
+		"poiLongitude": -1.56821,
+		"poiDescription": "La promenade de la Grande Plage borde la plage de surf du Miramar. Elle est particulièrement appréciée pour la vue qu'elle offre sur l'océan Atlantique."
+	}
+}
+// ----------------------------- FIN POI (createPoi) -------------------------------------

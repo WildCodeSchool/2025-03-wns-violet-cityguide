@@ -12,14 +12,17 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+		align-items: start;
 		gap: 1rem;
-		background-color: $light-beige;
-		padding: 1rem;
+		//background-color: $light-beige;
+		//padding: 1rem;
 		border-radius: 10px;
 		border: 2px solid $sand;
 		z-index: 1000;
-		@media (min-width: $breakpoint-small) {
+		@media (max-width: $breakpoint-medium) {
+			left: 3rem;
+		}
+		@media (min-width: $breakpoint-medium) {
 			left: 6rem;
 		}
 		@media (min-width: $breakpoint-large) {
@@ -30,7 +33,7 @@
 			flex-direction: row;
 			gap: 1rem;
 			input {
-				border-radius: 10px;
+				border-radius: 5px;
 				border: 2px solid $sand;
 				padding: 0.5rem;
 				font-family: $text;
@@ -58,22 +61,34 @@
 				}
 			}
 		}
-		&__results {
-			text-decoration: none;
-			list-style-type: none;
-			padding: .5rem 1rem;
-			border: none;
-			border-radius: 5px;
-			font-weight: bold;
-			font-size: 1.25rem;
-			color: $marron;
+		&__list {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			gap: 0.25rem;
 			background-color: $light-beige;
-			transition: background-color .25s ease, color .25s ease, transform .25s ease;
-			&:hover, &:focus-visible {
-				transform: scale(1.02);
-				background-color: $marron;
-				color: $sand;
-				outline: none;
+			border-radius: 5px;
+			padding: 0.25rem;
+			margin-top: -1rem;
+			max-height: 8.5rem;
+			overflow-y: auto;
+			&__results {
+				text-decoration: none;
+				list-style-type: none;
+				padding: .5rem 1rem;
+				border: none;
+				border-radius: 5px;
+				font-weight: bold;
+				font-size: 1.25rem;
+				color: $marron;
+				background-color: $light-beige;
+				transition: background-color .25s ease, color .25s ease, transform .25s ease;
+				&:hover, &:focus-visible {
+					transform: scale(1.02);
+					background-color: $marron;
+					color: $sand;
+					outline: none;
+				}
 			}
 		}
 	}

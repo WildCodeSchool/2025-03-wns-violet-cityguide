@@ -67,8 +67,9 @@ export type Mutation = {
   updateCategory: Scalars['ID']['output'];
   updateCity: Scalars['ID']['output'];
   updatePoi: Scalars['ID']['output'];
-  updateUser: Scalars['ID']['output'];
+  updateUserData: Scalars['ID']['output'];
   updateUserInfo: Scalars['ID']['output'];
+  updateUserRole: Scalars['ID']['output'];
 };
 
 
@@ -135,8 +136,8 @@ export type MutationUpdatePoiArgs = {
 };
 
 
-export type MutationUpdateUserArgs = {
-  data: UpdateUserInput;
+export type MutationUpdateUserDataArgs = {
+  data: UpdateUserDataInput;
   userId: Scalars['Float']['input'];
 };
 
@@ -144,6 +145,12 @@ export type MutationUpdateUserArgs = {
 export type MutationUpdateUserInfoArgs = {
   data: UserInfoInput;
   userInfoId: Scalars['Float']['input'];
+};
+
+
+export type MutationUpdateUserRoleArgs = {
+  data: UpdateUserRoleInput;
+  userId: Scalars['Float']['input'];
 };
 
 export type NewUserInput = {
@@ -250,7 +257,11 @@ export type UpdateCityInput = {
   imageUrl: Scalars['String']['input'];
 };
 
-export type UpdateUserInput = {
+export type UpdateUserDataInput = {
+  email: Scalars['String']['input'];
+};
+
+export type UpdateUserRoleInput = {
   roles: Array<Role>;
 };
 
@@ -338,7 +349,7 @@ export type GetPoisByCityQueryVariables = Exact<{
 }>;
 
 
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
 
 
 export const GetAllUsersDocument = gql`
@@ -661,6 +672,7 @@ export const GetPoisByCityDocument = gql`
     imageUrl
     poiCategory {
       categoryName
+      style
     }
     poiCity {
       cityName
