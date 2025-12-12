@@ -140,7 +140,7 @@ export async function seedDatabase(dataSource: DataSource): Promise<void> {
 			{
 				cityName: 'Paris',
 				description: 'La capitale de la France, ville lumière connue pour ses monuments emblématiques',
-				imageUrl: 'https://images.pexels.com/photos/1850619/pexels-photo-1850619.jpeg',
+				imageUrl: 'https://media.cntraveller.com/photos/611bed85a86777b29fbc54bc/master/w_2048%2Cc_limit/22_most-instagrammable-places-in-paris-conde-nast-traveller-6nov17-mary-quincy.jpg',
 				cityLatitude: 48.8566,
 				cityLongitude: 2.3522,
 			},
