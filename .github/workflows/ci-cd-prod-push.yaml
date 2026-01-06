@@ -1,16 +1,15 @@
 # name : libre de choix (s'affiche dans github Actions)
 name: Docker test, build & image (PROD) #test, build and push image on DockerHub for prod and stage
-# le git workflow se déclenche sur les PR, sur les branches choisies : 'stage' et 'main'
+# le git workflow se déclenche sur les push, sur les branches choisies : 'stage'
 on:
-  pull_request:
+  push:
     branches:
-      - stage 
-      - main
+      - stage
 
 # la liste des actions (jobs) à réaliser (différents job peuvent s'exécuter en parallèle)
 jobs: 
   # première actions : nom du job ('nom systême')
-  ci-cd-test-and-push:
+  ci-cd-push:
     # déclaration du nom du job tel qu'il s'affiche sur gitHub Actions
     name: Docker push image on DockerHub for CI/CD
     # environnement d'exécution
@@ -145,3 +144,12 @@ jobs:
         DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
         JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
         GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+  notify-server:
+    needs: ci-cd-push
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+    - name: Notify VPS
+      run: |
+        curl -X GET https://ops.032025-bleu-1.wns.wilders.dev/hooks/update-stage
