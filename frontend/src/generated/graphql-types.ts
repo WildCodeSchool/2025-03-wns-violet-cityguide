@@ -335,21 +335,29 @@ export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?
 export type GetAllPoisQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPoisQuery = { __typename?: 'Query', getAllPois: Array<{ __typename?: 'Poi', poiName: string, poiLongitude: number, poiLatitude: number, imageUrl: string, externalLink: string, poiDescription: string, address: string, poiCategory?: { __typename?: 'Category', style: string, categoryName: string } | null }> };
+export type GetAllPoisQuery = { __typename?: 'Query', getAllPois: Array<{ __typename?: 'Poi', poiName: string, poiLongitude: number, poiLatitude: number, imageUrl: string, externalLink: string, poiDescription: string, address: string, poiCategory?: { __typename?: 'Category', categoryId: number, style: string, categoryName: string } | null }> };
 
 export type GetPoiByIdQueryVariables = Exact<{
   getPoiByIdId: Scalars['Float']['input'];
 }>;
 
 
-export type GetPoiByIdQuery = { __typename?: 'Query', getPoiById: { __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCity: { __typename?: 'City', cityId: number }, poiCategory?: { __typename?: 'Category', categoryName: string } | null } };
+export type GetPoiByIdQuery = { __typename?: 'Query', getPoiById: { __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCity: { __typename?: 'City', cityId: number }, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null } };
 
 export type GetPoisByCityQueryVariables = Exact<{
   cityId: Scalars['Float']['input'];
 }>;
 
 
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+
+export type GetPoisByCityAndCategoryQueryVariables = Exact<{
+  categoryId: Scalars['Float']['input'];
+  cityId: Scalars['Float']['input'];
+}>;
+
+
+export type GetPoisByCityAndCategoryQuery = { __typename?: 'Query', getPoisByCityAndCategory: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiLatitude: number, poiLongitude: number, poiName: string, poiId: number, poiCategory?: { __typename?: 'Category', categoryId: number, style: string, categoryName: string } | null, poiCity: { __typename?: 'City', cityName: string, cityId: number, cityLatitude: number, cityLongitude: number, description: string, imageUrl: string } }> };
 
 
 export const GetAllUsersDocument = gql`
@@ -573,6 +581,7 @@ export const GetAllPoisDocument = gql`
     poiDescription
     address
     poiCategory {
+      categoryId
       style
       categoryName
     }
@@ -621,7 +630,9 @@ export const GetPoiByIdDocument = gql`
     externalLink
     imageUrl
     poiCategory {
+      categoryId
       categoryName
+      style
     }
     poiDescription
     poiId
@@ -671,6 +682,7 @@ export const GetPoisByCityDocument = gql`
     externalLink
     imageUrl
     poiCategory {
+      categoryId
       categoryName
       style
     }
@@ -718,3 +730,64 @@ export type GetPoisByCityQueryHookResult = ReturnType<typeof useGetPoisByCityQue
 export type GetPoisByCityLazyQueryHookResult = ReturnType<typeof useGetPoisByCityLazyQuery>;
 export type GetPoisByCitySuspenseQueryHookResult = ReturnType<typeof useGetPoisByCitySuspenseQuery>;
 export type GetPoisByCityQueryResult = Apollo.QueryResult<GetPoisByCityQuery, GetPoisByCityQueryVariables>;
+export const GetPoisByCityAndCategoryDocument = gql`
+    query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
+  getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
+    address
+    externalLink
+    imageUrl
+    poiCategory {
+      categoryId
+      style
+      categoryName
+    }
+    poiCity {
+      cityName
+      cityId
+      cityLatitude
+      cityLongitude
+      description
+      imageUrl
+    }
+    poiDescription
+    poiLatitude
+    poiLongitude
+    poiName
+    poiId
+  }
+}
+    `;
+
+/**
+ * __useGetPoisByCityAndCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetPoisByCityAndCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoisByCityAndCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoisByCityAndCategoryQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      cityId: // value for 'cityId'
+ *   },
+ * });
+ */
+export function useGetPoisByCityAndCategoryQuery(baseOptions: Apollo.QueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables> & ({ variables: GetPoisByCityAndCategoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);
+      }
+export function useGetPoisByCityAndCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);
+        }
+export function useGetPoisByCityAndCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);
+        }
+export type GetPoisByCityAndCategoryQueryHookResult = ReturnType<typeof useGetPoisByCityAndCategoryQuery>;
+export type GetPoisByCityAndCategoryLazyQueryHookResult = ReturnType<typeof useGetPoisByCityAndCategoryLazyQuery>;
+export type GetPoisByCityAndCategorySuspenseQueryHookResult = ReturnType<typeof useGetPoisByCityAndCategorySuspenseQuery>;
+export type GetPoisByCityAndCategoryQueryResult = Apollo.QueryResult<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>;
