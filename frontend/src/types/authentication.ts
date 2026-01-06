@@ -10,7 +10,7 @@ export type UserProfile = {
 export type GraphqlUser = {
   userId: number;
   email: string;
-  roles?: ("ADMIN" | "USER")[];
+  roles?: Role[];
   userInfo?: {
     firstName: string;
     lastName: string;
