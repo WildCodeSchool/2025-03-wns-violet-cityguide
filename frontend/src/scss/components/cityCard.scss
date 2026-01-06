@@ -9,6 +9,7 @@
 	background-color: $white;
 	box-shadow: $box-shadow;
 	transition: transform 250ms ease-in-out;
+	cursor: pointer;
 
 	&:hover {
 		transform: scale(1.01);
