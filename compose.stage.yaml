@@ -1,6 +1,7 @@
 services:
 
-  database:
+  database-stage:
+    container_name: database-stage
     image: postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
@@ -14,14 +15,11 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_HOST: ${DB_HOST}
     volumes:
-      - ./persist/database:/var/lib/postgresql
+      - ./persist/database-stage:/var/lib/postgresql
 
-  backend-prod:
+  backend-stage:
     restart: always
-    container_name: backend-prod
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile.prod
+    container_name: backend-stage
     image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:backend-latest
     healthcheck:
       interval: 20s
@@ -31,24 +29,21 @@ services:
       test:
         [
           "CMD-SHELL",
-          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-prod:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
+          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-stage:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
         ]
-    environment:
+    environment: # peut être mettre les id de docker
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DB_USER: ${DB_USER}
       DB_HOST: ${DB_HOST}
       JWT_SECRET: ${JWT_SECRET}
     depends_on:
-      database: 
+      database-stage:
         condition: service_healthy
 
-  frontend-prod:
+  frontend-stage:
     restart: always
-    container_name: frontend-prod
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+    container_name: frontend-stage
     image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:frontend-latest
     healthcheck:
       interval: 20s 
@@ -58,28 +53,24 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl --fail --request GET --url 'http://frontend-prod:80' || exit 1",
+          "curl --fail --request GET --url 'http://frontend-stage:80' || exit 1",
         ]
     depends_on:
-      backend-prod:
+      backend-stage:
         condition: service_healthy
 
   # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
-  gateway:
+  gateway-stage:
+    container_name: gateway-stage
     image: nginx
     volumes:
-      - ./nginx.stage.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
       - ${GATEWAY_PORT}:80
     depends_on:
-      backend-prod:
+      backend-stage:
         condition: service_healthy
-      frontend-prod:
+      frontend-stage:
         condition: service_healthy
 
-  adminer:
-    image: adminer
-    depends_on:
-      database:
-        condition: service_healthy
