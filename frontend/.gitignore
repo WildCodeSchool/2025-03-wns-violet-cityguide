@@ -27,3 +27,6 @@ dist-ssr
 .env.stage 
 .env.dev
 .env.prod
+
+generated/
+generated/graphql-types.ts

@@ -28,3 +28,7 @@ dist-ssr
 .env.stage
 .env.dev
 persist/
+generated/
+generated/graphql-types.ts
+
+./frontend/src/generated

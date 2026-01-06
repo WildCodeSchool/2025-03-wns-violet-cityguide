@@ -6,73 +6,94 @@ import { buildSchema } from "type-graphql";
 import * as jwt from "jsonwebtoken";
 import {UserToken} from "./types/Context";
 import { Role } from "./entities/User";
-
-import RateResolver from "./resolvers/RateResolver";
 import UserResolver from "./resolvers/UserResolver";
 import CityResolver from "./resolvers/CityResolver";
-import CommentResolver from "./resolvers/CommentResolver";
-
+import CategoryResolver from "./resolvers/CategoryResolver";
+import PoiResolver from "./resolvers/PoiResolver";
+import UserInfoResolver from "./resolvers/UserInfoResolver";
+import { seedDatabase } from "./config/seed";
 
 const port = 3000;
 
 async function startServer() {
 
-    // Initialisation de la connexion à la DB
-    await dataSource.initialize();
+	// Initialisation de la connexion à la DB
+	await dataSource.initialize();
 
-    // Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
-    const schema = await buildSchema({
+	// Seed de la base de données en développement
+	if (process.env.NODE_ENV !== 'production') {
+		try {
+			console.log('🌱 Seeding database in development mode...');
+			await seedDatabase(dataSource);
+		} catch (error) {
+			console.error('❌ Seeding failed:', error);
+			// Ne pas stopper le serveur si le seeding échoue
+		}
+	}
 
-        resolvers: [UserResolver, CityResolver, CommentResolver, RateResolver],
+	// Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
+	const schema = await buildSchema({
 
-        authChecker: ({context: { user } }, neededRoles: Role[]) => {
+		// Resolvers ajoutés au schema
+		resolvers: [
+			UserResolver,
+			CityResolver, 
+			CategoryResolver, 
+			PoiResolver,
+			UserInfoResolver,
+		],
 
-            // si pas authentifié, on retourne false
-            if (!user) return false;
+		// Permet d'utiliser les outils de validation de class-validator
+		validate: true,
 
-            // si neededRoles est vide, on retourne true
-            if (!neededRoles.length) return true;
+		authChecker: ({context: { user } }, neededRoles: Role[]) => {
 
-            // si user a ADMIN, on retourne true
-            if (user.roles.includes(Role.ADMIN)) return true;
+			// si pas authentifié, on retourne false
+			if (!user) return false;
 
-            // si user a au moins un role inclus dans neededRoles, on retourne true
-            // sinon on retourne false
-            return neededRoles.some(user.roles.includes);
-        }
-    });
+			// si neededRoles est vide, on retourne true
+			if (!neededRoles.length) return true;
 
-    // Création du serveur apollo à partir du schema
-    const apolloServer = new ApolloServer({ schema });
+			// si user a ADMIN_SITE, on retourne true
+			if (user.roles.includes(Role.ADMIN_SITE)) return true;
 
-    // Démarrage du serveur apollo
-    const { url } = await startStandaloneServer(apolloServer, {
-        listen: { port },
-        context: async ({ req, res }) => {
+			// si user a au moins un role inclus dans neededRoles, on retourne true
+			// sinon on retourne false
+			return neededRoles.some((neededRole) => user.roles.includes(neededRole));
+		}
+	});
 
-            // Initialisation de user à null
-            let user: string | jwt.JwtPayload | null = null;
+	// Création du serveur apollo à partir du schema
+	const apolloServer = new ApolloServer({ schema });
 
-            // Compare le cookie trouvé dans le header de la requête avec le format (cf regexp) que doivent avoir les cookie de notre appli
-            const match = req.headers.cookie?.match(/cityGuide-auth=([^;]+)/);
+	// Démarrage du serveur apollo
+	const { url } = await startStandaloneServer(apolloServer, {
+		listen: { port },
+		context: async ({ req, res }) => {
 
-            // Si match n'est pas null et que process.env.JWT_SECRET donne un résultat
-            if (match && process.env.JWT_SECRET) {
+			// Initialisation de user à null
+			let user: string | jwt.JwtPayload | null = null;
 
-                // Récupération du token dans le tableau match
-                const token = match[1]
+			// Compare le cookie trouvé dans le header de la requête avec le format (cf regexp) que doivent avoir les cookie de notre appli
+			const match = req.headers.cookie?.match(/cityGuide-auth=([^;]+)/);
 
-                /* verify verifie l'adéquation entre le token et le résultat de process.env.JWT_TOKEN.
-                Verify renvoie une string si invalide, un payload si valide*/
-                user = jwt.verify(token, process.env.JWT_SECRET);
+			// Si match n'est pas null et que process.env.JWT_SECRET donne un résultat
+			if (match && process.env.JWT_SECRET) {
 
-                // Si user est une string, l'utilisateur est null
-                if (typeof user === "string") user = null;
-            }
+				// Récupération du token dans le tableau match
+				const token = match[1]
 
-            return { req, res, user: user as UserToken };
-        },
-    });
-    console.info("Server started on " + url);
+				/* verify verifie l'adéquation entre le token et le résultat de process.env.JWT_TOKEN.
+				Verify renvoie une string si invalide, un payload si valide*/
+				user = jwt.verify(token, process.env.JWT_SECRET);
+
+				// Si user est une string, l'utilisateur est null
+				if (typeof user === "string") user = null;
+			}
+
+			return { req, res, user: user as UserToken };
+		},
+	});
+	console.info("Server started on " + url);
 }
 startServer();

@@ -15,7 +15,7 @@ services:
       POSTGRES_HOST: ${DB_HOST}
     volumes:
       - ./persist/database:/var/lib/postgresql
-    
+
   backend-prod:
     restart: always
     container_name: backend-prod
@@ -43,7 +43,6 @@ services:
       database: 
         condition: service_healthy
 
-  
   frontend-prod:
     restart: always
     container_name: frontend-prod
@@ -79,8 +78,9 @@ services:
       frontend-prod:
         condition: service_healthy
 
-  adminer:
-    image: adminer
-    depends_on:
-      database:
-        condition: service_healthy
+# A supprimer et laisser sur compose.stage.yaml
+  # adminer:
+  #   image: adminer
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy

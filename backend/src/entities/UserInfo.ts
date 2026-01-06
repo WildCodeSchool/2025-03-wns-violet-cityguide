@@ -6,27 +6,28 @@ import { User } from "./User";
 @ObjectType()
 class UserInfo extends BaseEntity {
 
-    @PrimaryGeneratedColumn()
-    @Field()
-    userInfoId: number;
+		@PrimaryGeneratedColumn()
+		@Field()
+		userInfoId: number;
 
-    @Column()
-    @Field()
-    lastName: string;
+		@Column()
+		@Field()
+		lastName: string;
 
-    @Column()
-    @Field()
-    firstName: string;
+		@Column()
+		@Field()
+		firstName: string;
 
-    @Column()
-    @Field()
-    avatarUrl: string;
+		@Column()
+		@Field()
+		avatarUrl: string;
 
-    @OneToOne(() => User, user => user.userInfo)
-    @JoinColumn({ name: "userId" })
-    @Field(() => User)
-    user: User;
-
+		@OneToOne(() => User, user => user.userInfo, {
+			onDelete: "CASCADE",
+		})
+		@JoinColumn({ name: "userId" })
+		@Field(() => User)
+		user: User;
 }
 
 export { UserInfo };
