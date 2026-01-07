@@ -1,0 +1,28 @@
+name: Exécution des tests unitaires, d'intégration et end to end
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+
+        # Action de récupération du code pré-existante fournie par GHub Actions
+        uses: actions/checkout@v4
+
+      - name: Exécution tests front-end
+        run: cd frontend && npm i && npm run test
+
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Exécution tests back-end
+        run: cd backend && npm i && npm run test
+
+# TODO ajouter scripts exécution des tests end to end
