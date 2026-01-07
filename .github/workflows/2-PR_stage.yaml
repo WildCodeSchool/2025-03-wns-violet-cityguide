@@ -2,6 +2,8 @@ name: Exécution des tests unitaires, d'intégration et end to end
 
 on:
   pull_request:
+    branches: 
+      - stage
     types: [opened, reopened, synchronize]
 
 jobs:
