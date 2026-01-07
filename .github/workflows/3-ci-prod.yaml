@@ -7,7 +7,6 @@ on:
 jobs:
 
   notify-server:
-    needs: ci-cd-push
     runs-on: ubuntu-latest
     environment: stage
     steps:
