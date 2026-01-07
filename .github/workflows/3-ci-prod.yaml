@@ -1,0 +1,17 @@
+name: CI prod
+on:
+  # workflow_dispatch = bouton dans github action
+  workflow_dispatch:
+
+# liste des jobs à exécuter
+jobs:
+
+  notify-server:
+    needs: ci-cd-push
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+    - name: Notify VPS
+      run: |
+        curl -X GET https://ops.032025-bleu-1.wns.wilders.dev/hooks/update-prod
+
