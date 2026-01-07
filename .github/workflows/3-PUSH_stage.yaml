@@ -1,0 +1,71 @@
+# name : libre de choix (s'affiche dans github Actions)
+name: Construire et push les images docker vers DockerHub #test, build and push image on DockerHub for prod and stage
+
+# le git workflow se déclenche sur les push, sur les branches choisies : 'stage'
+on:
+  push:
+    branches:
+      - stage
+
+# la liste des actions (jobs) à réaliser (différents job peuvent s'exécuter en parallèle)
+jobs: 
+  # première actions : nom du job ('nom systême')
+  ci-cd-push:
+    # déclaration du nom du job tel qu'il s'affiche sur gitHub Actions
+    name: Construction et push des images
+    # environnement d'exécution
+    runs-on: ubuntu-latest
+    
+    # liste des étapes réalisées consécutivement lors de ce job
+    # de manière générale, on a gardé les noms fournis par la documentation pour une meilleure maintenabilité 
+    steps:
+
+    #1. Récupération du code source
+    - name: Récupération du code #le nom est libre de choix (c'est celui qui s'affiche sur GH actions)
+
+      # utilisation de actions/checkout@v4 est une action préexistante fournie par GH Actions (uses = uniquement actions préexistantes =/= "run" cf step #5)
+      uses: actions/checkout@v4
+
+      # with = param qui est utilisé
+      with: 
+
+        # cette action récupère le repository entier (0 = historique entier ; 1 = dernier commit ; N = les N derniers commits)(par défaut = 1 )
+        fetch-depth: 0
+
+    #2. Connexion à Docker Hub (avec les identifiants enregistrés dans les secrets GH)
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    #3. Set de l'outil Buildx : installe et configure Docker sur la machine GHub Actions
+    - name: Buildx Docker
+      uses: docker/setup-buildx-action@v3
+
+    #4. Construction et envoi de l'image sur Dockerhub (sur le projet mentionné dans les variables secrètes)
+    - name: Build and push frontend
+      uses: docker/build-push-action@v3
+      with:
+        context: ./frontend
+        file: ./frontend/Dockerfile.prod
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:frontend-latest
+
+    - name: Build and push backend
+      uses: docker/build-push-action@v3
+      with:
+        context: ./backend
+        file: ./backend/Dockerfile.stg
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:backend-latest
+
+  # Ping du VPS quand DockerHub accuse réception des images
+  notify-server:
+    needs: ci-cd-push
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+    - name: Notify VPS
+      run: |
+        curl -X GET https://ops.032025-bleu-1.wns.wilders.dev/hooks/update-stage
