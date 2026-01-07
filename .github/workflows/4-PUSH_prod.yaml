@@ -1,5 +1,9 @@
 name: CI prod
 on:
+  push:
+    branches:
+      - main
+
   # workflow_dispatch = bouton dans github action
   workflow_dispatch:
 
