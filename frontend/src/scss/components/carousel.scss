@@ -1,0 +1,84 @@
+@use '../variables' as *;
+
+.carousel {
+  position: relative;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-small) {
+    padding: 2rem 6rem;
+  }
+  @media (min-width: $breakpoint-large) {
+    padding: 2rem 10rem;
+  }
+}
+
+.carousel__viewport {
+  overflow: hidden;
+  //width: 95%;
+}
+
+.carousel__track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.carousel__slide {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Boutons */
+.carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  color: $marron;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.carousel__nav--prev {
+  left: 0.5rem;
+  &:hover {
+    color: $sand;
+    outline: none;
+    border-radius: 50%;
+    background-color: $marron;
+  }
+}
+
+.carousel__nav--next {
+  right: 0.5rem;
+  &:hover {
+    color: $sand;
+    outline: none;
+    border-radius: 50%;
+    background-color: $marron;
+  }
+}
+
+/* Dots */
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  gap: 0.4rem;
+}
+
+.carousel__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  border: none;
+  background: #ccc;
+  cursor: pointer;
+}
+
+.carousel__dot--active {
+  background: #333;
+}

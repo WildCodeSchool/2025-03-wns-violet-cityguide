@@ -1,0 +1,155 @@
+# name : libre de choix (s'affiche dans github Actions)
+name: Docker test, build & image (PROD) #test, build and push image on DockerHub for prod and stage
+# le git workflow se déclenche sur les push, sur les branches choisies : 'stage'
+on:
+  push:
+    branches:
+      - stage
+
+# la liste des actions (jobs) à réaliser (différents job peuvent s'exécuter en parallèle)
+jobs: 
+  # première actions : nom du job ('nom systême')
+  ci-cd-push:
+    # déclaration du nom du job tel qu'il s'affiche sur gitHub Actions
+    name: Docker push image on DockerHub for CI/CD
+    # environnement d'exécution
+    runs-on: ubuntu-latest
+    
+    # liste des étapes réalisées consécutivement lors de ce job
+    # de manière générale, on a gardé les noms fournis par la documentation pour une meilleure maintenabilité 
+    steps:
+    #1. Checkout source code
+    - name: Checkout source code #le nom est libre de choix (c'est celui qui s'affiche sur GH actions)
+      # utilisation de actions/checkout@v4 est une action préexistante fournie par GH Actions (uses = uniquement actions préexistantes =/= "run" cf step #5)
+      uses: actions/checkout@v4
+      # with = param qui est utilisé
+      with: 
+        # cette action récupère le repository entier (0 = historique entier ; 1 = dernier commit ; N = les N derniers commits)(par défaut = 1 )
+        fetch-depth: 0
+    
+    #2. Set up Docker Buildx
+      # Permet de build une image Docker : par rapport à un Docker build système standard ; le cache + performance + stabilité + rapidité améliorés + permet de créer des images en parallèle.
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    #3. Cache Docker Layers
+      # pour améliorer la performance + rapidité de build, cherche le cache (associé à une clé) à partir duquel appliquer seulement les modifications
+      # TODO : implémenter le cache avec --cache-from / --cache-to
+    - name: Cache Docker Layers
+      uses: actions/cache@v4
+      with: 
+        # où checher le cache
+        path: /tmp/.buildx-cache
+        # clé associée au cache
+        key: ${{ runner.os}}-buildx-${{ github.sha }}
+        # key = OS-buildx-n° de commit. Un nouveau commit => une clé différente. Si la clé exacte n'est pas retrouvée, on cherche avec un "niveau de moins" dans la clé : juste OS-buildx-. Cela permet de retrouver la dernière modification du cache en date. 
+        restore-keys: ${{ runner.os}}-buildx-
+
+    #4. Cache npm dependencies
+      # Met en cache les dépendances npm du backend et du frontend pour améliorer performances + rapidité du build. Le fonctionnement du système de path + key + restore key est identique à celui de l'étape précédente.
+    - name: Cache npm dependencies
+      uses: actions/cache@v4 
+      with: 
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json', 'backend/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-npm-        
+
+    #5. Extract metadata
+      # Récupère les informations utiles depuis GH : le nom du repo + le hash du commit 
+      # TODO : vérifier si cette action fonctionne 
+    - name: Extract metadata
+      id: meta
+      # run => on n'utilise pas une action existante 
+      # le '|' après 'run:' permet de donner des instructions multilignes.
+      run: |
+        echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+        echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+    #6. Build all services with Docker Compose
+      # les variables d'environnement (ex: 'DOCKERHUB_USERNAME') sont celles déclarées dans les secrets sur GH (pas celles de .env.stage/prod)
+    - name: Build all services with Docker Compose
+      # commande classique de build docker à partir d'un fichier compose.yaml
+      run: docker compose -f compose.prod.yaml build
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+    #7. Start all services for tests
+    - name: Start all services
+      # commande classique de build docker avec l'option '-d' (= detached) l'execution de la commande se fait en arrière plan et libère le terminal
+      run: docker compose -f compose.prod.yaml up -d
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+    #8. Print logs for all containers on failure (ces logs sont visibles sur GH actions)
+    - name: Print database logs on failure
+      if: failure()
+      run: docker logs database || true
+
+    - name: Print backend logs on failure
+      if: failure()
+      run: docker logs backend-prod || true
+
+    - name: Print frontend logs on failure
+      if: failure()
+      run: docker logs frontend-prod || true
+
+    #9. Login to Docker Hub (avec les identifiants enregistrés dans les secrets GH)
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    #10. Add this step before the push step: pour débugger affiche sur GH actions les variables d'environnements et les images concernées par le push de l'image à venir
+      # A COMMENTER en dev/stage/prod : les variables secrètes DOIVENT RESTER SECRETES
+    - name: Debug Docker images and environment
+      run: |
+        echo "=== Environment variables ==="
+        echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+        echo "DOCKERHUB_PROJECT_NAME: $DOCKERHUB_PROJECT_NAME"
+        echo ""
+        echo "=== Built images ==="
+        docker images
+        echo ""
+        echo "=== Images to be pushed ==="
+        docker images | grep "$DOCKERHUB_USERNAME" || echo "No images found with username $DOCKERHUB_USERNAME"
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+
+    # 11. Build and push prod image
+      # envoi de l'image sur Dockerhub (sur le projet mentionné dans les variables secrètes)
+    - name: Build and push production image
+      run: docker compose -f compose.prod.yaml push
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PROJECT_NAME: ${{ secrets.DOCKERHUB_PROJECT_NAME }}
+        DB_PASSWORD: ${{ secrets.DOCKERHUB_TEST_DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DOCKERHUB_TEST_DB_DATABASE }}
+        DB_USER: ${{ secrets.DOCKERHUB_TEST_DB_USER }}
+        DB_HOST: ${{ secrets.DOCKERHUB_TEST_DB_HOST }}
+        JWT_SECRET: ${{ secrets.DOCKERHUB_TEST_JWT_SECRET }}
+        GATEWAY_PORT: ${{ secrets.GATEWAY_PORT }}
+
+  notify-server:
+    needs: ci-cd-push
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+    - name: Notify VPS
+      run: |
+        curl -X GET https://ops.032025-bleu-1.wns.wilders.dev/hooks/update-stage

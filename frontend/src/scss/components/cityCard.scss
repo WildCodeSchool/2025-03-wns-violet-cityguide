@@ -1,0 +1,62 @@
+@use '../variables' as *;
+
+.cityCard {
+	display: flex;
+	flex-direction: column;
+	height: 23rem;
+	border-radius: 10px;
+	border: 2px solid $sand;
+	background-color: $white;
+	box-shadow: $box-shadow;
+	transition: transform 250ms ease-in-out;
+	cursor: pointer;
+
+	&:hover {
+		transform: scale(1.01);
+	}
+
+	@media (min-width: $breakpoint-small) {
+		width: 18rem;
+		height: 28rem;
+	}
+
+	&__imgContainer {
+		border-radius: 8px 8px 0 0;
+		width: 100%;
+		height: 15rem;
+		overflow: hidden;
+		@media (min-width: $breakpoint-small) {
+			height: 20rem;
+		}
+
+		&__img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		padding: 1rem;
+		gap: .25rem;
+
+		&__title {
+			font-size: 1.25rem;
+			font-weight: bold;
+			font-family: $title;
+			color: $marron;
+		}
+
+		&__description {
+			font-weight: 500;
+			font-size: 1rem;
+			font-family: $text;
+			color: $marron;
+			//overflow: hidden;
+			//text-overflow: ellipsis;
+			//white-space: nowrap;
+		}
+	}
+}

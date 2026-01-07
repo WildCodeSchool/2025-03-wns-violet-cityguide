@@ -1,0 +1,26 @@
+# nom du test (choix libre)
+name: test-frontend
+
+# le test s'execute SUR les pull request, UNIQUEMENT lorsqu'elles sont ouvertes ou synchronisées
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+# actions à effectuer
+jobs:
+  # nom du test tel qu'affiché sur GH actions
+  test-frontend-display-components:
+    # os sur lequel est executé le test (notre développement et notre hébergement sont réalisés sur des env linux, donc exécutions des tests sur un OS le plus proche possible)
+    runs-on: ubuntu-latest
+    # étapes (si plusieurs étapes, elles sont exécutées séquentiellement)
+    steps:
+      #1 checkout code : récupère le code
+        # nom de l'étape (choix libre) 
+      - name: Check out code
+        # utilises une action préexistante fournie par GH actions
+        uses: actions/checkout@v2
+
+      #2 execution du test 
+      - name: run tests
+        # lance la commande de lancement du test du frontend (ce n'est pas une action préexistante de GH actions)
+        run: cd frontend && npm i && npm run test

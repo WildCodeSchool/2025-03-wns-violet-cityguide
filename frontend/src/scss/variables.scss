@@ -1,0 +1,40 @@
+// colors
+$beige: #FAF6ED;
+$light-beige: #FEFAF1;
+$sand: #eee0cb;
+$marron: rgb(134, 119, 111);
+$white: #FFFFFF;
+$black: #000000;
+
+// fonts
+@font-face {
+	font-family: 'Poppins';
+	src: url('../assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+	font-weight: 500;
+}
+@font-face {
+	font-family: 'JosefinSlab';
+	src: url('../assets/fonts/Josefin/JosefinSlab-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900;
+}
+@font-face {
+	font-family: 'Work_Sans';
+	src: url('../assets/fonts/Work_Sans/WorkSans-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900; // si c'est une variable font
+}
+
+// Variables SCSS pour les familles de polices
+$title: 'Poppins', sans-serif;
+$subtitle: 'JosefinSlab', sans-serif;
+$text: 'Work_Sans', sans-serif;
+
+// Responsive
+$breakpoint-small: 480px;
+$breakpoint-medium: 768px;
+$breakpoint-medium-large: 1024px;
+$breakpoint-large: 1920px;
+
+// Shadows
+$text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+$box-shadow: 1px 1px 10px rgba(134, 119, 111, 0.1),
+-1px -1px 10px rgba(134, 119, 111, 0.1);;

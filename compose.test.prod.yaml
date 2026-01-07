@@ -1,0 +1,67 @@
+services:
+
+  database:
+    image: postgres
+    env_file:
+      - .env.prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
+      interval: 20s 
+      timeout: 10s
+      retries: 5
+      start_period: 100s
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_HOST: ${DB_HOST}
+
+  backend-prod:
+    restart: always
+    container_name: backend-prod
+    env_file: 
+      - .env.prod
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    healthcheck:
+      interval: 20s
+      retries: 5
+      timeout: 15s
+      start_period: 100s
+      test:
+        [
+          "CMD-SHELL",
+          'curl --fail --request POST --header ''Content-Type: application/json'' --url ''http://backend-prod:3000'' --data ''{"query":"query { __typename }"}'' || exit 1',
+        ]
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_HOST: ${DB_HOST}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      database: 
+        condition: service_healthy
+
+  frontend-prod:
+    restart: always
+    container_name: frontend-prod
+    env_file: 
+      - .env.prod
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    healthcheck:
+      interval: 20s 
+      retries: 5
+      timeout: 20s
+      start_period: 100s
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail --request GET --url 'http://frontend-prod:80' || exit 1",
+        ]
+    depends_on:
+      backend-prod:
+        condition: service_healthy
