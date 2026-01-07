@@ -56,7 +56,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./backend
-        file: ./backend/Dockerfile.stg
+        file: ./backend/Dockerfile.prod
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:backend-latest
 
