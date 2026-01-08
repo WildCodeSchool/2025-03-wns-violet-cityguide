@@ -1,4 +1,4 @@
-# Où - City guide 🇫🇷
+# Où - City guide 🇫🇷 En
 
 ## Adresse du site / app link
 [Où City guide](https://032025-bleu-1.wns.wilders.dev/)
