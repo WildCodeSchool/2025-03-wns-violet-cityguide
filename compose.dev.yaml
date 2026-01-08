@@ -2,6 +2,7 @@ services:
   
   # nom du service : database
   database:
+    container_name : database-dev
     # Récupération de l'image existante pour la base de données
     image: postgres
     # "script" du healthckeck
