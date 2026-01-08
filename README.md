@@ -1,6 +1,6 @@
 # Où - City guide 🇫🇷
 
-## Adresse du site 
+## Adresse du site / app link
 [Où City guide](https://032025-bleu-1.wns.wilders.dev/)
 
 ## Installer le projet localement :
