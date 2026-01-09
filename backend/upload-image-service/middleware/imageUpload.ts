@@ -20,7 +20,7 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
 
 		res.json({
 			success: true,
-			url: `/images/${filename}`,
+			url: `upload-image-service/images/${filename}`,
 			filename: filename
 		});
 	} catch (error: any) {

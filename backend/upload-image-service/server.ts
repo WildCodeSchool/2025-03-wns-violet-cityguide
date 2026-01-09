@@ -27,6 +27,11 @@ const upload = multer({
 
 app.use(cors());
 app.use(express.json());
+
+// Permet d'accéder à des fichiers statique depuis le repertoire 'image'
+// sans cela, les images ne peuvent pas s'afficher 
+app.use('/images', express.static('./upload-image-service/images'));
+
 app.use(router)
 
 // Multer error handling middleware
