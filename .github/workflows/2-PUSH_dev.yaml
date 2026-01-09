@@ -1,0 +1,17 @@
+name: CI dev
+on:
+  push:
+    branches:
+      - develop
+
+# liste des jobs à exécuter
+jobs:
+
+  notify-server:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - name: Notify VPS
+      run: |
+        curl -X GET https://ops.032025-bleu-1.wns.wilders.dev/hooks/update-dev
+
