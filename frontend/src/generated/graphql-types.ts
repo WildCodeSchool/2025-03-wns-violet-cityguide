@@ -357,6 +357,8 @@ export type GetPoisByCityQueryVariables = Exact<{
 }>;
 
 
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null }> };
+
 export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -376,7 +378,6 @@ export type UpdateCategoryMutationVariables = Exact<{
 
 
 export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: string };
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
 
 export type GetPoisByCityAndCategoryQueryVariables = Exact<{
   categoryId: Scalars['Float']['input'];
@@ -788,41 +789,14 @@ export const GetAllCategoriesDocument = gql`
     categoryId
     style
   }
-}`
-
-export const GetPoisByCityAndCategoryDocument = gql`
-    query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
-  getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
-    address
-    externalLink
-    imageUrl
-    poiCategory {
-      categoryId
-      style
-      categoryName
-    }
-    poiCity {
-      cityName
-      cityId
-      cityLatitude
-      cityLongitude
-      description
-      imageUrl
-    }
-    poiDescription
-    poiLatitude
-    poiLongitude
-    poiName
-    poiId
-  }
 }
     `;
 
 /**
- * __useGetPoisByCityAndCategoryQuery__
+ * __useGetAllCategoriesQuery__
  *
- * To run a query within a React component, call `useGetPoisByCityAndCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPoisByCityAndCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -912,13 +886,51 @@ export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
-//  * const { data, loading, error } = useGetPoisByCityAndCategoryQuery({
-//  *   variables: {
-//  *      categoryId: // value for 'categoryId'
-//  *      cityId: // value for 'cityId'
-//  *   },
-//  * });
-//  */
+export const GetPoisByCityAndCategoryDocument = gql`
+    query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
+  getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
+    address
+    externalLink
+    imageUrl
+    poiCategory {
+      categoryId
+      style
+      categoryName
+    }
+    poiCity {
+      cityName
+      cityId
+      cityLatitude
+      cityLongitude
+      description
+      imageUrl
+    }
+    poiDescription
+    poiLatitude
+    poiLongitude
+    poiName
+    poiId
+  }
+}
+    `;
+
+/**
+ * __useGetPoisByCityAndCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetPoisByCityAndCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoisByCityAndCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoisByCityAndCategoryQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      cityId: // value for 'cityId'
+ *   },
+ * });
+ */
 export function useGetPoisByCityAndCategoryQuery(baseOptions: Apollo.QueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables> & ({ variables: GetPoisByCityAndCategoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);

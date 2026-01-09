@@ -28,4 +28,4 @@ dist-ssr
 .env.dev
 .env.prod
 
-./frontend/generated/*
+# ./frontend/generated/*
