@@ -58,7 +58,7 @@ export default function HomePage() {
                     </section>
 
                 ) : (
-                    <Carousel visibleCount={4}>
+                    <Carousel visibleCount={windowSize > 1440 ? 5 : 4}>
                         {citiesCards.map((currCity) => (
                             <CityCard key={currCity.cityId} city={currCity}/>
                         ))}
