@@ -8,6 +8,7 @@ RUN npm ci
 
 # Copie la source des fichiers
 COPY src src
+COPY upload-image-service upload-image-service
 COPY tsconfig.json ./
 
 # Build pour la production/stage + compile le code typescript en javascript
