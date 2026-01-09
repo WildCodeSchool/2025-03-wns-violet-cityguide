@@ -17,6 +17,7 @@ import Pois from './pages/Pois.tsx'
 import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Faq from './pages/faq.tsx';
 
 // Apollo
 import {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 			  path: '*',
 			  element: <NotFound/>,
 			},
+			{
+				path: '/faq',
+				element: <Faq/>,
+			}
 		],
 	},
 ])
