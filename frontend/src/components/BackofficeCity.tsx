@@ -71,7 +71,7 @@ export default function BackofficeCity() {
 
 
 	// IMAGES ! 
-	const { resetUseState, imageUploadUseState, validateImage, validateUrl } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'images
+	const { resetUseState, imageUploadUseState, validateImageFrontEndSide, validateUrl } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'images
 	const { isImageValid, displayImage, imgSrc, imageError } = imageUploadUseState(); 
 
 	// vérification de l'image côté front-end
@@ -91,7 +91,7 @@ export default function BackofficeCity() {
 		if (!file) {
 			throw new Error('Erreur lors du chargement du fichier')
 		}
-		validateImage(file)
+		validateImageFrontEndSide(file)
 
 	}
 

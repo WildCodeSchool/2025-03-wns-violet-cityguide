@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const microServiceFetchAddress = 'http://localhost:4322/image-verification'
 const maxSize = 5 * 1024 * 1024 // 5 MB in bytes
+const validType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 /**
  * This is a custom hook to :
@@ -26,6 +27,7 @@ export default function useImageVerificationAndUpload() {
 	// le message d'erreur affichée si l'image (lien ou uploadé) n'est pas valide
 	const [imageError, setImageError] = useState('');
 
+
 	// Utiliser pour réinitialiser les states
 	const resetUseState = () => {
 		setImageValid('');
@@ -45,9 +47,36 @@ export default function useImageVerificationAndUpload() {
 	}
 
 
-	/* FONCTIONS : Vérification et upload d'image
-	- 
-	*/
+	// étape finale
+	// envoie de l'image vers le micro-service du backend pour les vérifications 
+	const sendImageToBackendForUpload = (file: File) => {
+		const formData = new FormData();
+		formData.append('imageUrl', file);
+
+		fetch(microServiceFetchAddress, {
+			method: "POST",
+			body: formData
+		})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`HTTP error ! status : ${response.status}`)
+				}
+				return response.json()
+			})
+			.then(data => {
+				alert("Image uploadée avec succès !")
+				setDisplayImage(true)
+				setImgSrc(data.url)
+				console.log(data)
+			})
+			.catch(error => {
+				console.error('Upload failed:', error);
+				setImageError('Erreur lors de l\'upload de l\'image');
+				setDisplayImage(false)
+				setImageValid('false');
+			});
+	}
+
 
 	// On vérifie ici que l'image peut se charger correctement dans le navigateur
 	const verifyImageLoad = (file: File): Promise<boolean> => {
@@ -110,25 +139,41 @@ export default function useImageVerificationAndUpload() {
 		})
 	}
 
-	// nous allons continuer les check
-	const imageSecurityCheck = async (file: File | null) => {
-		if (!file) {
-			throw new Error("Une erreur s'est produite lors de la vérification du fichier. Veuillez réessayer.")
-		}
-		const fileMagicSignatureIsValid = await checkFileSignature(file); // on vérifie la signature des images
-		const fileVerifiedOnBrowserIsValid = await verifyImageLoad(file); // on vérifie qu'elle s'affiche correctement sur le navigateur
 
-		if (fileMagicSignatureIsValid === true && fileVerifiedOnBrowserIsValid === true) {
-			sendImageToBackendForUpload(file) // l'image a passée tous les tests front-end et est envoyée aux backend pour les tests backend
-			return setImageValid('true')
-		} else {
-			setImageError('Image invalide. Veuillez fournir une autre image (formats autorisés : png, jpeg, webp, jpg)');
+
+	// On vérifie dans un premier temps si l'image est d'un type valide
+	const verifyImageType = (file: File | null) => {
+
+		if (!file) throw new Error("Erreur lors de la vérification de l'image");
+
+		if (!validType.includes(file.type) || file === null) {
+			console.log('file type is not valid')
+			setImageError('Format invalide. Utilisez JPG, JPEG, PNG ou WEBP.')
 			setImageValid('false')
 			return file = null;
 		}
+		return true
 	}
+
+	// on vérifie ensuite la taille de l'image
+	const verifyImageSize = (file: File | null) => {
+		if (!file) throw new Error("Erreur lors de la vérification de l'image")
+
+		if (file.size > maxSize) {
+			console.error("Le fichier est trop volumineux")
+			setImageError('Image trop volumineuse. Taille Maximum : 5MB.');
+			setImageValid('false')
+			return file = null;
+		}
+		return true
+	}
+
 	// vérification de l'image côté front-end
-	const validateImage = (file: File | null) => {
+	// vérifie que l'image est d'un type valide 
+	// vérifie que l'image à la bonne taille 
+	// les magic byte de l'image correspondent à ceux effectivement d'une image
+	// on vérifique l'image peut effectivement s'afficher sur un navigateur
+	const validateImageFrontEndSide = async (file: File | null) => {
 
 		// on réinitialise les states
 		resetUseState()
@@ -137,57 +182,35 @@ export default function useImageVerificationAndUpload() {
 			console.error('Pas de fichier valide fournie.')
 			setImageError('Erreur lors du chargement du fichier. Veuillez réessayer.');
 			setImageValid('false');
+
 		} else {
 
-			// On vérifie dans un premier temps si l'image est d'un type valide
-			const validType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-			if (!validType.includes(file.type) || file === null) {
-				console.log('file type is not valid')
-				setImageError('Format invalide. Utilisez JPG, JPEG, PNG ou WEBP.')
-				setImageValid('false')
-				return file = null;
-			}
+			const imageTypeIsValid = verifyImageType(file) // on vérifie le type du fichier
+			const imageSizeIsValid = verifyImageSize(file) // on vérifie la taille du fichier
 
-			// on vérifie ensuite la taille de l'image
-			if (file.size > maxSize) {
-				console.error("Le fichier est trop volumineux")
-				setImageError('Image trop volumineuse. Taille Maximum : 5MB.');
-				setImageValid('false')
-				return file = null;
-			}
+			if (imageSizeIsValid === true && imageTypeIsValid === true) {
 
-			imageSecurityCheck(file)
+				// Si l'image passe toutes les étapes, on passe à l'étape suivante
+
+				const fileMagicSignatureIsValid = await checkFileSignature(file); // on vérifie la signature des images
+				const fileVerifiedOnBrowserIsValid = await verifyImageLoad(file); // on vérifie qu'elle s'affiche correctement sur le navigateur
+
+				if (fileMagicSignatureIsValid === true && fileVerifiedOnBrowserIsValid === true) {
+					
+					// l'image a passée tous les tests front-end et est envoyée aux backend pour les tests backend
+					sendImageToBackendForUpload(file) 
+					return setImageValid('true')
+
+				} else {
+
+					setImageError('Image invalide. Veuillez fournir une autre image (formats autorisés : png, jpeg, webp, jpg)');
+					setImageValid('false')
+					return file = null;
+				}
+			}
 		}
 	}
 
-	// envoie de l'image vers le micro-service du backend pour les vérifications 
-	function sendImageToBackendForUpload(file: File) {
-		const formData = new FormData();
-		formData.append('imageUrl', file);
-
-		fetch(microServiceFetchAddress, {
-			method: "POST",
-			body: formData
-		})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(`HTTP error ! status : ${response.status}`)
-				}
-				return response.json()
-			})
-			.then(data => {
-				alert("Image uploadée avec succès !")
-				setDisplayImage(true)
-				setImgSrc(data.url)
-				console.log(data)
-			})
-			.catch(error => {
-				console.error('Upload failed:', error);
-				setImageError('Erreur lors de l\'upload de l\'image');
-				setDisplayImage(false)
-				setImageValid('false');
-			});
-	}
 
 
 
@@ -225,7 +248,7 @@ export default function useImageVerificationAndUpload() {
 	return {
 		imageUploadUseState,
 		resetUseState,
-		validateImage,
+		validateImageFrontEndSide,
 		validateUrl
 	}
 }
