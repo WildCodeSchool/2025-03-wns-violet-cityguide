@@ -332,6 +332,14 @@ export type GetOneCityQueryVariables = Exact<{
 
 export type GetOneCityQuery = { __typename?: 'Query', getCityById: { __typename?: 'City', cityId: number, cityName: string, imageUrl: string, description: string } };
 
+export type UpdateOneCityMutationVariables = Exact<{
+  data: UpdateCityInput;
+  cityId: Scalars['Float']['input'];
+}>;
+
+
+export type UpdateOneCityMutation = { __typename?: 'Mutation', updateCity: string };
+
 export type GetAllPoisQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -349,7 +357,27 @@ export type GetPoisByCityQueryVariables = Exact<{
 }>;
 
 
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null }> };
+
+export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllCategoriesQuery = { __typename?: 'Query', getAllCategories: Array<{ __typename?: 'Category', categoryName: string, categoryId: number, style: string }> };
+
+export type CreateCategoryMutationVariables = Exact<{
+  data: CategoryInput;
+}>;
+
+
+export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: string };
+
+export type UpdateCategoryMutationVariables = Exact<{
+  data: CategoryInput;
+  categoryId: Scalars['Float']['input'];
+}>;
+
+
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: string };
 
 export type GetPoisByCityAndCategoryQueryVariables = Exact<{
   categoryId: Scalars['Float']['input'];
@@ -570,6 +598,38 @@ export type GetOneCityQueryHookResult = ReturnType<typeof useGetOneCityQuery>;
 export type GetOneCityLazyQueryHookResult = ReturnType<typeof useGetOneCityLazyQuery>;
 export type GetOneCitySuspenseQueryHookResult = ReturnType<typeof useGetOneCitySuspenseQuery>;
 export type GetOneCityQueryResult = Apollo.QueryResult<GetOneCityQuery, GetOneCityQueryVariables>;
+export const UpdateOneCityDocument = gql`
+    mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {
+  updateCity(data: $data, cityId: $cityId)
+}
+    `;
+export type UpdateOneCityMutationFn = Apollo.MutationFunction<UpdateOneCityMutation, UpdateOneCityMutationVariables>;
+
+/**
+ * __useUpdateOneCityMutation__
+ *
+ * To run a mutation, you first call `useUpdateOneCityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOneCityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOneCityMutation, { data, loading, error }] = useUpdateOneCityMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      cityId: // value for 'cityId'
+ *   },
+ * });
+ */
+export function useUpdateOneCityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOneCityMutation, UpdateOneCityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOneCityMutation, UpdateOneCityMutationVariables>(UpdateOneCityDocument, options);
+      }
+export type UpdateOneCityMutationHookResult = ReturnType<typeof useUpdateOneCityMutation>;
+export type UpdateOneCityMutationResult = Apollo.MutationResult<UpdateOneCityMutation>;
+export type UpdateOneCityMutationOptions = Apollo.BaseMutationOptions<UpdateOneCityMutation, UpdateOneCityMutationVariables>;
 export const GetAllPoisDocument = gql`
     query GetAllPois {
   getAllPois {
@@ -686,14 +746,6 @@ export const GetPoisByCityDocument = gql`
       categoryName
       style
     }
-    poiCity {
-      cityName
-    }
-    poiDescription
-    poiId
-    poiLatitude
-    poiLongitude
-    poiName
   }
 }
     `;
@@ -730,6 +782,110 @@ export type GetPoisByCityQueryHookResult = ReturnType<typeof useGetPoisByCityQue
 export type GetPoisByCityLazyQueryHookResult = ReturnType<typeof useGetPoisByCityLazyQuery>;
 export type GetPoisByCitySuspenseQueryHookResult = ReturnType<typeof useGetPoisByCitySuspenseQuery>;
 export type GetPoisByCityQueryResult = Apollo.QueryResult<GetPoisByCityQuery, GetPoisByCityQueryVariables>;
+export const GetAllCategoriesDocument = gql`
+    query GetAllCategories {
+  getAllCategories {
+    categoryName
+    categoryId
+    style
+  }
+}
+    `;
+
+/**
+ * __useGetAllCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetAllCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(GetAllCategoriesDocument, options);
+      }
+export function useGetAllCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(GetAllCategoriesDocument, options);
+        }
+export function useGetAllCategoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(GetAllCategoriesDocument, options);
+        }
+export type GetAllCategoriesQueryHookResult = ReturnType<typeof useGetAllCategoriesQuery>;
+export type GetAllCategoriesLazyQueryHookResult = ReturnType<typeof useGetAllCategoriesLazyQuery>;
+export type GetAllCategoriesSuspenseQueryHookResult = ReturnType<typeof useGetAllCategoriesSuspenseQuery>;
+export type GetAllCategoriesQueryResult = Apollo.QueryResult<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>;
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($data: CategoryInput!) {
+  createCategory(data: $data)
+}
+    `;
+export type CreateCategoryMutationFn = Apollo.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, options);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const UpdateCategoryDocument = gql`
+    mutation UpdateCategory($data: CategoryInput!, $categoryId: Float!) {
+  updateCategory(data: $data, categoryId: $categoryId)
+}
+    `;
+export type UpdateCategoryMutationFn = Apollo.MutationFunction<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCategoryMutation, UpdateCategoryMutationVariables>(UpdateCategoryDocument, options);
+      }
+export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
+export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const GetPoisByCityAndCategoryDocument = gql`
     query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
   getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {

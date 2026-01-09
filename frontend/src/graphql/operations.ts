@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const GET_ALL_USERS = gql`
 query GetAllUsers {
@@ -29,7 +29,7 @@ export const SIGNUP = gql`
 	}
 `;
 
-export const LOGIN = gql `
+export const LOGIN = gql`
 	mutation Login($data: UserInput!) {
 	login(data: $data) {
 		token
@@ -69,6 +69,12 @@ export const GET_ONE_CITY = gql`
 		}
 	}
 `;
+
+export const UPDATE_ONE_CITY = gql`
+	mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {		
+		updateCity(data: $data, cityId: $cityId)
+}
+`
 
 export const GET_ALL_POIS = gql`
 	query GetAllPois {
@@ -123,18 +129,34 @@ query GetPoisByCity($cityId: Float!) {
       categoryName
 	  style
     }
-    poiCity {
-      cityName
-    }
-    poiDescription
-    poiId
-    poiLatitude
-    poiLongitude
-    poiName
   }
 }
 `;
 
+// categorie ! 
+export const GET_ALL_CATEGORIES = gql`
+	query GetAllCategories {
+		getAllCategories {
+		categoryName, 
+		categoryId, 
+		style
+		}
+	}
+`
+export const CREATE_CATEGORY = gql`
+	mutation CreateCategory($data: CategoryInput!) {
+  createCategory(data: $data)
+}
+`
+
+export const UPDATE_CATEGORY = gql`
+	mutation UpdateCategory($data: CategoryInput!, $categoryId: Float!) {
+		updateCategory(data: $data, categoryId: $categoryId)
+	}
+`
+// Users !
+// get all users (for sysadmin)
+// export const GET_ALL_USERS
 export const GET_POIS_BY_CITY_AND_CATEGORY = gql`
     query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
         getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {

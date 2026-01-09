@@ -6,6 +6,8 @@ $marron: #342D29FF;
 $white: #FFFFFF;
 $black: #000000;
 
+$accent: #d1a680; //ajout de Roxane, à modifier si besoin
+
 // fonts
 @font-face {
 	font-family: 'Poppins';
@@ -38,3 +40,16 @@ $breakpoint-large: 1920px;
 $text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 $box-shadow: 1px 1px 10px rgba(134, 119, 111, 0.1),
 -1px -1px 10px rgba(134, 119, 111, 0.1);;
+
+@mixin flex-row {
+	display: flex;
+	flex-direction: row;
+}
+@mixin flex-column {
+	display: flex;
+	flex-direction: column;
+}
+@mixin align-center {
+	justify-content: center;
+	align-items: center;
+}

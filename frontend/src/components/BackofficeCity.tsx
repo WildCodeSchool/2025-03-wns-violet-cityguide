@@ -1,0 +1,333 @@
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import React, { useState, type FormEvent } from "react"
+import useImageVerificationAndUpload from '../pages/backofficeHandler/imageVerificationAndUpload';
+import { useCityStore } from '../zustand/cityStore';
+import { useGetAllCitiesQuery, useUpdateOneCityMutation, type City, type NewUserInput, type UpdateCityInput } from '../generated/graphql-types';
+
+export default function BackofficeCity() {
+
+	// Les query et mutation graphQL relatives aux villes 
+	const { data: allCitiesData, loading: allCitiesLoading, error: allCitiesError } = useGetAllCitiesQuery();
+	const [updateCity] = useUpdateOneCityMutation();
+
+	// les states de selection des onglets : Ajouter une vile ou Administrer une ville
+	const [adminTabCities, setAdminTabCities] = useState('createCity')
+	const handleAdminTabCities = (tab: string) => {
+		setAdminTabCities(tab);
+	}
+
+	// LES COORDONNEES ! 
+	// Ceci sont les state nécessaires à montrer et selectionnée les coordonnées de la ville
+	const [mapLatitude, setMapLatitude] = useState(0); //latitude pinnée sur la carte leaflet
+	const [isLatitudeValid, setIsLatitudeValid] = useState(true) // la latitude est validée
+	const [mapLongitude, setMapLongitude] = useState(0); //longitude pinnée sur la carte leaflet
+	const [isLongitudeValid, setIsLongitudeValid] = useState(true); // la longitude est validée
+	const [showMap, setShowMap] = useState(false); // affiche ou non la map leaflet pour afficher les coordonées ci-dessus
+	let coordinateFormatError = "" // le message d'erreur affiché si les coordonnées entrées ne sont pas valides
+
+	// on check les coordonnées input par l'utilisateur
+	const checkCoordinateInput = (e: React.ChangeEvent<HTMLInputElement>, setValid: (valid: boolean) => void, type: string) => {
+		const coordinate = Number(e.target.value);
+
+		if (coordinate) {
+			// coordinate a un type renseigné (string) : "latitude" || "longitude"
+			// on vérifie ici les latitudes et longitudes
+
+			if (type === "latitude") {
+				// la latitude ne peut être comprise que entre 90 et -90
+				if (coordinate <= 90 || coordinate >= -90) {
+					setMapLatitude(coordinate)
+					setIsLatitudeValid(true)
+				} else {
+					setIsLatitudeValid(false)
+					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
+				}
+			} else if (type === "longitude") {
+				if (coordinate <= 180 || coordinate >= -180) {
+					setMapLongitude(coordinate)
+					setIsLongitudeValid(true)
+				} else {
+					setIsLongitudeValid(false)
+					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
+				}
+			} else {
+				coordinateFormatError = "Veuillez renseigner une coordonnée."
+				return setValid(false)
+			}
+			// on lance par la suite une fonction pour afficher la minimap
+			showMapHandler()
+		}
+		return setValid
+	}
+
+	function showMapHandler() {
+		if (!mapLatitude && !mapLongitude) {
+			return setShowMap(false)
+		} else {
+			return setShowMap(true)
+		}
+	}
+
+
+	// IMAGES ! 
+	const { resetUseState, imageUploadUseState, validateImageFrontEndSide, validateUrl } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'images
+	const { isImageValid, displayImage, imgSrc, imageError } = imageUploadUseState(); 
+
+	// vérification de l'image côté front-end
+	const validateCityImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0] || null;
+
+		// on réinitialise les states
+		resetUseState(); 
+
+		// L'utilisateur a décidé de choisir d'uploader une photo: on efface donc le lien de l'input url
+		const imageUrlLink = document.getElementById('imageUrl-link') as HTMLInputElement;
+		if (imageUrlLink) {
+			imageUrlLink.value = ''
+			console.log("URL effacée")
+		}
+
+		if (!file) {
+			throw new Error('Erreur lors du chargement du fichier')
+		}
+		validateImageFrontEndSide(file)
+
+	}
+
+	// l'utilisateur a choisit d'envoyer un lien au lieu d'uploader une image
+	const validateCityImageUrl = (url: string) => {
+
+		// on réinitialise les states
+		resetUseState()
+
+		// on efface le fichier, si un fichier a été fournie avant le lien
+		const fileInput = document.getElementById('imageUrl-file') as HTMLInputElement;
+		if (fileInput) {
+			fileInput.value = '';
+		}
+
+		validateUrl(url)
+	}
+
+	const handleAddCitySubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const form = e.target;
+		const formAddCityData = new FormData(form as HTMLFormElement);
+		const formJsonAddCity = Object.fromEntries(formAddCityData.entries())
+	}
+
+	const [editCity, setEditCity] = useState(false);
+	const [editCityId, setEditCityId] = useState(0);
+	const [editCityName, setEditCityName] = useState('');
+	const [editCityDescription, setEditCityDescription] = useState('')
+	const [editImageUrl, setEditImageUrl] = useState('');
+	const [editCityLatitude, setEditCityLatitude] = useState(0);
+	const [editCityLongitude, setEditCityLongitude] = useState(0);
+	const [newCityLatitude, setNewCityLatitude] = useState(0);
+	const [newCityLongitude, setNewCityLongitude] = useState(0)
+	const editCityHandler = (id: string) => {
+		const city = allCitiesData?.getAllCities.find(city => city.cityId === Number(id));
+		if (!city) {
+			console.log("error finding the city")
+			return
+		};
+		setEditCityId(city.cityId)
+		setEditCityName(city.cityName);
+		setEditCityDescription(city.description);
+		setEditImageUrl(city.imageUrl);
+		setEditCityLatitude(city.cityLatitude);
+		setEditCityLongitude(city.cityLongitude);
+		setNewCityLatitude(city.cityLatitude);
+		setNewCityLongitude(city.cityLongitude);
+
+		if (editCityName === '') setEditCity(false)
+		setEditCity(true)
+	}
+
+	const setNewCityLongitudeHandler = (value: number) => {
+		setNewCityLongitude(value)
+		console.log("this is the value of setNewCityLongitudeHandler : ", value)
+		console.log({
+			defaultLongitude: editCityLongitude,
+			newLongitude: newCityLongitude,
+			defaultLatitude: newCityLatitude,
+			newCityLatitude: newCityLatitude
+		})
+	}
+
+	function ChangeMapView({ center, zoom }: { center: [number, number], zoom: number }) {
+		const map = useMap();
+		map.setView(center, zoom);
+		return null;
+	}
+
+	const updateCityHandler = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const form = e.target;
+		const formData = new FormData(form as HTMLFormElement);
+		try {
+			const { data } = await updateCity({
+				variables:
+					{ data: formData as UpdateCityInput, cityId: editCityId }
+
+			})
+			if (!data) throw new Error("Missing data");
+
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	return (
+		<>
+			<h2>Villes</h2>
+			<div className='tab__container'>
+				<div className={"tab__btn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>
+					<h3>Ajouter une ville</h3>
+				</div>
+				<div className={"tab__btn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>
+					<h3>Administrer une ville</h3>
+				</div>
+			</div>
+
+			<div className="backoffice-container">
+				{/* ajouter une ville */}
+				{adminTabCities === "createCity" &&
+					<form onSubmit={handleAddCitySubmit}>
+
+						<label htmlFor="cityName">Nom de la ville
+							<input type="text" name="cityName" placeholder="Lyon" required />
+						</label>
+
+						<label htmlFor="description">Description
+							<textarea name="description" placeholder="Une ville de talent..." className='description-field'></textarea>
+						</label>
+
+						<label htmlFor="imageUrl" className='vertical' >Image
+							<div>
+								<input type="file" name="imageUrl" id="imageUrl-file" placeholder="Image" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={validateCityImage} />
+								<span>or</span>
+								<input type="url" name='imageUrl' id="imageUrl-link" placeholder="https://my-image.com" onBlur={(e) => validateCityImageUrl(e.target.value)} />
+							</div>
+							{isImageValid === 'false' &&
+								<div className="img-div"><span className="img-div__error">{imageError}</span></div>
+							}
+							{isImageValid === 'true' &&
+								<div className="img-div">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+									>
+										<path
+											d="M5 13 L9 17 L19 7"
+											fill="none"
+											stroke="#22c55e"
+											strokeWidth="2.5"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>
+									</svg>
+
+									<span className="img-div__valid">Image valide</span>
+								</div>}
+							{displayImage === true &&
+								<img src={imgSrc} style={{ maxHeight: "300px" }} />}
+						</label>
+						<p>Coordonnées</p>
+						<div className="add-ville-coordonnees">
+							<label htmlFor="cityLatitude">Latitude
+								<input type="number" name="cityLatitude" min="-90" max="90" placeholder="-48.876667" onBlur={(e) => checkCoordinateInput(e, setIsLatitudeValid, 'latitude')} required />
+								{isLatitudeValid === false && <p>{coordinateFormatError}</p>}
+							</label>
+							<label htmlFor="cityLongitude">Longitude
+								<input type="number" name="cityLongitude" min="-180" max="180" placeholder="-123.393333" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} required />
+								{isLongitudeValid === false && <p>{coordinateFormatError}</p>}
+							</label>
+						</div>
+						{showMap &&
+							<MapContainer
+								center={[mapLatitude, mapLongitude]} // Paris
+								zoom={13}
+								style={{ height: '300px', width: '100%' }}
+							>
+								<TileLayer
+									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+									attribution="&copy; OpenStreetMap contributors"
+								/>
+								<Marker position={[mapLatitude, mapLongitude]}>
+									<Popup>
+										Salut ! Je suis un marqueur Leaflet dans React.
+									</Popup>
+								</Marker>
+							</MapContainer>
+						}
+						{/* <input type="submit">Ajouter la ville</input> */}
+					</form>}
+
+				{/* administrer une ville */}
+				{adminTabCities === "admin-city" &&
+					<div className="backoffice-container">
+						<label htmlFor="select-ville">Choisissez une ville à éditer
+							<select name="select-ville" onChange={(e) => editCityHandler(e.target.value)}>
+								{allCitiesData?.getAllCities.map((city) => (
+									<option value={city.cityId} key={city.cityId} defaultValue=''>{city.cityName}</option>
+								))}
+							</select>
+						</label>
+						{editCity === true &&
+							<div className='backoffice-container relative'>
+								<h4>Editer la ville : {editCityName}</h4>
+								<div className="close" onClick={() => { setEditCity(false); setEditCityName('') }}>
+									<svg height={15} width={15}>
+										<line x1="2" y1="2" x2="10" y2="10" style={{ stroke: "red", strokeWidth: 1 }} />
+										<line x1="
+									2" y1="10" x2="10" y2="2" style={{ stroke: "red", strokeWidth: 1 }} />
+									</svg>
+								</div>
+								<form onSubmit={updateCityHandler}>
+									<label htmlFor='cityName'>Nom de la ville :
+										<input type="text" defaultValue={editCityName} name='cityName' />
+									</label>
+									<label htmlFor='description'>Description de la ville
+										<textarea className='description-field' defaultValue={editCityDescription} name="description" />
+									</label>
+									<label htmlFor='imageUrl' className='vertical'>Image de la ville
+										{editImageUrl !== '' && <img src={editImageUrl} height="300px" width="500px" />}
+										<span>URL de l'image actuelle : {editImageUrl}</span>
+										<input type="file" name="imageUrl" placeholder="Image" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={validateCityImage} />
+									</label>
+									<h5>Coordonnées</h5>
+									<label htmlFor='cityLatitude'>Latitude
+										<span>Ancienne valeure : {editCityLatitude}</span>
+										<input type="number" defaultValue={editCityLatitude} name="cityLatitude" onChange={(e) => { setNewCityLatitude(Number(e.target.value)) }} />
+									</label>
+									<label htmlFor='cityLongitude'>Longitude
+										<span>Ancienne valeure : {editCityLongitude}</span>
+										<input type="number" defaultValue={editCityLongitude} name="cityLongitude" onChange={(e) => { setNewCityLongitudeHandler(Number(e.target.value)) }} />
+									</label>
+									<MapContainer
+										center={[newCityLatitude, newCityLongitude]}
+										zoom={13}
+										style={{ height: '300px', width: '100%' }}
+									>
+										<ChangeMapView center={[newCityLatitude, newCityLongitude]} zoom={13} />
+										<TileLayer
+											url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+											attribution="&copy; OpenStreetMap contributors"
+										/>
+										<Marker position={[newCityLatitude, newCityLongitude]}>
+										</Marker>
+									</MapContainer>
+									<input type="submit" value="Modifier la ville" />
+								</form>
+							</div>
+						}
+					</div>}
+			</div>
+
+		</>
+	)
+}
