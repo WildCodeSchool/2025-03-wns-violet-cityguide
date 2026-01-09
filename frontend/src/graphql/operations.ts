@@ -119,18 +119,26 @@ export const GET_POI_BY_ID = gql`
 `;
 
 export const GET_POIS_BY_CITY = gql`
-query GetPoisByCity($cityId: Float!) {
-  getPoisByCity(cityId: $cityId) {
-    address
-    externalLink
-    imageUrl
-    poiCategory {
-		categoryId
-      categoryName
-	  style
-    }
-  }
-}
+	query GetPoisByCity($cityId: Float!) {
+		getPoisByCity(cityId: $cityId) {
+			address
+			externalLink
+			imageUrl
+			poiCategory {
+				categoryId
+				categoryName
+				style
+			}
+			poiCity {
+				cityName
+			}
+			poiDescription
+			poiId
+			poiLatitude
+			poiLongitude
+			poiName
+		}
+	}
 `;
 
 // categorie ! 

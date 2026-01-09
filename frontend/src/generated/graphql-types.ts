@@ -357,7 +357,7 @@ export type GetPoisByCityQueryVariables = Exact<{
 }>;
 
 
-export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null }> };
+export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
 
 export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -746,6 +746,14 @@ export const GetPoisByCityDocument = gql`
       categoryName
       style
     }
+    poiCity {
+      cityName
+    }
+    poiDescription
+    poiId
+    poiLatitude
+    poiLongitude
+    poiName
   }
 }
     `;
