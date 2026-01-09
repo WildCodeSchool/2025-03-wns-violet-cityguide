@@ -1,147 +1,113 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import React, { useState, type FormEvent } from "react"
-import useImageVerificationFrontend from '../pages/backofficeHandler/imageVerification';
+import useImageVerificationAndUpload from '../pages/backofficeHandler/imageVerificationAndUpload';
+import { useCityStore } from '../zustand/cityStore';
+import { useGetAllCitiesQuery, useUpdateOneCityMutation, type City, type NewUserInput, type UpdateCityInput } from '../generated/graphql-types';
 
 export default function BackofficeCity() {
 
-	// handle the admin tab + get and set the date
+	// Les query et mutation graphQL relatives aux villes 
+	const { data: allCitiesData, loading: allCitiesLoading, error: allCitiesError } = useGetAllCitiesQuery();
+	const [updateCity] = useUpdateOneCityMutation();
+
+	// les states de selection des onglets : Ajouter une vile ou Administrer une ville
 	const [adminTabCities, setAdminTabCities] = useState('createCity')
 	const handleAdminTabCities = (tab: string) => {
 		setAdminTabCities(tab);
 	}
 
-	// to handle coordinateFormatError, see below
-	const [mapLatitude, setMapLatitude] = useState(0);
-	const [isLatitudeValid, setIsLatitudeValid] = useState(true)
-	const [mapLongitude, setMapLongitude] = useState(0);
-	const [isLongitudeValid, setIsLongitudeValid] = useState(true);
-	const [showMap, setShowMap] = useState(false);
-	let coordinateFormatError = ""
+	// LES COORDONNEES ! 
+	// Ceci sont les state nécessaires à montrer et selectionnée les coordonnées de la ville
+	const [mapLatitude, setMapLatitude] = useState(0); //latitude pinnée sur la carte leaflet
+	const [isLatitudeValid, setIsLatitudeValid] = useState(true) // la latitude est validée
+	const [mapLongitude, setMapLongitude] = useState(0); //longitude pinnée sur la carte leaflet
+	const [isLongitudeValid, setIsLongitudeValid] = useState(true); // la longitude est validée
+	const [showMap, setShowMap] = useState(false); // affiche ou non la map leaflet pour afficher les coordonées ci-dessus
+	let coordinateFormatError = "" // le message d'erreur affiché si les coordonnées entrées ne sont pas valides
+
+	// on check les coordonnées input par l'utilisateur
 	const checkCoordinateInput = (e: React.ChangeEvent<HTMLInputElement>, setValid: (valid: boolean) => void, type: string) => {
 		const coordinate = Number(e.target.value);
-		console.log('checkCoordinate : ', e, type, coordinate)
 
-		// // 1. Decimal Degrees (DD): 48.8566, -123.3847
-		// const regex = type === "latitude"
-		// 	? /^-?([0-8]?\d(\.\d+)?|90(\.0+)?)$/
-		// 	: /^-?(1[0-7]\d(\.\d+)?|180(\.0+)?|\d{1,2}(\.\d+)?)$/;
-		// // Examples: 48.8566, -123.3847, 90, -180
-		// const match = coordinate.match(regex)
-		console.log('match in check coordinate : ', {
-			// regex: regex,
-			coordinate: coordinate,
-			type: type,
-			// try: (coordinate.match(regex)),
-			// match: match
-		})
 		if (coordinate) {
+			// coordinate a un type renseigné (string) : "latitude" || "longitude"
+			// on vérifie ici les latitudes et longitudes
+
 			if (type === "latitude") {
+				// la latitude ne peut être comprise que entre 90 et -90
 				if (coordinate <= 90 || coordinate >= -90) {
 					setMapLatitude(coordinate)
 					setIsLatitudeValid(true)
 				} else {
 					setIsLatitudeValid(false)
-					coordinateFormatError('Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180')
+					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
 				}
-			}
-			if (type === "longitude") {
+			} else if (type === "longitude") {
 				if (coordinate <= 180 || coordinate >= -180) {
-					setIsLongitudeValid(false)
+					setMapLongitude(coordinate)
+					setIsLongitudeValid(true)
 				} else {
 					setIsLongitudeValid(false)
+					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
 				}
+			} else {
+				coordinateFormatError = "Veuillez renseigner une coordonnée."
+				return setValid(false)
 			}
-			coordinateFormatError = "Veuillez renseigner une coordonnée."
-			return setValid(false)
+			// on lance par la suite une fonction pour afficher la minimap
+			showMapHandler()
 		}
-
-		// if (match) {
-		// 	console.log('there is a match in coordinate !')
-		// 	if (type === "latitude") {
-		// 		setMapLatitude(coordinate)
-		// 		setIsLatitudeValid(true)
-		// 	}
-		// 	if (type === "longitude") {
-		// 		setMapLongitude(coordinate)
-		// 		setIsLongitudeValid(true)
-		// 	}
-		// 	setValid(true)
-		// 	showMapHandler();
-		// } else {
-		// 	console.log('regex is false for coordinate')
-		// 	setIsLatitudeValid(false)
-		// 	setIsLongitudeValid(false)
-		// 	setValid(false)
-		// 	coordinateFormatError = "Le format de votre coordonnée n'est pas correcte. Veullez utilisez le format approprié : Degrées décimal. Par exemple : Longitude -48.876667 ; latitude : -123.393333 "
-		// }
 		return setValid
 	}
 
 	function showMapHandler() {
-		if (mapLatitude !== '' && mapLongitude !== '') {
-			setShowMap(true)
+		if (!mapLatitude && !mapLongitude) {
+			return setShowMap(false)
 		} else {
-			setShowMap(false)
+			return setShowMap(true)
 		}
-
-		console.log({
-			mapLatitude: mapLatitude,
-			mapLongitude: mapLongitude,
-		})
-		console.log('showMapHandler', showMap)
 	}
 
 
-	// to handle adding an image see below
-	const { checkFileSignature, verifyImageLoad } = useImageVerificationFrontend()
-	const [isImageValid, setImageValid] = useState('unverified');
-	const [imageError, setImageError] = useState('');
-	const validateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0] || null;
-		console.log('in validImage ! file is : ', file)
-		setImageError('');
-		setImageValid('unverified');
+	// IMAGES ! 
+	const { resetUseState, imageUploadUseState, validateImage, validateUrl } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'images
+	const { isImageValid, displayImage, imgSrc, imageError } = imageUploadUseState(); 
 
+	// vérification de l'image côté front-end
+	const validateCityImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0] || null;
+
+		// on réinitialise les states
+		resetUseState(); 
+
+		// L'utilisateur a décidé de choisir d'uploader une photo: on efface donc le lien de l'input url
+		const imageUrlLink = document.getElementById('imageUrl-link') as HTMLInputElement;
+		if (imageUrlLink) {
+			imageUrlLink.value = ''
+			console.log("URL effacée")
+		}
 
 		if (!file) {
-			console.log('no file found ')
-			setImageError('Erreur lors du chargement du fichier. Veuillez réessayer.');
-			setImageValid('false');
-		} else {
-
-			const validType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-			console.log('file type is : ', file.type)
-			if (!validType.includes(file.type) || file === null) {
-				console.log('file type is not valid')
-				setImageError('Format invalide. Utilisez JPG, JPEG, PNG ou WEBP.')
-				setImageValid('false')
-				return e.target.value = '';
-			}
-
-			const maxSize = 5 * 1024 * 1024 // 5 MB in bytes
-			console.log('file size is : ', file.size, ' max size is : ', maxSize)
-			if (file.size > maxSize) {
-				console.log('file size is not valid')
-				setImageError('Image trop volumineuse. Taille Maximum : 5MB.');
-				setImageValid('false')
-				return e.target.value = '';
-			}
-			const imageSecurityCheck = async (file: File) => {
-				const fileMagicSignatureIsValid = await checkFileSignature(file);
-				console.log('in image security check, value of fileMagicSignatureIsValid = ', await checkFileSignature(file))
-				const fileVerifiedOnBrowserIsValid = await verifyImageLoad(file);
-				console.log('fileverifiedonbrowerisvalid ', fileVerifiedOnBrowserIsValid)
-				if (fileMagicSignatureIsValid === true && fileVerifiedOnBrowserIsValid === true) {
-					return setImageValid('true')
-				} else {
-					setImageError('Image invalide. Veuillez fournir une autre image (formats autorisés : png, jpeg, webp, jpg)');
-					setImageValid('false')
-					return e.target.value = '';
-				}
-			}
-			imageSecurityCheck(file)
+			throw new Error('Erreur lors du chargement du fichier')
 		}
+		validateImage(file)
+
+	}
+
+	// l'utilisateur a choisit d'envoyer un lien au lieu d'uploader une image
+	const validateCityImageUrl = (url: string) => {
+
+		// on réinitialise les states
+		resetUseState()
+
+		// on efface le fichier, si un fichier a été fournie avant le lien
+		const fileInput = document.getElementById('imageUrl-file') as HTMLInputElement;
+		if (fileInput) {
+			fileInput.value = '';
+		}
+
+		validateUrl(url)
 	}
 
 	const handleAddCitySubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -151,23 +117,99 @@ export default function BackofficeCity() {
 		const formJsonAddCity = Object.fromEntries(formAddCityData.entries())
 	}
 
+	const [editCity, setEditCity] = useState(false);
+	const [editCityId, setEditCityId] = useState(0);
+	const [editCityName, setEditCityName] = useState('');
+	const [editCityDescription, setEditCityDescription] = useState('')
+	const [editImageUrl, setEditImageUrl] = useState('');
+	const [editCityLatitude, setEditCityLatitude] = useState(0);
+	const [editCityLongitude, setEditCityLongitude] = useState(0);
+	const [newCityLatitude, setNewCityLatitude] = useState(0);
+	const [newCityLongitude, setNewCityLongitude] = useState(0)
+	const editCityHandler = (id: string) => {
+		const city = allCitiesData?.getAllCities.find(city => city.cityId === Number(id));
+		if (!city) {
+			console.log("error finding the city")
+			return
+		};
+		setEditCityId(city.cityId)
+		setEditCityName(city.cityName);
+		setEditCityDescription(city.description);
+		setEditImageUrl(city.imageUrl);
+		setEditCityLatitude(city.cityLatitude);
+		setEditCityLongitude(city.cityLongitude);
+		setNewCityLatitude(city.cityLatitude);
+		setNewCityLongitude(city.cityLongitude);
+
+		if (editCityName === '') setEditCity(false)
+		setEditCity(true)
+	}
+
+	const setNewCityLongitudeHandler = (value: number) => {
+		setNewCityLongitude(value)
+		console.log("this is the value of setNewCityLongitudeHandler : ", value)
+		console.log({
+			defaultLongitude: editCityLongitude,
+			newLongitude: newCityLongitude,
+			defaultLatitude: newCityLatitude,
+			newCityLatitude: newCityLatitude
+		})
+	}
+
+	function ChangeMapView({ center, zoom }: { center: [number, number], zoom: number }) {
+		const map = useMap();
+		map.setView(center, zoom);
+		return null;
+	}
+
+	const updateCityHandler = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const form = e.target;
+		const formData = new FormData(form as HTMLFormElement);
+		try {
+			const { data } = await updateCity({
+				variables:
+					{ data: formData as UpdateCityInput, cityId: editCityId }
+
+			})
+			if (!data) throw new Error("Missing data");
+
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	return (
 		<>
 			<h2>Villes</h2>
-			<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>Ajouter une ville</div><div className={"tabBtn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>Administrer une ville</div></div></h3>
+			<div className='tab__container'>
+				<div className={"tab__btn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>
+					<h3>Ajouter une ville</h3>
+				</div>
+				<div className={"tab__btn " + (adminTabCities === 'admin-city' ? 'active' : '')} onClick={() => handleAdminTabCities('admin-city')}>
+					<h3>Administrer une ville</h3>
+				</div>
+			</div>
 
-			{/* ajouter une ville */}
-			{adminTabCities === "createCity" &&
-				<div className="input-field section-part">
+			<div className="backoffice-container">
+				{/* ajouter une ville */}
+				{adminTabCities === "createCity" &&
 					<form onSubmit={handleAddCitySubmit}>
+
 						<label htmlFor="cityName">Nom de la ville
 							<input type="text" name="cityName" placeholder="Lyon" required />
 						</label>
+
 						<label htmlFor="description">Description
-							<input type="text" name="description" placeholder="Une ville de talent..." />
+							<textarea name="description" placeholder="Une ville de talent..." className='description-field'></textarea>
 						</label>
-						<label htmlFor="imageUrl">Image
-							<input type="file" name="imageUrl" placeholder="Image" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={validateImage} />
+
+						<label htmlFor="imageUrl" className='vertical' >Image
+							<div>
+								<input type="file" name="imageUrl" id="imageUrl-file" placeholder="Image" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={validateCityImage} />
+								<span>or</span>
+								<input type="url" name='imageUrl' id="imageUrl-link" placeholder="https://my-image.com" onBlur={(e) => validateCityImageUrl(e.target.value)} />
+							</div>
 							{isImageValid === 'false' &&
 								<div className="img-div"><span className="img-div__error">{imageError}</span></div>
 							}
@@ -189,7 +231,11 @@ export default function BackofficeCity() {
 										/>
 									</svg>
 
-									<span className="img-div__valid">Image valide</span></div>}</label>
+									<span className="img-div__valid">Image valide</span>
+								</div>}
+							{displayImage === true &&
+								<img src={imgSrc} style={{ maxHeight: "300px" }} />}
+						</label>
 						<p>Coordonnées</p>
 						<div className="add-ville-coordonnees">
 							<label htmlFor="cityLatitude">Latitude
@@ -219,23 +265,69 @@ export default function BackofficeCity() {
 							</MapContainer>
 						}
 						{/* <input type="submit">Ajouter la ville</input> */}
-					</form>
-				</div>}
+					</form>}
 
-			{/* administrer une ville */}
-			{adminTabCities === "admin-city" &&
-				<div className="admin-cities section-part">
-					<h3>Administrer une ville</h3>
-					<div className="admin-cities-wrapper">
-						<label htmlFor="select-ville">Choisissez une ville
-							<select name="select-ville">
-								<option>Saint-Loin-Lez-Allouètes</option>
-								<option>Machine Glin-glin</option>
-								<option>Lyon</option>
+				{/* administrer une ville */}
+				{adminTabCities === "admin-city" &&
+					<div className="backoffice-container">
+						<label htmlFor="select-ville">Choisissez une ville à éditer
+							<select name="select-ville" onChange={(e) => editCityHandler(e.target.value)}>
+								{allCitiesData?.getAllCities.map((city) => (
+									<option value={city.cityId} key={city.cityId} defaultValue=''>{city.cityName}</option>
+								))}
 							</select>
 						</label>
-					</div>
-				</div>}
+						{editCity === true &&
+							<div className='backoffice-container relative'>
+								<h4>Editer la ville : {editCityName}</h4>
+								<div className="close" onClick={() => { setEditCity(false); setEditCityName('') }}>
+									<svg height={15} width={15}>
+										<line x1="2" y1="2" x2="10" y2="10" style={{ stroke: "red", strokeWidth: 1 }} />
+										<line x1="
+									2" y1="10" x2="10" y2="2" style={{ stroke: "red", strokeWidth: 1 }} />
+									</svg>
+								</div>
+								<form onSubmit={updateCityHandler}>
+									<label htmlFor='cityName'>Nom de la ville :
+										<input type="text" defaultValue={editCityName} name='cityName' />
+									</label>
+									<label htmlFor='description'>Description de la ville
+										<textarea className='description-field' defaultValue={editCityDescription} name="description" />
+									</label>
+									<label htmlFor='imageUrl' className='vertical'>Image de la ville
+										{editImageUrl !== '' && <img src={editImageUrl} height="300px" width="500px" />}
+										<span>URL de l'image actuelle : {editImageUrl}</span>
+										<input type="file" name="imageUrl" placeholder="Image" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={validateCityImage} />
+									</label>
+									<h5>Coordonnées</h5>
+									<label htmlFor='cityLatitude'>Latitude
+										<span>Ancienne valeure : {editCityLatitude}</span>
+										<input type="number" defaultValue={editCityLatitude} name="cityLatitude" onChange={(e) => { setNewCityLatitude(Number(e.target.value)) }} />
+									</label>
+									<label htmlFor='cityLongitude'>Longitude
+										<span>Ancienne valeure : {editCityLongitude}</span>
+										<input type="number" defaultValue={editCityLongitude} name="cityLongitude" onChange={(e) => { setNewCityLongitudeHandler(Number(e.target.value)) }} />
+									</label>
+									<MapContainer
+										center={[newCityLatitude, newCityLongitude]}
+										zoom={13}
+										style={{ height: '300px', width: '100%' }}
+									>
+										<ChangeMapView center={[newCityLatitude, newCityLongitude]} zoom={13} />
+										<TileLayer
+											url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+											attribution="&copy; OpenStreetMap contributors"
+										/>
+										<Marker position={[newCityLatitude, newCityLongitude]}>
+										</Marker>
+									</MapContainer>
+									<input type="submit" value="Modifier la ville" />
+								</form>
+							</div>
+						}
+					</div>}
+			</div>
+
 		</>
 	)
 }

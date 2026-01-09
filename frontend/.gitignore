@@ -27,3 +27,5 @@ dist-ssr
 .env.stage 
 .env.dev
 .env.prod
+
+./frontend/generated/*

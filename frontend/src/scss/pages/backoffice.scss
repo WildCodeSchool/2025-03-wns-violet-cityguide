@@ -1,5 +1,19 @@
 @use '../variables' as *;
 
+.href-container {
+	@include flex-row; 
+	@include align-center; 
+	width: 100%;
+	gap: 1rem; 
+
+	a {
+		color: inherit; 
+		text-decoration: none; 
+	}
+	a:hover, a:visited {
+		text-decoration: underline;
+	}
+}
 .backoffice {
 	&-banner {
 		@include flex-column;
@@ -11,49 +25,87 @@
 			color: $marron;
 		}
 
-
 	}
-}
 
-.input-field,
-.admin-cities {
-	@include flex-column;
-	padding: 0.8rem;
-	gap: 0.8rem;
-
-	h3 {
-		text-align: center;
-		font-family: $subtitle;
-	}
-}
-
-.input-field {
-	label {
-		display: inline-flex;
-		width: 100%;
-		padding-bottom: 1rem;
+	&-container {
+		@include flex-column;
 		align-items: center;
-	}
+		min-height: 250px; 
+		width: 100%;
+		background-color: $sand;
 
-	input {
-		margin-left: 1rem;
-
-	}
-
-	p {
-		text-align: center
-	}
-
-	.add-ville-coordonnees {
-		@include flex-row;
-		justify-content: space-between;
-
-		@media (max-width: $breakpoint-small) {
+		h2, h3 {
+			text-align: center
+		}
+		
+		form {
 			@include flex-column;
+			text-align: left;
+			justify-content: left;
+			width: 100%;
+			gap: 0.8rem;
+			padding: 0.8rem;
+
+			.description-field {
+				width: 800px; 
+				min-height: 50px; 
+				height: fit-content;
+				display: flex;
+				align-items: start;
+				text-wrap: initial;
+			}
+
+			label {
+				display: inline-flex;
+				width: 100%;
+				padding-bottom: 1rem;
+				align-items: center;
+			}
+
+			input {
+				margin-left: 1rem;
+
+			}
+
+			p {
+				text-align: center
+			}
+
+			input[type="submit"] {
+				height: 40px;
+				max-width: 50%;
+				margin: 0 25%;
+				font-size: 18px;
+				color: $marron; 
+				border-radius: 20px; 
+				border: 1px solid $marron; 
+				background-color: antiquewhite;
+				cursor: pointer;
+
+				&:hover {
+					transition: 1s;
+					background-color: bisque;
+				}
+			}
 		}
 	}
 }
 
+.container-row {
+	padding: 0.8rem;
+	gap:0.8rem; 
+	display: flex; 
+	flex-direction: row; 
+	flex-wrap: wrap;
+}
+.add-ville-coordonnees {
+	@include flex-row;
+	justify-content: space-between;
+
+	@media (max-width: $breakpoint-small) {
+		@include flex-column;
+	}
+}
 
 #admin {
 	section {
@@ -96,10 +148,13 @@
 		color: $marron;
 		font-size: 1rem;
 		font-weight: 500;
+		margin-right: 0.8rem;
 	}
 
-	input[type="text"], input[type="number"],
-	select {
+	input[type="text"],
+	input[type="number"],
+	input[type="url"],
+	select, textarea {
 		background-color: $beige;
 		border: solid 2px $sand;
 		border-radius: 5px;
@@ -113,6 +168,14 @@
 			background-color: $beige;
 		}
 	}
+
+	select {margin-left: 0.8rem}
+
+	textarea {
+		height: fit-content;
+	}
+
+
 	input[type="number"] {
 		min-width: 200px;
 	}
@@ -123,11 +186,6 @@
 
 	::picker(select) {
 		border-radius: 10px;
-	}
-
-	.admin-cities-wrapper {
-		@include flex-column;
-		@include align-center;
 	}
 
 	option:hover,
@@ -155,28 +213,24 @@
 	}
 }
 
-.tabBtn {
-	background-color: $beige;
-	padding: 8px 20px;
-	cursor: pointer;
-	font-weight: 600;
+.tab {
+	&__container {
+		display: inline-flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		gap: 2rem;
+		width: 100%;
+	}
+
+
+	&__btn {
+		background-color: $beige;
+		padding: 8px 20px;
+		cursor: pointer;
+		font-weight: 600;
+	}
 }
 
-.flex-center {
-	display: flex;
-	margin: 1rem;
-	gap: auto;
-	width: 100%;
-	height: fit-content;
-	justify-content: space-evenly;
-	align-items: center;
-}
-
-.flex-column {
-	display: flex;
-	flex-direction: column !important;
-	gap: 20px; 
-}
 
 .active {
 	background-color: $sand;
@@ -184,7 +238,7 @@
 
 .category-tag {
 	padding: .3rem 1rem;
-	position: relative; 
+	position: relative;
 	overflow: hidden;
 	display: flex;
 	align-items: center;
@@ -192,15 +246,15 @@
 	cursor: pointer;
 	height: 30px;
 	min-width: 150px;
-	border-radius: 5px; 
+	border-radius: 5px;
 	gap: 5px;
-	border: 1px solid $marron; 
-	
-	
+	border: 1px solid $marron;
+
+
 	&__pin {
-		width: 20px; 
+		width: 20px;
 		height: 20px;
-		border-radius: 90px; 
+		border-radius: 90px;
 	}
 
 	&:hover {
@@ -208,32 +262,100 @@
 	}
 }
 
+.user-mail {
+	width: 100%;
+	border: 1px solid yellow;
+
+	input {
+		width: 450px;
+	}
+
+	&__content {
+		width: 450px;
+		// border: 1px solid $marron; 
+		border-radius: 0 0 15px 15px;
+		background-color: $light-beige;
+		padding: 0.8rem;
+	}
+
+	&__item {
+		border-bottom: 1px solid lightgrey;
+		padding: .8rem;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&:hover {
+			background-color: beige;
+			cursor: pointer;
+		}
+	}
+}
+
 .img-div {
 	height: 100%;
-	display: inline-flex; 
+	display: inline-flex;
 	align-items: center;
 
 	&__error {
-		color: red; 
+		color: red;
 	}
+
 	&__valid {
-		color: green; 
+		color: green;
 	}
 }
 
-.add-categories {
-	display: flex;
-	flex-direction: column;
-}
-
+.edit-zone,
 .danger-zone {
-	background-color: red;
-	width: 80%;
-	height: 150px;
+	width: 60%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	border-radius: 20px; 
-	gap: 20px; 
+	gap: 20px;
+
+	input[type="submit"],
+	button {
+		background-color: transparent;
+		height: 25px;
+		padding: 1rem 15px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid black;
+		color: black;
+		cursor: pointer;
+		border-radius: 15px;
+	}
+}
+.relative {
+	position: relative;
+}
+.close {
+	position: absolute; 
+	top: 0; 
+	right: 0; 
+	padding: 0.3rem;
+}
+
+.danger-zone {
+	border-radius: 15px;
+	background-color: lightcoral;
+	height: 150px;
+}
+
+.edit-zone {
+	border-radius: 10px;
+	background-color: papayawhip;
+	width: 100%;
+	height: 50px;
+}
+
+.vertical {
+	display: flex;
+	flex-direction: column;
+	align-items: start !important;
 }

@@ -29,7 +29,7 @@ export const SIGNUP = gql`
 	}
 `;
 
-export const LOGIN = gql `
+export const LOGIN = gql`
 	mutation Login($data: UserInput!) {
 	login(data: $data) {
 		token
@@ -69,6 +69,12 @@ export const GET_ONE_CITY = gql`
 		}
 	}
 `;
+
+export const UPDATE_ONE_CITY = gql`
+	mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {		
+		updateCity(data: $data, cityId: $cityId)
+}
+`
 
 export const GET_ALL_POIS = gql`
 	query GetAllPois {
@@ -133,9 +139,17 @@ export const GET_ALL_CATEGORIES = gql`
 		}
 	}
 `
-
 export const CREATE_CATEGORY = gql`
 	mutation CreateCategory($data: CategoryInput!) {
   createCategory(data: $data)
 }
 `
+
+export const UPDATE_CATEGORY = gql`
+	mutation UpdateCategory($data: CategoryInput!, $categoryId: Float!) {
+		updateCategory(data: $data, categoryId: $categoryId)
+	}
+`
+// Users !
+// get all users (for sysadmin)
+// export const GET_ALL_USERS

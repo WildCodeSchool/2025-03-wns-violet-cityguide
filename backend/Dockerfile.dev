@@ -6,9 +6,11 @@ RUN apk --no-cache add curl
 
 # Copie du src locale vers le src du container docker
 COPY src src
+COPY upload-image-service upload-image-service
 
 # Copie des packages files 
 COPY *.json .
+COPY ./upload-image-service/*.json ./upload-image-service
 
 # Installations des dépendances
 RUN npm i

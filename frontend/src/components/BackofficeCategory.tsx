@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useCreateCategoryMutation, useGetAllCategoriesQuery } from "../generated/graphql-types";
+import { useState, type FormEvent } from "react";
+import { useCreateCategoryMutation, useGetAllCategoriesQuery, useUpdateCategoryMutation } from "../generated/graphql-types";
 import useStyleColors from "../pages/backofficeHandler/styleColors";
 
 
 type Category = {
 	categoryName: string,
-	categoryId: number, 
+	categoryId: number,
 	style: string
 }
 
@@ -58,10 +58,12 @@ export default function BackofficeCategory() {
 			console.error('Error creating new category : ', error)
 		}
 	}
+	const [update] = useUpdateCategoryMutation()
 	const [editCategory, setEditCategory] = useState(false);
 	const [editCategoryName, setEditCategoryName] = useState('')
 	const [editCategoryStyle, setEditCategoryStyle] = useState('')
-	const handleEditCategory = (name: string, style: string) => {
+	const [editCategoryId, setEditCategoryId] = useState(0)
+	const handleEditCategory = (name: string, style: string, id: number) => {
 		if (editCategory === true) setEditCategory(false)
 		if (editCategory === false) setEditCategory(true)
 
@@ -71,9 +73,47 @@ export default function BackofficeCategory() {
 			setEditCategory(true)
 			setEditCategoryName(name);
 			setEditCategoryStyle(style);
+			setEditCategoryId(id)
+			//TODO : add resolver here once it's done
 		}
-		//TODO : add resolver here once it's done
 	}
+	const sendEditCategory = async (e: FormEvent) => {
+		e.preventDefault();
+		const form = e.target;
+		console.log("form is : ", form)
+		const formEditCategoryData = new FormData(form as HTMLFormElement);
+		console.log("formEditCategoryData is : ", formEditCategoryData)
+		const fromJsonAddCategory = Object.fromEntries(formEditCategoryData.entries())
+		console.log("formEditCategoryData : ", formEditCategoryData)
+
+		let newCategoryName: string = ''
+		let newCategoryStyle: string = ''
+
+		try {
+			if (fromJsonAddCategory['categoryName'] === editCategoryName) newCategoryName = editCategoryName
+			if (fromJsonAddCategory['style'] === editCategoryStyle) newCategoryStyle = editCategoryStyle
+			const editResult = await update({
+				variables: {
+					data: {
+						categoryName: newCategoryName as string,
+						style: newCategoryStyle as string
+					},
+					categoryId: editCategoryId as number
+				}
+			});
+
+			if (editResult.data) {
+				alert('Category updated ! ')
+				console.log('category : ', editResult.data)
+			}
+			if (editResult.errors) {
+				throw new Error(editResult.errors[0].message);
+			}
+		} catch (error) {
+			console.error('Error updating : ', error)
+		}
+	}
+
 	const [userWantsToDeleteCategory, setUserWantsToDeleteCategory] = useState(false);
 	const handleDeleteCategory = () => {
 		// TODO : add resolver here once it's done
@@ -85,10 +125,18 @@ export default function BackofficeCategory() {
 	return (
 		<>
 			<h2>Catégories</h2>
-			<h3><div style={{ display: "inline-flex", flexDirection: "row", justifyContent: "flex-start", gap: "2rem", width: "100%" }}><div className={"tabBtn " + (adminTabCategories === 'add-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('add-categories')}>Ajouter une catégorie</div><div className={"tabBtn " + (adminTabCategories === 'admin-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('admin-categories')}>Administrer les catégories</div></div></h3>
-			{adminTabCategories === "add-categories" &&
-				<div className="add-categories section-part">
-					<form onSubmit={handleAddCategory} className="flex-column">
+			<div className="tab__container">
+				<div className={"tab__btn " + (adminTabCategories === 'add-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('add-categories')}>
+					<h3>Ajouter une catégorie</h3>
+				</div>
+				<div className={"tab__btn " + (adminTabCategories === 'admin-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('admin-categories')}>
+					<h3>Administrer les catégories</h3>
+				</div>
+			</div>
+
+			<div className="backoffice-container">
+				{adminTabCategories === "add-categories" &&
+					<form onSubmit={handleAddCategory}>
 						<label htmlFor="categoryName">Nom de la catégorie à ajouter
 							<input type="text" name="categoryName" placeholder="Musée, restaurant..." required />
 						</label>
@@ -102,40 +150,59 @@ export default function BackofficeCategory() {
 							</label>
 						}
 						<input type="submit" value="Créer la nouvelle catégorie" />
-					</form>
-				</div>}
+					</form>}
 			{adminTabCategories === 'admin-categories' &&
-				<div className="admin-categories section-part">
+				<div>
 					<label>Sélectionnez une catégorie</label>
-					<div className="flex-center">
+					<div className="container-row">
 						{allCategoriesData &&
 							allCategoriesData?.getAllCategories.map((category: Category) => (
-								<div className="category-tag" key={category.categoryId} onClick={() => handleEditCategory(category.categoryName, category.style)}>
+								<div className="category-tag" key={category.categoryId} onClick={() => handleEditCategory(category.categoryName, category.style, category.categoryId)}>
 									<div className="category-tag__pin" style={{ backgroundColor: category.style }} ></div>
 									<div className="category-tag__name">{category.categoryName}</div>
 								</div>
 							))}
-
 					</div>
+
 					{editCategory === true &&
-						<div className="flex-center input-field">Editer la catégorie
-							<label htmlFor="current-category-name">Nom actuel de la catégorie
-								<input type="text" name="current-category-name" value={editCategoryName} readOnly />
-							</label>
-							<label htmlFor="categoryName">Nouveau nom
-								<input type="text" name="categorName" placeholder={editCategoryName} />
-							</label>
-							<label htmlFor="current-style">Couleur actuelle de la catégorie
-								<div style={{ width: '50px', height: '50px', borderRadius: '90px', backgroundColor: editCategoryStyle }}></div>
-							</label>
-							<label htmlFor="style">Sélectionnez une nouvelle couleure de pin
-								<select name="style">
-									{Object.entries(colors).map(([key, value]) => (
-										<option key={key} value={key} style={{ color: value }}>{key}</option>
-									))}
-								</select>
-							</label>
-							<input type="submit" value="modifier la catégorie" />
+						<div className="backoffice-container relative">
+							<h4>Editer la catégorie</h4>
+							<div className="close" onClick={() => setEditCategory(false)}>
+								<svg height={15} width={15}>
+									<line x1="2" y1="2" x2="10" y2="10" style={{stroke:"red",strokeWidth:1}}/>
+									<line x1="
+									2" y1="10" x2="10" y2="2" style={{stroke:"red",strokeWidth:1}}/>
+								</svg>
+							</div>
+
+							<form onSubmit={sendEditCategory}>
+
+								<label htmlFor="current-category-name">Nom actuel de la catégorie
+									<span>{editCategoryName}</span>
+								</label>
+								
+								<label htmlFor="categoryName">Nouveau nom
+									<input type="text" name="categoryName" placeholder={editCategoryName} />
+								</label>
+
+								<label htmlFor="current-style">Couleur actuelle de la catégorie :
+									<div style={{ width: '25px', height: '25px', borderRadius: '90px', backgroundColor: editCategoryStyle, marginRight:'0.8rem', marginLeft:'0.8rem' }}></div>
+									<span>{editCategoryStyle}</span>
+								</label>
+								
+								<label htmlFor="style">Sélectionnez une nouvelle couleure de pin
+									<select name="style">
+										{Object.entries(colors).map(([key, value]) => (
+											<option key={key} value={key} style={{ color: value }}>{key}</option>
+										))}
+									</select>
+								</label>
+								<div className="edit-zone">
+									<input type="submit" value="modifier la catégorie" />
+								</div>
+							</form>
+
+
 							<hr></hr>
 							<div className="danger-zone">
 								<span style={{ textTransform: 'uppercase' }}>Zone de danger !</span>
@@ -150,6 +217,7 @@ export default function BackofficeCategory() {
 						</div>
 					}
 				</div>}
+			</div>
 		</>
 	)
 }

@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"start": "ts-node-dev ./src/index.ts",
+		"start": "concurrently \"ts-node-dev ./src/index.ts\" \"ts-node-dev ./upload-image-service/server.ts\"",
 		"prod": "node ./build/index.js",
 		"seed": "ts-node ./src/scripts/seed.ts",
 		"seed:clear": "ts-node ./src/scripts/seed.ts --clear",
@@ -15,7 +15,9 @@
 	"description": "",
 	"dependencies": {
 		"@apollo/server": "^5.0.0",
+		"@types/multer": "^2.0.0",
 		"argon2": "^0.43.1",
+		"concurrently": "^9.2.1",
 		"cors": "^2.8.5",
 		"dotenv": "^17.2.1",
 		"express": "^5.1.0",
@@ -24,6 +26,7 @@
 		"graphql-scalars": "^1.24.2",
 		"graphql-upload-ts": "^2.1.3",
 		"jsonwebtoken": "^9.0.2",
+		"multer": "^2.0.2",
 		"pg": "^8.16.3",
 		"reflect-metadata": "^0.2.2",
 		"sharp": "^0.34.5",
