@@ -1,0 +1,86 @@
+@use '../variables' as *;
+
+.faq {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  font-family: $text;
+  color: $marron;
+
+  &__header {
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    font-family: $title;
+    font-size: 2rem;
+    line-height: 1.15;
+    margin: 0 0 8px 0;
+  }
+
+  &__intro {
+    margin: 0;
+    color: $marron, 0.75;
+    line-height: 1.6;
+  }
+
+  &__section {
+    background: $light-beige;
+    border: 1px solid rgba($marron, 0.15);
+    box-shadow: $box-shadow;
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin: 14px 0;
+
+    &--last {
+      margin-bottom: 0;
+    }
+  }
+
+  &__heading {
+    font-family: $subtitle;
+    font-size: 1.3rem;
+    margin: 0 0 10px 0;
+    color: $marron;
+  }
+
+  &__item {
+    background: $beige;
+    border: 1px solid rgba($marron, 0.12);
+    border-radius: 14px;
+    padding: 14px 14px;
+    margin: 12px 0;
+  }
+
+  &__question {
+    font-family: $title;
+    font-size: 1.05rem;
+    margin: 0 0 8px 0;
+  }
+
+  &__answer {
+    margin: 0;
+    line-height: 1.6;
+    color: $marron;
+  }
+
+  &__link {
+    color: $marron;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    &__title {
+      font-size: 1.7rem;
+    }
+
+    &__section {
+      padding: 16px 14px;
+    }
+  }
+}
