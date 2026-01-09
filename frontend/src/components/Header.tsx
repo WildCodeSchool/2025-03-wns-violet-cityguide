@@ -74,8 +74,8 @@ export default function Header() {
 		<header className="header">
 			<div className="header__fullLogo">
 				<Link to="" className="header__brand">
-					<span className="header__logo"><LogoSVG /></span>
-					<span className="header__ou-text"><OuTextSVG /></span>
+					<LogoSVG />
+					<OuTextSVG />
 				</Link>
 			</div>
 
