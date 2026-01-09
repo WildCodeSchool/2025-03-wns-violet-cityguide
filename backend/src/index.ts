@@ -34,6 +34,7 @@ async function startServer() {
 	// Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
 	const schema = await buildSchema({
 
+		// Resolvers ajoutés au schema
 		resolvers: [
 			UserResolver,
 			CityResolver, 
@@ -41,6 +42,9 @@ async function startServer() {
 			PoiResolver,
 			UserInfoResolver,
 		],
+
+		// Permet d'utiliser les outils de validation de class-validator
+		validate: true,
 
 		authChecker: ({context: { user } }, neededRoles: Role[]) => {
 

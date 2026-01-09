@@ -15,25 +15,32 @@ import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context, UserToken } from "../types/Context";
 import { UserInfo } from "../entities/UserInfo";
+import { IsArray, IsEmail, IsString, MinLength } from "class-validator";
 
 // Input de création d'un nouvel utilisateur
 @InputType()
 class NewUserInput {
 	@Field()
-	email: string;
+	@IsEmail()
+	email!: string;
 
 	@Field()
-	password: string;
+	@IsString()
+	@MinLength(7, { message: "Le mot de passe doit comporter au moins 7 caractères." })
+	password!: string;
 }
 
 // Input de "sélection" d'un nouvel utilisateur (pour le login)
 @InputType()
 class UserInput {
 	@Field()
-	email: string;
+	@IsEmail()
+	email!: string;
 
 	@Field()
-	password: string;
+	@IsString()
+	@MinLength(7, { message: "Le mot de passe doit comporter au moins 7 caractères." })
+	password!: string;
 }
 
 // Input de retour attendu pour les mutations (signup, login, logout)
@@ -53,12 +60,14 @@ class UserResponse {
 @InputType()
 class UpdateUserRoleInput {
 	@Field(() => [Role])
+	@IsArray()
 	roles: Role[];
 }
 
 @InputType()
 class UpdateUserDataInput {
 	@Field()
+	@IsEmail()
 	email: string;
 	// TODO voir pour le mot de passe dans un second temps
 }

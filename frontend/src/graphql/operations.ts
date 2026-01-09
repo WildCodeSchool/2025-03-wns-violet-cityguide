@@ -87,6 +87,7 @@ export const GET_ALL_POIS = gql`
 			poiDescription
 			address
 			poiCategory {
+				categoryId
 				style
 				categoryName
 			}
@@ -104,7 +105,9 @@ export const GET_POI_BY_ID = gql`
             externalLink
             imageUrl
             poiCategory {
+				categoryId
                 categoryName
+				style
             }
             poiDescription
             poiId
@@ -122,6 +125,7 @@ query GetPoisByCity($cityId: Float!) {
     externalLink
     imageUrl
     poiCategory {
+		categoryId
       categoryName
 	  style
     }
@@ -153,3 +157,30 @@ export const UPDATE_CATEGORY = gql`
 // Users !
 // get all users (for sysadmin)
 // export const GET_ALL_USERS
+export const GET_POIS_BY_CITY_AND_CATEGORY = gql`
+    query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
+        getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
+            address
+            externalLink
+            imageUrl
+            poiCategory {
+				categoryId
+                style
+                categoryName
+            }
+            poiCity {
+                cityName
+                cityId
+                cityLatitude
+                cityLongitude
+                description
+                imageUrl
+            }
+            poiDescription
+            poiLatitude
+            poiLongitude
+            poiName
+            poiId
+        }
+    }
+`;

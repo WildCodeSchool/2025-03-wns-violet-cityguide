@@ -6,6 +6,10 @@
 @use "components/footer";
 @use "components/cityCard";
 @use "components/carousel";
+@use "components/categorySelect";
+@use "pages/notFound";
+@use "pages/faq";
+@use "pages/legalNotice";
 @use 'variables' as *;
 
 h1 {

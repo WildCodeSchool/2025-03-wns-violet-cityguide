@@ -16,6 +16,8 @@ import City from './pages/City.tsx'
 import Pois from './pages/Pois.tsx'
 import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
+import NotFound from "./pages/NotFound.tsx";
+import Faq from './pages/Faq.tsx';
 
 // Apollo
 import {
@@ -26,7 +28,7 @@ import {
 import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
 
 const client = new ApolloClient({
-	uri: "http://localhost:7000/api",
+	uri: "/api",
 	cache: new InMemoryCache(),
 });
 
@@ -66,10 +68,14 @@ const router = createBrowserRouter([
 				path: '/legalNotice',
 				element: <LegalNotice />,
 			},
-			// {
-			//   path: '*',
-			//   element: <NotFound/>,
-			// },
+			{
+			  path: '*',
+			  element: <NotFound/>,
+			},
+			{
+				path: '/faq',
+				element: <Faq/>,
+			}
 		],
 	},
 ])

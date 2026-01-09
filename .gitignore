@@ -24,9 +24,12 @@ dist-ssr
 *.sw?
 
 .idea
+.env
 .env.prod
 .env.stage
 .env.dev
 persist/
+generated/
+generated/graphql-types.ts
 
 ./frontend/src/generated

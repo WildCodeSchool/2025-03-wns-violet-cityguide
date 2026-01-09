@@ -95,7 +95,7 @@ mutation Signup($data: NewUserInput!) {
 {
 "data": {
 		"cityName": "Paris",
-		"imageUrl": "https://images.pexels.com/photos/1850619/pexels-photo-1850619.jpeg",
+		"imageUrl": "https://media.cntraveller.com/photos/611bed85a86777b29fbc54bc/master/w_2048%2Cc_limit/22_most-instagrammable-places-in-paris-conde-nast-traveller-6nov17-mary-quincy.jpg",
 		"cityLatitude": 48.85889,
 		"cityLongitude": 2.320041,
 		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut congue porta odio, non 		lobortis ante egestas quis. In sem nulla, luctus id venenatis placerat, ultrices id nibh. Donec rhoncus et est id ornare. Integer commodo eget orci at pellentesque. Donec nisi sem, laoreet vel ultrices ut, semper vel elit. Sed imperdiet leo ac posuere tincidunt. Cras elit dolor, gravida ut dapibus in, congue id urna. Etiam iaculis tellus lectus, vulputate tristique ipsum facilisis eget. Aliquam condimentum massa sapien, et ultrices leo dictum eget. Nunc a libero ut tellus tempus cursus sed egestas erat. Curabitur gravida sagittis rhoncus. Nullam sed elit enim. Integer vitae libero rutrum, volutpat ex at, posuere urna. Praesent accumsan dignissim nisi vel congue. Donec ut convallis nibh. Integer pellentesque sem quam, eu commodo lorem sodales id."

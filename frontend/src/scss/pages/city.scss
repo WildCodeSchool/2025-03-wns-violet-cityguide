@@ -1,100 +1,95 @@
 @use '../variables' as *;
 
 .city {
-	position: relative;
+  position: relative;
   background-color: $beige;
   width: 100%;
-  height: calc(100vh - 10rem);
+	height: 100vh;
+  @media (min-width: $breakpoint-medium) {
+	  height: calc(100vh - 10rem);
+  }
 
-	&__search {
-		position: absolute;
-		top: 1rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: start;
-		gap: 1rem;
-		//background-color: $light-beige;
-		//padding: 1rem;
-		border-radius: 10px;
-		border: 2px solid $sand;
-		z-index: 1000;
-		@media (max-width: $breakpoint-medium) {
-			left: 3rem;
-		}
-		@media (min-width: $breakpoint-medium) {
-			left: 6rem;
-		}
-		@media (min-width: $breakpoint-large) {
-			left: 10rem;
-		}
-		&__form {
-			display: flex;
-			flex-direction: row;
-			gap: 1rem;
-			input {
-				border-radius: 5px;
-				border: 2px solid $sand;
-				padding: 0.5rem;
-				font-family: $text;
-				font-weight: bold;
-				font-size: 1.25rem;
-				color: $marron;
-			}
-			button {
-				padding: .5rem 1rem;
-				border: none;
-				border-radius: 5px;
-				color: $marron;
-				background-color: $sand;
-				font-family: $title;
-				font-size: 1.25rem;
-				font-weight: bold;
-				cursor: pointer;
-				transition: background-color .25s ease, color .25s ease, transform .25s ease;
+  &__search {
+    position: absolute;
+    top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 1rem;
+    //background-color: $light-beige;
+    //padding: 1rem;
+    border-radius: 10px;
+    border: 2px solid $sand;
+    z-index: 1003;
+    @media (max-width: $breakpoint-medium) {
+      left: 3rem;
+    }
+    @media (min-width: $breakpoint-medium) {
+      left: 6rem;
+    }
+    @media (min-width: $breakpoint-large) {
+      left: 10rem;
+    }
 
-				&:hover, &:focus-visible {
-					transform: scale(1.02);
-					background-color: $marron;
-					color: $sand;
-					outline: none;
-				}
-			}
-		}
-		&__list {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			gap: 0.25rem;
-			background-color: $light-beige;
-			border-radius: 5px;
-			padding: 0.25rem;
-			margin-top: -1rem;
-			max-height: 8.5rem;
-			overflow-y: auto;
-			&__results {
-				text-decoration: none;
-				list-style-type: none;
-				padding: .5rem 1rem;
-				border: none;
-				border-radius: 5px;
-				font-weight: bold;
-				font-size: 1.25rem;
-				color: $marron;
-				background-color: $light-beige;
-				transition: background-color .25s ease, color .25s ease, transform .25s ease;
-				&:hover, &:focus-visible {
-					transform: scale(1.02);
-					background-color: $marron;
-					color: $sand;
-					outline: none;
-				}
-			}
-		}
-	}
+    &__form {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+
+      input {
+        border-radius: 5px;
+        border: 2px solid $sand;
+        padding: 0.5rem;
+        font-family: $text;
+        font-weight: bold;
+        font-size: 1.25rem;
+        color: $marron;
+        width: 17rem;
+        height: 2.75rem;
+      }
+    }
+
+    &__list {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 0.25rem;
+      background-color: $light-beige;
+      border-radius: 5px;
+      padding: 0.25rem;
+      margin-top: -1rem;
+      max-height: 8.5rem;
+      overflow-y: auto;
+      z-index: 1003;
+
+      &__results {
+        position: relative;
+        text-decoration: none;
+        list-style-type: none;
+        padding: .5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 1.25rem;
+        color: $marron;
+        background-color: $light-beige;
+        z-index: 2;
+        transition: background-color .25s ease, color .25s ease, transform .25s ease;
+
+        &:hover, &:focus-visible {
+          transform: scale(1.02);
+          background-color: $marron;
+          color: $sand;
+          outline: none;
+        }
+      }
+    }
+  }
 
   &__map {
-	position: relative;
+    position: relative;
     width: 100%;
     height: 100%;
 
@@ -105,62 +100,63 @@
   }
 
   &__right-panel {
-	  display: flex;
-	  flex-direction: column;
-	  align-items: center;
-    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30rem;
     max-width: 100%;
-	height: 100%;
+    height: 100%;
     background: $white;
     border-left: 1px solid #e5e7eb;
     padding: 2rem;
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 1000;
-	  color: $marron;
-	  gap: 1rem;
-	  &__header {
-		  width: 100%;
-		display: flex;
-		  flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		  margin-top: 3rem;
-		  gap: 1rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1004;
+    color: $marron;
+    gap: 1rem;
 
-		img {
-			width: 100%;
-			height: auto;
-			max-height: 20rem;
-			object-fit: cover;
-			border-radius: 10px;
-			border: 2px solid $sand;
-		}
-	  }
+    &__header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      gap: 1rem;
 
-	  &__cross {
-		  position: absolute;
-		  top: 1rem;
-		  right: 1rem;
-		  display: inline-flex;
-		  align-items: center;
-		  justify-content: center;
-		  width: 2.25rem;
-		  height: 2.25rem;
-		  border: 0;
-		  background: transparent;
-		  cursor: pointer;
+      img {
+        width: 100%;
+        height: auto;
+        max-height: 20rem;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid $sand;
+      }
+    }
 
-		  &__icon {
-			  color: $marron;
-			  transition: transform .25s ease;
+    &__cross {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
 
-			  &:hover, &:focus-visible {
-				  transform: scale(1.1);
-			  }
-		  }
-	  }
+      &__icon {
+        color: $marron;
+        transition: transform .25s ease;
+
+        &:hover, &:focus-visible {
+          transform: scale(1.1);
+        }
+      }
+    }
   }
 }
 
