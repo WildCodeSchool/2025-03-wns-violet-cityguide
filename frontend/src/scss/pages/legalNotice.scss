@@ -1,0 +1,138 @@
+@use '../variables' as *;
+
+.legalNotice {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  font-family: $text;
+  color: $marron;
+
+  &__header {
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    font-family: $title;
+    color: $marron;
+    font-size: 2rem;
+    line-height: 1.15;
+    margin: 0 0 8px 0;
+  }
+
+  &__intro {
+    margin: 0;
+    color: rgba($marron, 0.75);
+  }
+
+  &__section {
+    background: $light-beige;
+    border: 1px solid rgba($marron, 0.15);
+    box-shadow: $box-shadow;
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin: 14px 0;
+
+    p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    &--last {
+      margin-bottom: 0;
+    }
+  }
+
+  &__heading {
+    font-family: $subtitle;
+    font-size: 1.3rem;
+    margin: 0 0 10px 0;
+    color: $marron;
+  }
+
+  &__list {
+    margin: 12px 0 0 0;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px dashed rgba($marron, 0.25);
+
+    &:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    dt {
+      font-weight: 600;
+      color: $marron;
+    }
+
+    dd {
+      margin: 0;
+      color: $marron;
+      word-break: break-word;
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  &__card {
+    background: $beige;
+    border: 1px solid rgba($marron, 0.12);
+    border-radius: 14px;
+    padding: 14px 14px;
+  }
+
+  &__cardTitle {
+    font-family: $title;
+    font-size: 1.05rem;
+    margin: 0 0 10px 0;
+  }
+
+  &__bullets {
+    margin: 0;
+    padding-left: 18px;
+    line-height: 1.6;
+
+    li {
+      margin: 6px 0;
+    }
+  }
+
+  &__link {
+    color: $marron;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    &__cards {
+      grid-template-columns: 1fr;
+    }
+
+    &__row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+
+      dt {
+        opacity: 0.9;
+      }
+    }
+
+    &__title {
+      font-size: 1.7rem;
+    }
+  }
+}
