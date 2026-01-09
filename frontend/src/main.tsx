@@ -17,7 +17,7 @@ import Pois from './pages/Pois.tsx'
 import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import Faq from './pages/faq.tsx';
+import Faq from './pages/Faq.tsx';
 
 // Apollo
 import {
