@@ -10,11 +10,13 @@ export const useUserStore = create<State & Actions>()(
 		persist(
 			(set) => ({
 				user: null,
+				roles: [],
 				token: null,
 				isAuthenticated: false,
 				login: (profile) =>
 					set({
 						user: profile.user ?? null,
+						roles: profile.roles ?? [],
 						token: profile.token ?? null,
 						isAuthenticated: !!profile.user && !!profile.token,
 					}),
