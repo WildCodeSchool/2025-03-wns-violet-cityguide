@@ -1,9 +1,8 @@
-import multer from "multer";
 import path from "path";
 import * as fs from 'fs';
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
-const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
+const uploadImage = async (req: Request, res: Response) => {
 	console.log('upload image has been called')
 	try {
 		if (!req.file || !req.file.buffer) {
@@ -23,6 +22,7 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
 			url: `upload-image-service/images/${filename}`,
 			filename: filename
 		});
+
 	} catch (error: any) {
 		console.error("L'upload de l'image a échouée", error);
 		res.status(500).json({ error: error.message })
