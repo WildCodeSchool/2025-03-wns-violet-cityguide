@@ -1,6 +1,6 @@
 // React
-import { useEffect } from "react";
-import {  useNavigate } from "react-router-dom";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
 // Components
 import CityCard from "../components/CityCard.tsx";
@@ -13,7 +13,7 @@ import type {CityType} from "./City.tsx";
 
 export default function HomePage() {
     const {data, loading, error} = useGetAllCitiesQuery();
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const windowSize = window.innerWidth;
 
@@ -37,9 +37,9 @@ export default function HomePage() {
 
     const citiesCards = data?.getAllCities ?? [];
 
-	const handleSelectCity = (city: CityType) => {
-		navigate(`/city/${city.cityId}`);
-	};
+    const handleSelectCity = (city: CityType) => {
+        navigate(`/city/${city.cityId}`);
+    };
 
     return (
         <>
@@ -57,8 +57,14 @@ export default function HomePage() {
                         ))}
                     </section>
 
+                ) : windowSize > 1441 ? (
+                    <Carousel visibleCount={5}>
+                        {citiesCards.map((currCity) => (
+                            <CityCard key={currCity.cityId} city={currCity}/>
+                        ))}
+                    </Carousel>
                 ) : (
-                    <Carousel visibleCount={windowSize > 1440 ? 5 : 4}>
+                    <Carousel visibleCount={4}>
                         {citiesCards.map((currCity) => (
                             <CityCard key={currCity.cityId} city={currCity}/>
                         ))}
