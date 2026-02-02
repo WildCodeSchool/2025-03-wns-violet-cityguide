@@ -8,7 +8,7 @@ import SignupHeader from './components/SignupHeader';
 
 export default function App() {
 	const { pathname } = useLocation();
-	const showSignupHeader = pathname === '/' || pathname === '/login' || pathname === '/signup';
+	const showSignupHeader = pathname === '/' || pathname === '/unauthorized' || pathname === '/login' || pathname === '/signup';
 
 	return (
 		<>
