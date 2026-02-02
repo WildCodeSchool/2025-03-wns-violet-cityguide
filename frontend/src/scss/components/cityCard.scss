@@ -54,9 +54,11 @@
 			font-size: 1rem;
 			font-family: $text;
 			color: $marron;
-			//overflow: hidden;
-			//text-overflow: ellipsis;
-			//white-space: nowrap;
+			min-width: 0;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 3;
 		}
 	}
 }
