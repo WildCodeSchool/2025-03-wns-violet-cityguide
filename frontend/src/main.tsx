@@ -19,6 +19,7 @@ import LegalNotice from "./pages/LegalNotice.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Faq from './pages/Faq.tsx';
 import Welcome from './pages/Welcome.tsx';
+import Unauthorized from './pages/Unauthorized';
 
 // Zustand
 import RequireAuth from "./zustand/RequireAuth";
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
 						element: <BackofficeAdmin />,
 					},
 				],
+			},
+			{
+				path: "/unauthorized",
+				element: <Unauthorized/>
 			},
 			{
 				path: '*',
