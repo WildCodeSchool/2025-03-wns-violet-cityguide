@@ -29,7 +29,7 @@ export default function Login() {
 			loginToStore(publicProfile);
 			console.log(`Salut ${publicProfile.user?.email}`);
 
-			path("/");
+			path("/home-page");
 		} catch (error) {
 			console.error(error);
 		}

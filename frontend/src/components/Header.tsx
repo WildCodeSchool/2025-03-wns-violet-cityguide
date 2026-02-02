@@ -45,7 +45,7 @@ export default function Header() {
 
 	const navigateToCities = () => {
 		sessionStorage.setItem("scrollTo", "cities");
-		navigate("/");
+		navigate("/home-page/");
 	};
 
 	// Fermer le menu quand on change de route
@@ -83,13 +83,13 @@ export default function Header() {
 	const onLogout = () => {
 		logout();
 		setOpen(false);
-		navigate("/login");
+		navigate("/");
 	};
 
 	return (
 		<header className="header">
 			<div className="header__fullLogo">
-				<Link to="" className="header__brand">
+				<Link to="/home-page" className="header__brand">
 					<LogoSVG />
 					<OuTextSVG />
 				</Link>
@@ -111,7 +111,7 @@ export default function Header() {
 
 				{/* Nav desktop */}
 				<nav className="header__nav header__nav--desktop" aria-label="Navigation principale">
-					<Link to="">Accueil</Link>
+					<Link to="/home-page">Accueil</Link>
 					<button
 						type="button"
 						onClick={() => {
@@ -147,7 +147,7 @@ export default function Header() {
 					aria-label="Menu"
 				>
 					<nav className="header__nav--mobile">
-						<Link to="">Accueil</Link>
+						<Link to="/home-page">Accueil</Link>
 						<button
 							type="button"
 							onClick={() => {

@@ -33,7 +33,7 @@ export default function Signup() {
 
 			console.log(`Salut ${publicProfile.user?.email}`);
 
-			path("/");
+			path("/home-page");
 		} catch (error) {
 			console.error(error);
 		}

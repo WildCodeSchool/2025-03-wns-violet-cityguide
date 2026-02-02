@@ -18,6 +18,11 @@ import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Faq from './pages/Faq.tsx';
+import Welcome from './pages/Welcome.tsx';
+import Unauthorized from './pages/Unauthorized';
+
+// Zustand
+import RequireAuth from "./zustand/RequireAuth";
 
 // Apollo
 import {
@@ -37,8 +42,9 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: '',
-				element: <HomePage />
+				// à la place de "/" React Router va directement lire cette route comme l'entrée de l'app type index.html
+				index: true,
+				element: <Welcome/>
 			},
 			{
 				path: '/signup',
@@ -49,33 +55,46 @@ const router = createBrowserRouter([
 				element: <Login />,
 			},
 			{
-				path: '/city/:cityId',
-				element: <City />,
-			},
-			{
-				path: '/pois',
-				element: <Pois />,
-			},
-			{
-				path: '/account',
-				element: <Account />,
-			},
-			{
-				path: '/admin',
-				element: <BackofficeAdmin />,
-			},
-			{
 				path: '/legalNotice',
 				element: <LegalNotice />,
 			},
 			{
-			  path: '*',
-			  element: <NotFound/>,
-			},
-			{
 				path: '/faq',
 				element: <Faq/>,
-			}
+			},
+			{
+				element: <RequireAuth />,
+				children: [
+					{
+						path: '/home-page',
+						element: <HomePage />
+					},
+					{
+						path: '/city/:cityId',
+						element: <City />,
+					},
+					{
+						path: '/pois',
+						element: <Pois />,
+					},
+					{
+						path: '/account',
+						element: <Account />,
+					},
+					{
+						path: '/admin',
+						element: <BackofficeAdmin />,
+					},
+				],
+			},
+			{
+				path: "/unauthorized",
+				element: <Unauthorized/>
+			},
+			{
+				path: '*',
+				element: <NotFound/>,
+			},
 		],
 	},
 ])
