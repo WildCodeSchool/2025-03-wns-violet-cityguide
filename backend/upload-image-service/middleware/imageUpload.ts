@@ -12,14 +12,15 @@ const uploadImage = async (req: Request, res: Response) => {
 		const nameWithoutSpace = path.parse(req.file.originalname).name.replace(/ /g, '_');
 		const extension = path.extname(req.file.originalname);
 		const filename = `${nameWithoutSpace}_${Date.now()}${extension}`;
-		const filepath = path.join('./upload-image-service/images', filename)
+		// Save to backend/images directory (two levels up from middleware folder)
+		const filepath = path.join(__dirname, '../../images', filename)
 
 		await fs.promises.writeFile(filepath, req.file.buffer);
 		req.file.filename = filename;
 
 		res.json({
 			success: true,
-			url: `upload-image-service/images/${filename}`,
+			url: `/images/${filename}`,
 			filename: filename
 		});
 
