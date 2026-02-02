@@ -1,0 +1,54 @@
+@use '../variables' as *;
+
+.landing__page {
+	&__buttons {
+		display: flex;
+
+		@media (max-width: $breakpoint-small) {
+			flex-direction: column;
+			align-items: center;
+			margin-bottom: 2rem;
+		}
+
+		@media (min-width: $breakpoint-large) {
+			justify-content: center;
+			margin-bottom: 3.5rem;
+			gap: 2rem;
+		}
+
+		&__button {
+			text-align: center;
+
+			@media (max-width: $breakpoint-small) {
+				margin-top: 1rem;
+			}
+		}
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding: 0 1rem;
+		gap: 1.5rem;
+
+		h3, p {
+			color: $marron;
+		}
+
+		@media (min-width: $breakpoint-large) {
+			h3 {
+				font-size: 1.5rem;
+			}
+
+			p {
+				font-size: 1.25rem;
+			}
+		}
+
+		img {
+			border-radius: 5px;
+		}
+	}
+}

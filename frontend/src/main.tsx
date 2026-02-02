@@ -18,6 +18,7 @@ import Account from './pages/Account.tsx'
 import LegalNotice from "./pages/LegalNotice.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Faq from './pages/Faq.tsx';
+import Welcome from './pages/Welcome.tsx';
 
 // Apollo
 import {
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: '',
+				path: '/',
+				element: <Welcome/>
+			},
+			{
+				path: '/home-page',
 				element: <HomePage />
 			},
 			{
@@ -69,8 +74,8 @@ const router = createBrowserRouter([
 				element: <LegalNotice />,
 			},
 			{
-			  path: '*',
-			  element: <NotFound/>,
+				path: '*',
+				element: <NotFound/>,
 			},
 			{
 				path: '/faq',
