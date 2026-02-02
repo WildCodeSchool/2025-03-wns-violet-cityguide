@@ -232,7 +232,7 @@ export default class UserResolver {
 	}
 
 	// Modification du role d'un utilisateur (Prévoir de rendre possible à l'utilisateur de modifier son mot de passe)
-	@Authorized("ADMIN_SITE")
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
 	@Mutation(() => ID)
 	async updateUserRole(@Arg("userId") userId: number, @Arg("data") data: UpdateUserRoleInput) {
 
