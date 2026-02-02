@@ -10,7 +10,6 @@ export default function Unauthorized() {
 			Veuillez
             <Link to="/login">vous connecter</Link> ou
 			<Link to="/signup">vous inscrire</Link>
-
 		</section>
 	)
 }
