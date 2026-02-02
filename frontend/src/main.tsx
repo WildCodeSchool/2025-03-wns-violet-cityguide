@@ -20,6 +20,9 @@ import NotFound from "./pages/NotFound.tsx";
 import Faq from './pages/Faq.tsx';
 import Welcome from './pages/Welcome.tsx';
 
+// Zustand
+import RequireAuth from "./zustand/RequireAuth";
+
 // Apollo
 import {
 	ApolloClient,
@@ -38,12 +41,8 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: '/',
+				index: true,
 				element: <Welcome/>
-			},
-			{
-				path: '/home-page',
-				element: <HomePage />
 			},
 			{
 				path: '/signup',
@@ -54,33 +53,42 @@ const router = createBrowserRouter([
 				element: <Login />,
 			},
 			{
-				path: '/city/:cityId',
-				element: <City />,
-			},
-			{
-				path: '/pois',
-				element: <Pois />,
-			},
-			{
-				path: '/account',
-				element: <Account />,
-			},
-			{
-				path: '/admin',
-				element: <BackofficeAdmin />,
-			},
-			{
 				path: '/legalNotice',
 				element: <LegalNotice />,
+			},
+			{
+				path: '/faq',
+				element: <Faq/>,
+			},
+			{
+				element: <RequireAuth />,
+				children: [
+					{
+						path: '/home-page',
+						element: <HomePage />
+					},
+					{
+						path: '/city/:cityId',
+						element: <City />,
+					},
+					{
+						path: '/pois',
+						element: <Pois />,
+					},
+					{
+						path: '/account',
+						element: <Account />,
+					},
+					{
+						path: '/admin',
+						element: <BackofficeAdmin />,
+					},
+				],
 			},
 			{
 				path: '*',
 				element: <NotFound/>,
 			},
-			{
-				path: '/faq',
-				element: <Faq/>,
-			}
 		],
 	},
 ])

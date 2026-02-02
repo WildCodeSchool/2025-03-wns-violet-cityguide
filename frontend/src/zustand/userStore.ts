@@ -13,6 +13,7 @@ export const useUserStore = create<State & Actions>()(
 				roles: [],
 				token: null,
 				isAuthenticated: false,
+				isAuthStoreReady: false,
 				login: (profile) =>
 					set({
 						user: profile.user ?? null,
@@ -23,6 +24,11 @@ export const useUserStore = create<State & Actions>()(
 				logout: () => set({ user: null, token: null, isAuthenticated: false }),
 			}), {
 				name: "user-store",
+				onRehydrateStorage: () => (state) => {
+					if (state) {
+						state.isAuthStoreReady = true;
+					}
+				},
 			}
 		)
 	)
