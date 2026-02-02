@@ -41,6 +41,7 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
+				// à la place de "/" React Router va directement lire cette route comme l'entrée de l'app type index.html
 				index: true,
 				element: <Welcome/>
 			},
