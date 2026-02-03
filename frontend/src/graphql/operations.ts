@@ -192,3 +192,9 @@ export const GET_POIS_BY_CITY_AND_CATEGORY = gql`
         }
     }
 `;
+
+export const CREATE_CITY = gql`
+	mutation createCity($data: CreateCityInput!) {
+	createCity(data: $data)
+}
+`

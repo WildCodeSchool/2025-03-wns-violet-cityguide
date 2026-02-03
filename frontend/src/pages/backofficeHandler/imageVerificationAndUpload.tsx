@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const microServiceFetchAddress = 'http://localhost:4322/image-verification'
+const microServiceFetchAddress = 'http://localhost:7000/image-verification'
 const maxSize = 5 * 1024 * 1024 // 5 MB in bytes
 const validType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 

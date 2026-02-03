@@ -1,6 +1,7 @@
 import express from "express";
 import cors from 'cors';
 import multer from "multer";
+import path from "path";
 import { imageValidator } from './middleware/imageValidator';
 import uploadImage from './middleware/imageUpload';
 
@@ -25,12 +26,15 @@ const upload = multer({
 	}
 });
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5173'], // Add your frontend URLs
+  credentials: true
+}));
 app.use(express.json());
 
 // Permet d'accéder à des fichiers statique depuis le repertoire 'image'
 // sans cela, les images ne peuvent pas s'afficher 
-app.use('/images', express.static('./upload-image-service/images'));
+app.use('/images', express.static(path.join(__dirname, '../images')));
 
 app.use(router)
 

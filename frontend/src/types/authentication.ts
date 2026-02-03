@@ -30,6 +30,7 @@ export type State = {
 	roles?: Role[];
   token: string | null;
   isAuthenticated: boolean;
+  isAuthStoreReady: boolean;
 };
 
 export type Actions = {

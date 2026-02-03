@@ -15,7 +15,7 @@ import { useConsentCookies } from './hooks/useCookieConsent';
 
 export default function App() {
 	const { pathname } = useLocation();
-	const showSignupHeader = pathname === '/' || pathname === '/login' || pathname === '/signup';
+	const showSignupHeader = pathname === '/' || pathname === '/unauthorized' || pathname === '/login' || pathname === '/signup';
 
 	// Gestion des cookies pour les préférences globales (avec consentement)
 	const [cookies, setCookie] = useConsentCookies(['cityGuide-theme', 'cityGuide-preferences']);
