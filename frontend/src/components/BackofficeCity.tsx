@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import React, { useState, type FormEvent } from "react"
+import React, { use, useEffect, useState, type FormEvent } from "react"
 import useImageVerificationAndUpload from '../pages/backofficeHandler/imageVerificationAndUpload';
 import { useCityStore } from '../zustand/cityStore';
 import { useCreateCityMutation, useGetAllCitiesQuery, useUpdateOneCityMutation, type City, type CreateCityMutationOptions, type NewUserInput, type UpdateCityInput } from '../generated/graphql-types';
@@ -177,6 +177,43 @@ export default function BackofficeCity() {
 		setEditCity(true)
 	}
 
+	// LA DESCRIPTION
+	// Permet lors du changement de ville à éditer depuis le select, d'obtenir le texte de la description correspondant à la ville choisie
+	const [descriptionUpdate, setDescriptionUpdate] = useState(editCityDescription);
+
+	// Au changement dans le select, on récupère la bonne description
+	useEffect(() => {
+		setDescriptionUpdate(editCityDescription);
+	}, [editCityDescription]);
+
+	// Set des compteurs de caractères
+	const [charCountCreate, setCharCountCreate] = useState(0);
+	const [charCountUpdate, setCharCountUpdate] = useState(editCityDescription.length);
+
+	// Quand la description change, on récupère la nouvelle description + on compte le nombre de caractères saisis
+	const handleDescriptionUpdateChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setDescriptionUpdate(e.target.value);
+		setCharCountUpdate(e.target.value.length);
+	};
+
+	// Compte des caractères de la description pour une création de ville
+	const handleCharCountCreate = (value: string) => {
+		setCharCountCreate(value.length);
+	};
+
+	// RàZ du compteur de caractères de la description de ville lors de sa création lorsqu'on arrive sur l'onglet création de ville
+	useEffect(() => {
+		if (adminTabCities === 'createCity') {
+			setCharCountCreate(0); // remet le compteur à zéro
+		}
+	}, [adminTabCities]);
+
+	// Set le compteur de caractères de la description d'une ville pour sa modification au nombre de caractères de la description actuelle
+	useEffect(() => {
+		setCharCountUpdate(editCityDescription.length);
+	}, [editCityDescription.length]);
+
+	// LATITUDE / LONGITUDE ET VUE SUR LA MAP
 	const setNewCityLongitudeHandler = (value: number) => {
 		setNewCityLongitude(value)
 		console.log("this is the value of setNewCityLongitudeHandler : ", value)
@@ -240,7 +277,15 @@ export default function BackofficeCity() {
 						</label>
 
 						<label htmlFor="description">Description
-							<textarea name="description" placeholder="Une ville de talent..." className='description-field'></textarea>
+							<textarea
+								name="description" 
+								placeholder="Une ville de talent..." 
+								className='description-field' 
+								minLength={ 10 } 
+								maxLength={ 80 } 
+								onChange={(e) => handleCharCountCreate(e.target.value)} 
+							/>
+							<p>{ charCountCreate } / 80</p>
 						</label>
 
 						<label htmlFor="imageUrl" className='vertical' >Image
@@ -331,7 +376,16 @@ export default function BackofficeCity() {
 										<input type="text" defaultValue={editCityName} name='cityName' />
 									</label>
 									<label htmlFor='description'>Description de la ville
-										<textarea className='description-field' defaultValue={editCityDescription} name="description" />
+										<textarea 
+											className='description-field' 
+											value={descriptionUpdate}
+											name="description" 
+											minLength={ 10 } 
+											maxLength={ 80 } 
+											// onChange={ (e) => { handleCharCountUpdate(e.target.value) }}
+											onChange={handleDescriptionUpdateChange}
+										/>
+										<p>{ charCountUpdate } / 80</p>
 									</label>
 									<label htmlFor='imageUrl' className='vertical'>Image de la ville
 										{editImageUrl !== '' && <img src={editImageUrl} height="300px" width="500px" />}

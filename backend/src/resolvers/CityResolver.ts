@@ -14,6 +14,7 @@ import {
 	IsNumber, 
 	IsString, 
 	Max, 
+	MaxLength, 
 	Min, 
 	MinLength
 } from "class-validator";
@@ -32,6 +33,7 @@ class CreateCityInput {
 	@Field()
 	@IsString({ message: "La description de la ville doit être un texte." })
 	@MinLength(10, { message: "La descritpion de la ville doit compter au moins 10 caractères." })
+	@MaxLength(80, { message: "La descritpion de la ville doit compter au maximum 80 caractères." })
 	description!: string;
 	
 	@Field()
