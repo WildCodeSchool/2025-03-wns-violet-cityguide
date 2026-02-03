@@ -50,19 +50,19 @@ const CookieConsent: React.FC = () => {
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: '#2c3e50',
+            backgroundColor: '#eee0cb',
             color: 'white',
             padding: '20px',
             zIndex: 10000,
             boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
-            borderTop: '4px solid #e74c3c'
+            borderTop: '1px solid #342D29FF'
         }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <div style={{ marginBottom: '15px' }}>
-                    <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#ecf0f1' }}>
+                    <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#342D29FF' }}>
                         🍪 Consentement aux cookies requis
                     </h3>
-                    <p style={{ margin: '0 0 15px 0', fontSize: '14px', lineHeight: '1.5' }}>
+                    <p style={{ margin: '0 0 15px 0', fontSize: '14px', lineHeight: '1.5', fontStyle: 'normal', color: '#342D29FF'  }}>
                         <strong>Acceptation obligatoire :</strong> Nous utilisons des cookies pour améliorer votre expérience sur CityGuide. 
                         Ces cookies sont nécessaires au fonctionnement du site, d'autres nous permettent 
                         de sauvegarder vos préférences personnelles. Vous devez accepter au moins les cookies nécessaires pour continuer.
@@ -75,11 +75,11 @@ const CookieConsent: React.FC = () => {
                         marginBottom: '15px',
                         fontSize: '12px'
                     }}>
-                        <div style={{ padding: '8px', backgroundColor: '#34495e', borderRadius: '4px' }}>
+                        <div style={{ padding: '8px', backgroundColor: '#FEFAF1', borderRadius: '4px', fontStyle: 'normal', color: '#342D29FF' }}>
                             <strong>🔒 Nécessaires</strong><br />
                             Authentification, sécurité
                         </div>
-                        <div style={{ padding: '8px', backgroundColor: '#34495e', borderRadius: '4px' }}>
+                        <div style={{ padding: '8px', backgroundColor: '#FEFAF1', borderRadius: '4px', fontStyle: 'normal', color: '#342D29FF'  }}>
                             <strong>⚙️ Préférences</strong><br />
                             Thème, langue, favoris
                         </div>
@@ -133,7 +133,7 @@ const CookieConsent: React.FC = () => {
                             marginLeft: '15px'
                         }}
                     >
-                        En savoir plus
+
                     </a>
                 </div>
             </div>
