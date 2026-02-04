@@ -1,10 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 import SearchBar from "../SearchBar"
 import type { City } from "../../generated/graphql-types"
-import type { CityType } from "../../pages/City";
 import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom"; 
+import "@testing-library/jest-dom";
 
 // Mock useNavigate au niveau du module 
 // On le défini avant le module car sinon vitest va tenter de le redéfinir plusieurs fois, ce qui va engendrer une erreur
@@ -92,9 +91,7 @@ describe('Test unitaire du composant SearchBar', () => {
 	const navigate = mockNavigate
 
 	//fonction implémentée sur la HomePage et utilisée dans la searchBar
-	const handleSelectCity = (city: CityType) => {
-		navigate(`/city/${city.cityId}`);
-	};
+	const handleSelectCity = vi.fn()
 
 	// On nettoie les mocks après chaque tests
 	afterEach(() => {
@@ -106,7 +103,7 @@ describe('Test unitaire du composant SearchBar', () => {
 		// On fait un mock data d'array vide
 		const noCity: Array<City> = []
 
-		const { container }  = render(
+		const { container } = render(
 			<MemoryRouter>
 				<SearchBar
 					cities={noCity}
@@ -117,22 +114,22 @@ describe('Test unitaire du composant SearchBar', () => {
 		)
 
 		// on sélectionne l'input 
-		const cityInput = screen.getByPlaceholderText('Rechercher une ville...'); 
-		
+		const cityInput = screen.getByPlaceholderText('Rechercher une ville...');
+
 		// on vérifie que la liste de villes ne s'affiche pas si aucune valeure est entrée
 		const verifyNoMsg = container.querySelector('.city__search__list')
 		expect(verifyNoMsg).toBeNull()
-		
+
 		// on entre 'abc' dans l'input
 		fireEvent.change(cityInput, {
 			target: {
 				value: "abc"
 			}
 		})
-		
+
 		// on s'attends à ce que l'input enregistre notre précédente entrée
-		expect(cityInput).toHaveValue('abc'); 
-		
+		expect(cityInput).toHaveValue('abc');
+
 		// On vérifie que le message affiché nous informe effectivement qu'aucunes villes a été trouvée
 		const errorMsg = screen.getByText('Aucune ville trouvée')
 		expect(errorMsg).toBeInTheDocument()
@@ -150,7 +147,7 @@ describe('Test unitaire du composant SearchBar', () => {
 			</MemoryRouter>
 		)
 
-		const cityInput = screen.getByPlaceholderText('Rechercher une ville...'); 
+		const cityInput = screen.getByPlaceholderText('Rechercher une ville...');
 
 		fireEvent.change(cityInput, {
 			target: {
@@ -158,9 +155,9 @@ describe('Test unitaire du composant SearchBar', () => {
 			}
 		})
 
-		expect(cityInput).toHaveValue('Test'); 
+		expect(cityInput).toHaveValue('Test');
 
-		const cityName = screen.getAllByRole('listitem'); 
+		const cityName = screen.getAllByRole('listitem');
 		expect(cityName).toHaveLength(7)
 
 		expect(screen.getByText('AbcTest1')).toBeInTheDocument();
@@ -185,7 +182,7 @@ describe('Test unitaire du composant SearchBar', () => {
 			</MemoryRouter>
 		)
 
-		const cityInput = screen.getByPlaceholderText('Rechercher une ville...'); 
+		const cityInput = screen.getByPlaceholderText('Rechercher une ville...');
 
 		fireEvent.change(cityInput, {
 			target: {
@@ -193,10 +190,44 @@ describe('Test unitaire du composant SearchBar', () => {
 			}
 		})
 
-		expect(cityInput).toHaveValue('abc'); 
+		expect(cityInput).toHaveValue('abc');
 
 		const cityList = container.querySelectorAll('.city__search__list')
 
 		expect(cityList[0]).toHaveTextContent('AbcTest1')
+	})
+
+	it('En cliquant sur la ville filtrée, on est redirigée vers le lien correct', () => {
+		render(
+			<MemoryRouter>
+				<SearchBar
+					cities={testCityCards}
+					onSelectCity={handleSelectCity}
+					errorMessage={"Aucune ville trouvée"}
+				/>
+			</MemoryRouter>
+		)
+
+		const cityInput = screen.getByPlaceholderText('Rechercher une ville...');
+
+		fireEvent.change(cityInput, {
+			target: {
+				value: "Ghi"
+			}
+		})
+
+		expect(cityInput).toHaveValue('Ghi');
+		const cityName = screen.getAllByRole('listitem');
+
+
+		expect(cityName[0]).toHaveTextContent('GhiTest3')
+
+		fireEvent.mouseDown(cityName[0])
+
+		expect(handleSelectCity).toHaveBeenCalledTimes(1)
+		expect(handleSelectCity).toHaveBeenCalledWith(
+			expect.objectContaining({ cityId: 3, cityName: 'GhiTest3' })
+		)
+
 	})
 })
