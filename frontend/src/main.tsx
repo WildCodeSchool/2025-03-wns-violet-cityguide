@@ -34,6 +34,7 @@ import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
 
 // Cookies
 import { CookiesProvider } from 'react-cookie';
+import { Role } from './generated/graphql-types.ts';
 
 const client = new ApolloClient({
 	uri: "/api",
@@ -93,7 +94,7 @@ const router = createBrowserRouter([
 			{
 				element: <RequireAuth
 							redirectToWhenLoggedOut={"/"}
-							allowedRoles={["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR"]}
+							allowedRoles={[Role.AdminSite, Role.AdminCity, Role.PoiCreator]}
 						/>,
 				children: [
 					{
