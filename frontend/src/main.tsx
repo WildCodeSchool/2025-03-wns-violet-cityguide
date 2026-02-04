@@ -32,6 +32,9 @@ import {
 } from "@apollo/client";
 import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
 
+// Cookies
+import { CookiesProvider } from 'react-cookie';
+
 const client = new ApolloClient({
 	uri: "/api",
 	cache: new InMemoryCache(),
@@ -101,8 +104,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<ApolloProvider client={client}>
-			<RouterProvider router={router}/>
-		</ApolloProvider>
+		<CookiesProvider>
+			<ApolloProvider client={client}>
+				<RouterProvider router={router}/>
+			</ApolloProvider>
+		</CookiesProvider>
 	</StrictMode>,
 )
