@@ -21,13 +21,16 @@ export const useUserStore = create<State & Actions>()(
 						token: profile.token ?? null,
 						isAuthenticated: !!profile.user && !!profile.token,
 					}),
-				logout: () => set({ user: null, token: null, isAuthenticated: false }),
+				logout: () => set({
+					user: null,
+					roles: [],
+					token: null,
+					isAuthenticated: false,
+				}),
 			}), {
 				name: "user-store",
-				onRehydrateStorage: () => (state) => {
-					if (state) {
-						state.isAuthStoreReady = true;
-					}
+				onRehydrateStorage: () => () => {
+					useUserStore.setState({ isAuthStoreReady: true });
 				},
 			}
 		)

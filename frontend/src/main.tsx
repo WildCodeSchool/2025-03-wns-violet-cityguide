@@ -66,7 +66,7 @@ const router = createBrowserRouter([
 				element: <Faq/>,
 			},
 			{
-				element: <RequireAuth />,
+				element: <RequireAuth redirectToWhenLoggedOut={"/"} />,
 				children: [
 					{
 						path: '/home-page',
@@ -84,6 +84,18 @@ const router = createBrowserRouter([
 						path: '/account',
 						element: <Account />,
 					},
+					{
+						path: '/admin',
+						element: <BackofficeAdmin />,
+					},
+				],
+			},
+			{
+				element: <RequireAuth
+							redirectToWhenLoggedOut={"/"}
+							allowedRoles={["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR"]}
+						/>,
+				children: [
 					{
 						path: '/admin',
 						element: <BackofficeAdmin />,
