@@ -433,6 +433,9 @@ export function useGetAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllUsersQuery, GetAllUsersQueryVariables>(GetAllUsersDocument, options);
         }
+// @ts-ignore
+export function useGetAllUsersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllUsersQuery, GetAllUsersQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllUsersQuery, GetAllUsersQueryVariables>;
+export function useGetAllUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllUsersQuery, GetAllUsersQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllUsersQuery | undefined, GetAllUsersQueryVariables>;
 export function useGetAllUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllUsersQuery, GetAllUsersQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetAllUsersQuery, GetAllUsersQueryVariables>(GetAllUsersDocument, options);
@@ -554,6 +557,9 @@ export function useGetAllCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllCitiesQuery, GetAllCitiesQueryVariables>(GetAllCitiesDocument, options);
         }
+// @ts-ignore
+export function useGetAllCitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllCitiesQuery, GetAllCitiesQueryVariables>;
+export function useGetAllCitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllCitiesQuery | undefined, GetAllCitiesQueryVariables>;
 export function useGetAllCitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetAllCitiesQuery, GetAllCitiesQueryVariables>(GetAllCitiesDocument, options);
@@ -597,6 +603,9 @@ export function useGetOneCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOneCityQuery, GetOneCityQueryVariables>(GetOneCityDocument, options);
         }
+// @ts-ignore
+export function useGetOneCitySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables>): Apollo.UseSuspenseQueryResult<GetOneCityQuery, GetOneCityQueryVariables>;
+export function useGetOneCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables>): Apollo.UseSuspenseQueryResult<GetOneCityQuery | undefined, GetOneCityQueryVariables>;
 export function useGetOneCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOneCityQuery, GetOneCityQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetOneCityQuery, GetOneCityQueryVariables>(GetOneCityDocument, options);
@@ -679,6 +688,9 @@ export function useGetAllPoisLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllPoisQuery, GetAllPoisQueryVariables>(GetAllPoisDocument, options);
         }
+// @ts-ignore
+export function useGetAllPoisSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllPoisQuery, GetAllPoisQueryVariables>;
+export function useGetAllPoisSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllPoisQuery | undefined, GetAllPoisQueryVariables>;
 export function useGetAllPoisSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllPoisQuery, GetAllPoisQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetAllPoisQuery, GetAllPoisQueryVariables>(GetAllPoisDocument, options);
@@ -734,6 +746,9 @@ export function useGetPoiByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetPoiByIdQuery, GetPoiByIdQueryVariables>(GetPoiByIdDocument, options);
         }
+// @ts-ignore
+export function useGetPoiByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoiByIdQuery, GetPoiByIdQueryVariables>;
+export function useGetPoiByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoiByIdQuery | undefined, GetPoiByIdQueryVariables>;
 export function useGetPoiByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoiByIdQuery, GetPoiByIdQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetPoiByIdQuery, GetPoiByIdQueryVariables>(GetPoiByIdDocument, options);
@@ -789,6 +804,9 @@ export function useGetPoisByCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetPoisByCityQuery, GetPoisByCityQueryVariables>(GetPoisByCityDocument, options);
         }
+// @ts-ignore
+export function useGetPoisByCitySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisByCityQuery, GetPoisByCityQueryVariables>;
+export function useGetPoisByCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisByCityQuery | undefined, GetPoisByCityQueryVariables>;
 export function useGetPoisByCitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityQuery, GetPoisByCityQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetPoisByCityQuery, GetPoisByCityQueryVariables>(GetPoisByCityDocument, options);
@@ -830,6 +848,9 @@ export function useGetAllCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(GetAllCategoriesDocument, options);
         }
+// @ts-ignore
+export function useGetAllCategoriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>;
+export function useGetAllCategoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAllCategoriesQuery | undefined, GetAllCategoriesQueryVariables>;
 export function useGetAllCategoriesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>(GetAllCategoriesDocument, options);
@@ -954,6 +975,9 @@ export function useGetPoisByCityAndCategoryLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);
         }
+// @ts-ignore
+export function useGetPoisByCityAndCategorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>;
+export function useGetPoisByCityAndCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisByCityAndCategoryQuery | undefined, GetPoisByCityAndCategoryQueryVariables>;
 export function useGetPoisByCityAndCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<GetPoisByCityAndCategoryQuery, GetPoisByCityAndCategoryQueryVariables>(GetPoisByCityAndCategoryDocument, options);
