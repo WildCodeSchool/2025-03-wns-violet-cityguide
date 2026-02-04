@@ -83,7 +83,7 @@ export default function Header() {
 	const onLogout = () => {
 		logout();
 		setOpen(false);
-		navigate("/");
+		navigate("/", { replace: true });
 	};
 
 	return (
