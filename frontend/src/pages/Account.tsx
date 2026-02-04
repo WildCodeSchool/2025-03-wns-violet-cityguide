@@ -2,18 +2,22 @@
 import { useCurrentUser } from "../zustand/userStore";
 import CookieSettings from "../components/CookieSettings";
 
+// Image
+import img from '../assets/img/en-construction.png';
+
 export default function Account() {
 	const user = useCurrentUser();
 
 	return (
-		<div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+		<div className="account">
 			<h1>Mon compte</h1>
-			<p>Bonjour {user?.email}</p>
+			<h2>Bonjour {user?.email}</h2>
 			
-			<div style={{ marginTop: '30px' }}>
-				<h2>Paramètres de confidentialité</h2>
+			<div className="account_confidentialSettings">
+				<h3>Paramètres de confidentialité</h3>
 				<CookieSettings />
 			</div>
+			<img src={img} alt="image de construction représentant la page account en construction"/>
 		</div>
 	)
 }
