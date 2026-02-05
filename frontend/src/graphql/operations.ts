@@ -162,6 +162,13 @@ export const UPDATE_CATEGORY = gql`
 		updateCategory(data: $data, categoryId: $categoryId)
 	}
 `
+
+export const DELETE_ONE_CATEGORY = gql`
+	mutation DeleteCategory($categoryId: Float!) {
+  		deleteCategory(categoryId: $categoryId)
+}
+`
+
 // Users !
 // get all users (for sysadmin)
 // export const GET_ALL_USERS

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useCreateCategoryMutation, useGetAllCategoriesQuery, useUpdateCategoryMutation } from "../generated/graphql-types";
+import { useCreateCategoryMutation, useDeleteCategoryMutation, useGetAllCategoriesQuery, useUpdateCategoryMutation } from "../generated/graphql-types";
 import useStyleColors from "../pages/backofficeHandler/styleColors";
 
 
@@ -141,12 +141,40 @@ export default function BackofficeCategory() {
 		}
 	}
 
+
+	/**
+	 * Supprime une catégorie
+	 */
+	const [ deleteOneCategory ] = useDeleteCategoryMutation({
+		refetchQueries: ['GetAllCategories']
+	})
 	const [userWantsToDeleteCategory, setUserWantsToDeleteCategory] = useState(false);
 	const handleDeleteCategory = () => {
-		// TODO : add resolver here once it's done
-		console.log('handle delete category has been called !')
 		setUserWantsToDeleteCategory(true)
-		return alert('Attention, supprimer la catégorie peut supprimer les POI qui y sont associé. Assurez-vous que cette catégorie n\'est associé à aucun POI')
+		alert('Attention, si vous surpprimez cette catégorie. Veuillez modifier les poi qui y sont associés. Assurez-vous que cette catégorie n\'est associé à aucun POI')
+	}
+
+	const handleDeleteCategoryQuery = async () => {
+		try {
+			const result = await deleteOneCategory({
+				variables: {
+					categoryId : editCategoryInfo.editId
+				}
+			})
+
+			if (result.data) alert('Categorie supprimée')
+			if (result.errors) throw new Error(result.errors[0].message);
+			setUserWantsToDeleteCategory(false)
+			setEditCategory(false)
+			setEditCategoryInfo({
+				editName: '', 
+				editStyle: '', 
+				editId: 0
+			});
+			
+		} catch (error) {
+			console.error(`La catégorie ${editCategoryInfo.editName} n'a pas pu être supprimé.`, error)
+		}
 	}
 
 	return (
@@ -237,7 +265,7 @@ export default function BackofficeCategory() {
 									{userWantsToDeleteCategory === true &&
 										<>
 											<button onClick={() => setUserWantsToDeleteCategory(false)}>Annuler la suppresion</button>
-											<input type="submit" value={`Confirmer la suppression de la catégorie '${editCategoryInfo.editName}'`} />
+											<button onClick={handleDeleteCategoryQuery}>Confirmer la suppression de la catégorie{editCategoryInfo.editName}</button>
 										</>
 									}
 								</div>
