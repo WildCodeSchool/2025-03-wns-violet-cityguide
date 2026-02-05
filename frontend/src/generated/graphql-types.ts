@@ -382,6 +382,13 @@ export type UpdateCategoryMutationVariables = Exact<{
 
 export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: string };
 
+export type DeleteCategoryMutationVariables = Exact<{
+  categoryId: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: string };
+
 export type GetPoisByCityAndCategoryQueryVariables = Exact<{
   categoryId: Scalars['Float']['input'];
   cityId: Scalars['Float']['input'];
@@ -927,6 +934,86 @@ export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+export const DeleteCategoryDocument = gql`
+    mutation DeleteCategory($categoryId: Float!) {
+  deleteCategory(categoryId: $categoryId)
+}
+    `;
+export type DeleteCategoryMutationFn = Apollo.MutationFunction<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument, options);
+      }
+export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
+export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export const GetPoisFromCategoryDocument = gql`
+    query GetPoisFromCategory {
+  getAllPois {
+    poiCategory {
+      categoryId
+      categoryName
+    }
+    poiCity {
+      cityName
+    }
+    poiName
+  }
+}
+    `;
+
+/**
+ * __useGetPoisFromCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetPoisFromCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPoisFromCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPoisFromCategoryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPoisFromCategoryQuery(baseOptions?: Apollo.QueryHookOptions<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>(GetPoisFromCategoryDocument, options);
+      }
+export function useGetPoisFromCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>(GetPoisFromCategoryDocument, options);
+        }
+// @ts-ignore
+export function useGetPoisFromCategorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>;
+export function useGetPoisFromCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetPoisFromCategoryQuery | undefined, GetPoisFromCategoryQueryVariables>;
+export function useGetPoisFromCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>(GetPoisFromCategoryDocument, options);
+        }
+export type GetPoisFromCategoryQueryHookResult = ReturnType<typeof useGetPoisFromCategoryQuery>;
+export type GetPoisFromCategoryLazyQueryHookResult = ReturnType<typeof useGetPoisFromCategoryLazyQuery>;
+export type GetPoisFromCategorySuspenseQueryHookResult = ReturnType<typeof useGetPoisFromCategorySuspenseQuery>;
+export type GetPoisFromCategoryQueryResult = Apollo.QueryResult<GetPoisFromCategoryQuery, GetPoisFromCategoryQueryVariables>;
 export const GetPoisByCityAndCategoryDocument = gql`
     query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
   getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
