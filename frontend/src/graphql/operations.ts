@@ -71,8 +71,10 @@ export const GET_ONE_CITY = gql`
 `;
 
 export const UPDATE_ONE_CITY = gql`
-	mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {		
-		updateCity(data: $data, cityId: $cityId)
+	mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {
+		updateCity(data: $data, cityId: $cityId) {
+			cityId
+		}
 }
 `
 

@@ -9,7 +9,8 @@ export default function Unauthorized() {
 				à accéder à cette page</p>
 			Veuillez
             <Link to="/login">vous connecter</Link> ou
-			<Link to="/signup">vous inscrire</Link>
+			<Link to="/signup">vous inscrire</Link> ou
+			<Link to="/home-page">retourner sur la page d'accueil</Link>
 		</section>
 	)
 }

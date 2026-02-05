@@ -11,7 +11,7 @@ import {
 } from "type-graphql";
 
 import { 
-	IsNumber, 
+	IsNumber,
 	IsString, 
 	Max, 
 	MaxLength, 
@@ -56,9 +56,15 @@ class CreateCityInput {
 	// createdBy: User;
 }
 
-// Lors de la modification de la ville, on NE doit PAS modifier l'utilisateur créateur de la ville
+// Modification de la ville
 @InputType()
 class UpdateCityInput {
+
+	@Field()
+	@IsString({message: "Le nom de la ville doit être un texte"})
+	@MinLength(2, {message: "Le nom de la ville doit compter au moins 2 caractères"})
+	cityName: string;
+
 	@Field()
 	@IsString({ message: "La description de la ville doit être un texte." })
 	@MinLength(10, { message: "La descritpion de la ville doit compter au moins 10 caractères." })
@@ -67,6 +73,18 @@ class UpdateCityInput {
 	@Field()
 	@IsString()
 	imageUrl: string;
+
+	@Field()
+	@IsNumber()
+	@Min(-90, { message: "La latitude doit être supérieure à -90." })
+	@Max(90, { message: "La longitude doit être inférieure à 90." })
+	cityLatitude!: number;
+
+	@Field()
+	@IsNumber()
+	@Min(-180, { message: "La latitude doit être supérieure à -180." })
+	@Max(180, { message: "La longitude doit être inférieure à 180." })
+	cityLongitude!: number;
 }
 
 @Resolver(City)
@@ -104,7 +122,7 @@ export default class CityResolver {
 
 	// Modifier une ville
 	@Authorized("ADMIN_SITE", "ADMIN_CITY")
-	@Mutation(() => ID)
+	@Mutation(() => City)
 	async updateCity(@Arg("cityId") cityId: number, @Arg("data") data: UpdateCityInput) {
 
 			// Récupérer la ville à partir de l'id fourni
@@ -115,7 +133,7 @@ export default class CityResolver {
 
 			// Sauvegarder les modifications
 			await city.save();
-			return city.cityId;
+			return city;
 	}
 
 	// Supprimer une ville

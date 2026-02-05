@@ -1,7 +1,7 @@
 // React
 import ReactDOM from 'react-dom/client'
-import { StrictMode } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {StrictMode} from 'react'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 
 // Styles
 import 'leaflet/dist/leaflet.css';
@@ -20,106 +20,109 @@ import NotFound from "./pages/NotFound.tsx";
 import Faq from './pages/Faq.tsx';
 import Welcome from './pages/Welcome.tsx';
 import Unauthorized from './pages/Unauthorized';
+import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
 
 // Zustand
 import RequireAuth from "./zustand/RequireAuth";
 
 // Apollo
 import {
-	ApolloClient,
-	InMemoryCache,
-	ApolloProvider,
+    ApolloClient,
+    InMemoryCache,
+    ApolloProvider,
 } from "@apollo/client";
-import BackofficeAdmin from './pages/BackofficeAdmin.tsx';
+import {Role} from './generated/graphql-types.ts';
 
 // Cookies
-import { CookiesProvider } from 'react-cookie';
+import {CookiesProvider} from 'react-cookie';
+import RequireConsent from './components/RequireConsent.tsx'
 
 const client = new ApolloClient({
-	uri: "/api",
-	cache: new InMemoryCache(),
+    uri: "/api",
+    cache: new InMemoryCache(),
 });
 
 const router = createBrowserRouter([
-	{
-		element: <App />,
-		children: [
-			{
-				// à la place de "/" React Router va directement lire cette route comme l'entrée de l'app type index.html
-				index: true,
-				element: <Welcome/>
-			},
-			{
-				path: '/signup',
-				element: <Signup />,
-			},
-			{
-				path: '/login',
-				element: <Login />,
-			},
-			{
-				path: '/legalNotice',
-				element: <LegalNotice />,
-			},
-			{
-				path: '/faq',
-				element: <Faq/>,
-			},
-			{
-				element: <RequireAuth redirectToWhenLoggedOut={"/"} />,
-				children: [
+    {
+        element: <App/>,
+        children: [
+            {
+                // à la place de "/" React Router va directement lire cette route comme l'entrée de l'app type index.html
+                index: true,
+                element: <Welcome/>
+            },
+            {
+                path: '/signup',
+                element: <Signup/>,
+            },
+            {
+                path: '/login',
+                element: <Login/>,
+            },
+            {
+                path: '/legalNotice',
+                element: <LegalNotice/>,
+            },
+            {
+                path: '/faq',
+                element: <Faq/>,
+            },
+            {
+                element: <RequireConsent />,
+                children: [
+                    {
+                        element: <RequireAuth redirectToWhenLoggedOut={"/"}/>,
+                        children: [
+                            {
+                                path: '/home-page',
+                                element: <HomePage/>
+                            },
+                            {
+                                path: '/city/:cityId',
+                                element: <City/>,
+                            },
+                            {
+                                path: '/pois',
+                                element: <Pois/>,
+                            },
+                            {
+                                path: '/account',
+                                element: <Account/>,
+                            },
+                        ],
+                    },
 					{
-						path: '/home-page',
-						element: <HomePage />
-					},
-					{
-						path: '/city/:cityId',
-						element: <City />,
-					},
-					{
-						path: '/pois',
-						element: <Pois />,
-					},
-					{
-						path: '/account',
-						element: <Account />,
-					},
-					{
-						path: '/admin',
-						element: <BackofficeAdmin />,
-					},
-				],
-			},
-			{
-				element: <RequireAuth
+						element: <RequireAuth
 							redirectToWhenLoggedOut={"/"}
-							allowedRoles={["ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR"]}
+							allowedRoles={[Role.AdminSite, Role.AdminCity, Role.PoiCreator]}
 						/>,
-				children: [
-					{
-						path: '/admin',
-						element: <BackofficeAdmin />,
+						children: [
+							{
+								path: '/admin',
+								element: <BackofficeAdmin />,
+							},
+						],
 					},
-				],
-			},
-			{
-				path: "/unauthorized",
-				element: <Unauthorized/>
-			},
-			{
-				path: '*',
-				element: <NotFound/>,
-			},
-		],
-	},
+                ],
+            },
+            {
+                path: "/unauthorized",
+                element: <Unauthorized/>
+            },
+            {
+                path: '*',
+                element: <NotFound/>,
+            },
+        ],
+    },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<StrictMode>
-		<CookiesProvider>
-			<ApolloProvider client={client}>
-				<RouterProvider router={router}/>
-			</ApolloProvider>
-		</CookiesProvider>
-	</StrictMode>,
+    <StrictMode>
+        <CookiesProvider>
+            <ApolloProvider client={client}>
+                <RouterProvider router={router}/>
+            </ApolloProvider>
+        </CookiesProvider>
+    </StrictMode>,
 )
