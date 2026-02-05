@@ -65,7 +65,7 @@ export type Mutation = {
   logout: UserResponse;
   signup: UserResponse;
   updateCategory: Scalars['ID']['output'];
-  updateCity: Scalars['ID']['output'];
+  updateCity: City;
   updatePoi: Scalars['ID']['output'];
   updateUserData: Scalars['ID']['output'];
   updateUserInfo: Scalars['ID']['output'];
@@ -253,6 +253,9 @@ export enum Role {
 }
 
 export type UpdateCityInput = {
+  cityLatitude: Scalars['Float']['input'];
+  cityLongitude: Scalars['Float']['input'];
+  cityName: Scalars['String']['input'];
   description: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
 };
@@ -338,7 +341,7 @@ export type UpdateOneCityMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOneCityMutation = { __typename?: 'Mutation', updateCity: string };
+export type UpdateOneCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', cityId: number } };
 
 export type GetAllPoisQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -616,7 +619,9 @@ export type GetOneCitySuspenseQueryHookResult = ReturnType<typeof useGetOneCityS
 export type GetOneCityQueryResult = Apollo.QueryResult<GetOneCityQuery, GetOneCityQueryVariables>;
 export const UpdateOneCityDocument = gql`
     mutation UpdateOneCity($data: UpdateCityInput!, $cityId: Float!) {
-  updateCity(data: $data, cityId: $cityId)
+  updateCity(data: $data, cityId: $cityId) {
+    cityId
+  }
 }
     `;
 export type UpdateOneCityMutationFn = Apollo.MutationFunction<UpdateOneCityMutation, UpdateOneCityMutationVariables>;
