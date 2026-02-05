@@ -19,8 +19,6 @@ export default function RequireAuth({ allowedRoles, redirectToWhenLoggedOut = "/
 
     if (!isReady) return null;
 
-
-
     if (!isAuthenticated) {
         return <Navigate to={redirectToWhenLoggedOut} replace state={{ from: location }} />;
     }
