@@ -10,7 +10,7 @@ import { useLogin } from "../zustand/userStore";
 
 export default function Login() {
 	// form login
-	const [ login ] = useLoginMutation();
+	const [ doLogin ] = useLoginMutation();
 	const loginToStore = useLogin();
 	const path = useNavigate();
 
@@ -21,7 +21,7 @@ export default function Login() {
 		const formJson = Object.fromEntries(forDate.entries());
 
 		try {
-			const { data } = await login({variables: {data: formJson as NewUserInput}});
+			const { data } = await doLogin({variables: {data: formJson as NewUserInput}});
 
 			if (!data) throw new Error("Missing data");
 
