@@ -95,7 +95,29 @@
 					color: $sand;
 					outline: none;
 				}
+				&:disabled {
+					opacity: 0.5;
+					cursor: not-allowed;
+					&:hover {
+						transform: scale(1);
+						color: $marron;
+						background-color: $sand;
+						outline: none;
+					}
+				}
 			}
 		}
 	}
+}
+
+.validation {
+	color: rgba(76, 173, 76, 0.9);
+	font-size: 0.75rem;
+	font-weight: 500;
+}
+
+.invalide {
+	color: #da3434;
+	font-size: 0.75rem;
+	font-weight: 500;
 }
