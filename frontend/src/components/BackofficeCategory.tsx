@@ -162,6 +162,8 @@ export default function BackofficeCategory() {
 									<div className="category-tag__name">{category.categoryName}</div>
 								</div>
 							))}
+						{!allCategoriesData &&
+						<p>Oups ! Il n'y aucune catégorie à afficher.</p>}
 					</div>
 
 					{editCategory === true &&
