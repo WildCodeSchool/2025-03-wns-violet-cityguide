@@ -1,7 +1,7 @@
 // React
 import type { FormEvent } from "react";
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // GraphQL
 import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
@@ -113,6 +113,7 @@ export default function Signup() {
 						value="S'inscrire"
 						disabled={!isFormValid}
 					/>
+					<Link to="/login" className="link-to-connect">Déjà un compte ? Connectez-vous</Link>
 				</form>
 			</section>
 		</div>
