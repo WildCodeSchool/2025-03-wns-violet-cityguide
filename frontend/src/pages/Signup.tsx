@@ -1,7 +1,7 @@
 // React
 import type { FormEvent } from "react";
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // GraphQL
 import { type NewUserInput, useSignupMutation } from "../generated/graphql-types";
@@ -19,6 +19,7 @@ export default function Signup() {
 	const loginToStore = useLogin();
 	const path = useNavigate();
 	const [password, setPassword] = useState("");
+	const [passwordTouched, setPasswordTouched] = useState(false);
 	const validation = usePasswordValidation(password);
 	const [email, setEmail] = useState("");
 	const emailValidation = useEmailValidation(email);
@@ -94,14 +95,17 @@ export default function Signup() {
 							   name="password"
 							   value={password}
 							   onChange={(e) => setPassword(e.target.value)}
+							   onBlur={() => setPasswordTouched(true)}
 							   required
 						/>
-						<ul>
-							<li className={`${validation.hasMinLength ? "validation" : "invalide"}`}>Contient au moins 7 caractères</li>
-							<li className={`${validation.hasUppercase ? "validation" : "invalide"}`}>Contient au moins une majuscule</li>
-							<li className={`${validation.hasSpecialChar ? "validation" : "invalide"}`}>Contient au moins un caractère spécial</li>
-							<li className={`${validation.hasNumberChar ? "validation" : "invalide"}`}>Contient au moins un chiffre</li>
-						</ul>
+						{passwordTouched && password.length > 0 && (
+							<ul>
+								<li className={`${validation.hasMinLength ? "validation" : "invalide"}`}>Contient au moins 7 caractères</li>
+								<li className={`${validation.hasUppercase ? "validation" : "invalide"}`}>Contient au moins une majuscule</li>
+								<li className={`${validation.hasSpecialChar ? "validation" : "invalide"}`}>Contient au moins un caractère spécial</li>
+								<li className={`${validation.hasNumberChar ? "validation" : "invalide"}`}>Contient au moins un chiffre</li>
+							</ul>
+						)}
 					</div>
 					<input
 						className="signup__card__form__button"
@@ -109,6 +113,7 @@ export default function Signup() {
 						value="S'inscrire"
 						disabled={!isFormValid}
 					/>
+					<Link to="/login" className="link-to-connect">Déjà un compte ? Connectez-vous</Link>
 				</form>
 			</section>
 		</div>
