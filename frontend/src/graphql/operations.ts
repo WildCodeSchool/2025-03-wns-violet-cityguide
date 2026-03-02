@@ -205,6 +205,13 @@ export const ADD_ONE_POI = gql`
   	createPoi(data: $data)
 }
 `
+
+export const EDIT_ONE_POI = gql`
+	mutation EditPoi($data: PoiInput!, $poiId: Float!) {
+  updatePoi(data: $data, poiId: $poiId)
+}
+`
+
 export const DELETE_ONE_POI = gql`
 	mutation DeletePoi($poiId: Float!) {
   deletePoi(poiId: $poiId)
