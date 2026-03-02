@@ -31,7 +31,7 @@ export default function Login() {
 				variables: { data: formJson as NewUserInput }
 			});
 
-			if (!data?.login) throw new Error("LOGIN_FAILED");
+			if (!data?.login) return new Error("LOGIN_FAILED");
 
 			loginToStore(data.login);
 
