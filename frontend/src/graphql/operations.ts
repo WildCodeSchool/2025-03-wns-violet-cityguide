@@ -1,16 +1,12 @@
 import { gql } from "@apollo/client";
 
+// UTILISATEURS
 export const GET_ALL_USERS = gql`
 query GetAllUsers {
 	getAllUsers {
 		userId
 		email
 		roles
-		userInfo {
-			firstName
-			lastName
-			avatarUrl
-		}
 	}
 }
 `;
@@ -42,6 +38,67 @@ export const LOGIN = gql`
 }
 `;
 
+export const GET_USER_BY_ID = gql`
+	query GetUserById($userId: ID!) {
+		getUserById(userId: $userId) {
+			userId
+			email
+			roles
+		}
+	}
+`;
+
+export const UPDATE_USER_ROLE = gql`
+	mutation UpdateUserRole($data: UpdateUserRoleInput!, $userId: Float!) {
+		updateUserRole(data: $data, userId: $userId)
+	}
+`;
+
+// Mail (plus tard password)
+export const UPDATE_USER_DATA = gql`
+	mutation UpdateUserData($data: UpdateUserDataInput!, $userId: Float!) {
+		updateUserData(data: $data, userId: $userId)
+	}
+`;
+
+export const DELETE_USER_BY_ID = gql`
+	mutation DeleteUserByID($userId: Float!) {
+		deleteUser(userId: $userId)
+	}
+`;
+
+export const GET_ALL_USER_INFO = gql`
+	query getAllUserInfos {
+		getAllUserInfos {
+			user {
+				userId
+			}
+			userInfoId
+			firstName
+			lastName
+			avatarUrl
+		}
+	}
+`;
+
+export const GET_USER_INFO_BY_USER_ID = gql`
+	query getUserInfoByUserId($userId: Float!) {
+		getUserInfoByUserId(userId: $userId) {
+			userInfoId
+			firstName
+			lastName
+			avatarUrl
+		}
+	}
+`;
+
+export const UPDATE_USER_INFO = gql`
+	mutation UpdateUserInfo($data: UserInfoInput!, $userInfoId: Float!) {
+		updateUserInfo(data: $data, userInfoId: $userInfoId)
+	}
+`;
+
+// VILLES
 export const GET_ALL_CITIES = gql`
 	query GetAllCities {
 		getAllCities {
@@ -99,24 +156,24 @@ export const GET_ALL_POIS = gql`
 
 export const GET_POI_BY_ID = gql`
 	query GetPoiById($getPoiByIdId: Float!) {
-        getPoiById(id: $getPoiByIdId) {
-            address
-            poiCity {
-                cityId
-            }
-            externalLink
-            imageUrl
-            poiCategory {
+				getPoiById(id: $getPoiByIdId) {
+						address
+						poiCity {
+								cityId
+						}
+						externalLink
+						imageUrl
+						poiCategory {
 				categoryId
-                categoryName
+								categoryName
 				style
-            }
-            poiDescription
-            poiId
-            poiLatitude
-            poiLongitude
-            poiName
-        }
+						}
+						poiDescription
+						poiId
+						poiLatitude
+						poiLongitude
+						poiName
+				}
 	}
 `;
 
@@ -155,7 +212,7 @@ export const GET_ALL_CATEGORIES = gql`
 `
 export const CREATE_CATEGORY = gql`
 	mutation CreateCategory($data: CategoryInput!) {
-  createCategory(data: $data)
+	createCategory(data: $data)
 }
 `
 
@@ -167,7 +224,7 @@ export const UPDATE_CATEGORY = gql`
 
 export const DELETE_ONE_CATEGORY = gql`
 	mutation DeleteCategory($categoryId: Float!) {
-  		deleteCategory(categoryId: $categoryId)
+			deleteCategory(categoryId: $categoryId)
 }
 `
 
@@ -175,31 +232,31 @@ export const DELETE_ONE_CATEGORY = gql`
 // get all users (for sysadmin)
 // export const GET_ALL_USERS
 export const GET_POIS_BY_CITY_AND_CATEGORY = gql`
-    query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
-        getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
-            address
-            externalLink
-            imageUrl
-            poiCategory {
+		query getPoisByCityAndCategory($categoryId: Float!, $cityId: Float!) {
+				getPoisByCityAndCategory(categoryId: $categoryId, cityId: $cityId) {
+						address
+						externalLink
+						imageUrl
+						poiCategory {
 				categoryId
-                style
-                categoryName
-            }
-            poiCity {
-                cityName
-                cityId
-                cityLatitude
-                cityLongitude
-                description
-                imageUrl
-            }
-            poiDescription
-            poiLatitude
-            poiLongitude
-            poiName
-            poiId
-        }
-    }
+								style
+								categoryName
+						}
+						poiCity {
+								cityName
+								cityId
+								cityLatitude
+								cityLongitude
+								description
+								imageUrl
+						}
+						poiDescription
+						poiLatitude
+						poiLongitude
+						poiName
+						poiId
+				}
+		}
 `;
 
 export const CREATE_CITY = gql`
