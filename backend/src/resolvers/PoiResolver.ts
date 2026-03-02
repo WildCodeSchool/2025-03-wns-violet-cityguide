@@ -7,7 +7,8 @@ import {
 	Mutation, 
 	ID, 
 	Arg, 
-	Authorized 
+	Authorized,
+	Int
 } from "type-graphql";
 
 import { 
@@ -61,13 +62,13 @@ class PoiInput {
 	@IsFQDN()
 	externalLink: string;
 
-	@Field(() => ID)
+	@Field(() => Int)
 	@IsNumber()
-	poiCity: City;
+	poiCity: City['cityId'];
 
-	@Field(() => ID)
+	@Field(() => Int)
 	@IsNumber()
-	poiCategory: Category;
+	poiCategory: Category['categoryId'];
 }
 
 @Resolver(Poi)
@@ -132,7 +133,11 @@ export default class PoiResolver {
 	@Authorized("ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR")
 	@Mutation(() => ID)
 	async createPoi(@Arg("data") data: PoiInput) {
-		const poi = Poi.create({...data});
+		const poi = Poi.create({
+			...data,
+			poiCity: { cityId: data.poiCity } as City,
+			poiCategory: { categoryId: data.poiCategory } as Category,
+		});
 		await poi.save();
 		return poi.poiId;
 	}

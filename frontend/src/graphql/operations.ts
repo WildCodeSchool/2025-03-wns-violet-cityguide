@@ -200,6 +200,17 @@ export const GET_POIS_BY_CITY = gql`
 	}
 `;
 
+export const ADD_ONE_POI = gql`
+	mutation CreatePoi($data: PoiInput!) {
+  	createPoi(data: $data)
+}
+`
+export const DELETE_ONE_POI = gql`
+	mutation DeletePoi($poiId: Float!) {
+  deletePoi(poiId: $poiId)
+}
+`
+
 // categorie ! 
 export const GET_ALL_CATEGORIES = gql`
 	query GetAllCategories {
