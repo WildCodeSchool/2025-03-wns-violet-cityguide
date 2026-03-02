@@ -169,6 +169,9 @@ export default function BackofficeUser() {
 	if (errorUser) return <p>Error 😔</p>;
 		if (loadingUserInfo) return <p>Loading User Infos...</p>;
 	if (errorUserInfo) return <p>Error 😔</p>;
+	if (dataUser?.getAllUsers === undefined) {
+		return <p>Erreur : Pas d'utilisateurs trouvés</p>
+	}
 
 	return (
 		<>
@@ -187,7 +190,8 @@ export default function BackofficeUser() {
 							</tr>
 						</thead>
 						<tbody>
-							{ dataUser?.getAllUsers.map((currUser) => (
+							{ dataUser?.getAllUsers ? (
+								dataUser?.getAllUsers.map((currUser) => (
 									<tr key={ currUser.userId }>
 										<td>{ currUser.email }</td>
 										<td>{ currUser.roles.join(', ') }</td>
@@ -231,7 +235,8 @@ export default function BackofficeUser() {
 											</div>
 										</td>
 									</tr>
-								))}
+								))
+							) : (<p>Erreur : Pas d'utilisateurs trouvés</p>)}
 						</tbody>
 					</table>
 
