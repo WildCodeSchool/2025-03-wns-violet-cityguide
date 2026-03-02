@@ -78,17 +78,14 @@ const testCityCards = [
 
 /**
  *Ce que je veux tester : 
- - que le message d'erreur apparait si pas de villes dans la liste 
- - Que la liste prédise le nom de ville charge les bons noms 
- - que le filtre de city fonctionne correctement 
- - que le formulaire soit correctement envoyé
- - vérifier les fonctions sur le input 
+	- que le message d'erreur apparait si pas de villes dans la liste 
+	- Que la liste prédise le nom de ville charge les bons noms 
+	- que le filtre de city fonctionne correctement 
+	- que le formulaire soit correctement envoyé
+	- vérifier les fonctions sur le input 
  */
 
 describe('Test unitaire du composant SearchBar', () => {
-
-	//On mock useNavigate
-	const navigate = mockNavigate
 
 	//fonction implémentée sur la HomePage et utilisée dans la searchBar
 	const handleSelectCity = vi.fn()
