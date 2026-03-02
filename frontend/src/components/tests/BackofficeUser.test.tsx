@@ -2,6 +2,12 @@ import "@testing-library/jest-dom/vitest";
 import { describe, expect, it } from "vitest";
 import { Role } from "../../generated/graphql-types";
 
+
+/**
+ * - Le back office user ne doit pas être accessible à un utilisateur non authentifié
+ * - Le back office user doit être accessible SSI l'utilisateur authentifié possède le rôle Admin Site et/ou Admin City
+ */
+
 describe("Le Backoffice User n'est visible que par les admin site et admin city", () => {
 	const ADMIN_ROLES: Role[] = [Role.AdminSite, Role.AdminCity];
 
