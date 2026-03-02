@@ -11,6 +11,7 @@ import {
 	useGetAllUserInfosQuery
 } from "../generated/graphql-types";
 import { useCurrentUser } from "../zustand/userStore";
+import { GET_ALL_USER_INFO, GET_ALL_USERS } from "../graphql/operations";
 
 export default function BackofficeUser() {
 
@@ -44,9 +45,11 @@ export default function BackofficeUser() {
 		const email = formData.get("email") as string;
 		const firstName = formData.get("firstName") as string;
 		const lastName = formData.get("lastName") as string;
-		const avatarUrl = formData.get("avatarUrl") as string ? formData.get("avatarUrl") as string : "";
+		let avatarUrl = "";
+		if (formData.get("avatarUrl") as string != "") {
+			avatarUrl = formData.get("avatarUrl") as string
+		}
 
-		console.log(avatarUrl);
 		try {
 
 			// Update Role OK
@@ -57,6 +60,9 @@ export default function BackofficeUser() {
 					},
 					userId: userToUpdate.userId,
 				},
+				refetchQueries : [
+					{ query: GET_ALL_USERS }
+				]
 			});
 
 			// Update Mail OK
@@ -67,6 +73,9 @@ export default function BackofficeUser() {
 						},
 						userId: userToUpdate.userId
 				},
+				refetchQueries : [
+					{ query: GET_ALL_USERS }
+				]
 			});
 
 			// Update userInfo OK
@@ -79,9 +88,11 @@ export default function BackofficeUser() {
 					},
 					userInfoId: userToUpdate.userId
 				},
+				refetchQueries : [
+					{ query: GET_ALL_USER_INFO }
+				]
 			});
 
-			console.log("Modification réussie");
 			setUserBeingUpdated(null);
 		} catch {
 		console.error("Erreur lors de la modification de l'utilisateur :", Error);
@@ -333,24 +344,18 @@ export default function BackofficeUser() {
 												<img className="miniature-pp" src={ userInfoToUpdate?.avatarUrl.length ? userInfoToUpdate?.avatarUrl : "/src/assets/img/pp_user_std_carre.jpg"} alt="Photo de profil standard" />
 												<div className="form-update-user__form-body__avatar-inputs__avatars-display__avatar-block__is-success"> </div>
 											</div>
-
-											{/* <div className="form-update-user__form-body__avatar-inputs__avatars-display__avatar-block">
-												<div className="form-update-user__form-body__avatar-inputs__avatars-display__avatar-block__curr-old-info">Nouvel avatar</div>
-												<img className="miniature-pp" src={ userInfoToUpdate?.avatarUrl.length ? userInfoToUpdate?.avatarUrl : "/src/assets/img/pp_user_std_carre.jpg"} alt="Photo de profil standard" />
-												<div className="form-update-user__form-body__avatar-inputs__avatars-display__avatar-block__is-success">Checkmark</div>
-											</div> */}
 										</div>
 
 										{/* Champ saisie nouvelle image */}
 										<div className="form-update-user__form-body__avatar-inputs__form-inputs">
 											<label
 												className="form-update-user__form-body__avatar-inputs__form-inputs__form-body-label"
-												htmlFor="userLastName">Avatar : 
+												htmlFor="avatarUrl">Avatar : 
 											</label>
 											<input
 												type="url"
 												defaultValue={userInfoToUpdate?.avatarUrl}
-												name="avatar"
+												name="avatarUrl"
 												className="form-update-user__form-body__avatar-inputs__form-inputs__form-body-input"
 											/>
 										</div>
