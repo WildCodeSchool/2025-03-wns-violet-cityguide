@@ -206,6 +206,31 @@ export default function BackofficePoi() {
 
 	}
 
+	// Delete the poi
+	type DeletePoiConfirmation = "no" | 'wish' | "yes"
+	const [userConfirmDeletion, setUserConfirmDeletion] = useState<DeletePoiConfirmation>('no')
+	const handleDeletePoi = async (id:number) => {
+		setUserConfirmDeletion('yes'); 
+		try {
+			if (id === 0) throw new Error("Une erreur est survenue lors de la suppression du POI");
+			
+			const { data } = await deletePoi({
+				variables: {
+					poiId: id
+				}, 
+				refetchQueries: [
+					{query:GET_ALL_POIS}
+				], 
+				awaitRefetchQueries: true
+			})
+			if (!data) throw new Error(`Une erreur est survenue lors de la suppression du POI ${poiByIdData?.getPoiById.poiName}`)
+
+			alert('Suppression du POI effectué avec succès !')
+		} catch (error) {
+			console.error('Une erreur inattendue est survenue lors de la suppression du POI', error)
+		}
+	}
+
 	return (
 		<>
 			<h2>Points d'intêret</h2>
@@ -343,7 +368,7 @@ export default function BackofficePoi() {
 				{/* Edition et suppression de POI */}
 				{
 					isCreationPoiTab === "edition-tab" &&
-
+					<>
 					<form onSubmit={handleEditPoi}>
 						<label htmlFor="poiCity">Ajouter un point d'intêret (POI) la ville :
 							<select name="poiCity" required onChange={(e) => setEditPoiCity(Number(e.target.value))} onBlur={() => handlePoiStep(2)}>
@@ -491,6 +516,23 @@ export default function BackofficePoi() {
 						</>
 					}
 					</form>
+
+					{
+						editPoiStep === 3 &&
+						<>
+						<p>Or</p>
+					<button onClick={() => setUserConfirmDeletion('wish')}>Supprimer le point d'intérêt</button>
+					{
+						userConfirmDeletion === 'wish' &&
+						<>
+						<p>Souhaitez-vous supprimer le point d'intérêt ? Attention cette action est irréversible.</p>
+						<button onClick={() => handleDeletePoi(Number(poiByIdData?.getPoiById.poiId))}>Oui, supprimer le point d'intérêt</button>
+						<button onClick={() => setUserConfirmDeletion('no')}>Annuler la suppression</button>
+						</>
+					}
+					</>
+				}
+					</>
 				}
 			</div>
 		</>
