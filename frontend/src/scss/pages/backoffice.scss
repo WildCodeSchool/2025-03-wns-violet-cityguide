@@ -364,3 +364,227 @@
 	display: flex;
 	flex-direction: row;
 }
+
+// USERS
+// Liste des utilisateurs
+.admin-table-users {
+	width: 80%;
+	align-self: center;
+	margin-top: 1.5rem;
+}
+
+thead {
+	font-size: 1.25rem;
+}
+
+thead > tr > th {
+	font-weight: initial;
+	line-height: 3rem;
+	border-bottom: 2px solid $marron;
+}
+
+tr:nth-child(even) {
+  background-color: $sand;
+	line-height: 2.5rem;
+}
+
+td {
+	text-align: center;
+	vertical-align: middle;
+	
+}
+
+// Image
+.td-image {
+	padding-top: 0.6rem;
+}
+
+.miniature-pp {
+	width: 4.5rem;
+	height: 4.5rem;
+}
+
+// Boutons
+.admin-user-td-buttons {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.admin-user-button {
+	padding: 0.25rem;
+	border: 1px solid $marron;
+	border-radius: 5px;
+	background-color: $beige;
+}
+
+.admin-user-button:hover {
+	cursor: pointer;
+}
+
+.delete-alert {
+	padding: 0 0.5rem;
+	border-radius: 5px;
+	border: 1px solid $marron;
+}
+
+.delete-alert:hover {
+	cursor: pointer;
+}
+
+.delete-cancel {
+	background-color: $sand;
+}
+
+.delete-confirm {
+	background-color: lightcoral;
+}
+
+// Formulaire
+.form-update-user {
+	width: 80%;
+	align-self: center;
+	border: 1px solid $marron;
+	background-color: $sand;
+	border-radius: 5px;
+	margin-top: 1rem;
+	padding: 0.75rem;
+
+	display: flex;
+	flex-direction: column;
+
+	&__form-header {
+		display: flex;
+		margin-bottom: 1.5rem;
+
+		&__form-header-title {
+			flex-grow: 3;
+			text-align: center;
+		}
+
+		&__form-header-button {
+			padding: 0.5rem;
+			border-radius: 5px;
+			border: 1px solid $marron;
+			width: 15rem;
+			background-color: lightcoral;
+		}
+	}
+
+	&__form-body {
+		display: flex;
+		flex-direction: row;
+
+		&__infos-without-avatar {
+			display: flex;
+			flex-direction: column;
+
+			&__form-inputs {
+				display: flex;
+				margin-bottom: 0.5rem;
+
+				&__form-body-label {
+					display: block;
+					width: 5rem;
+				}
+
+				&__form-body-input {
+					border: none;
+					background-color: $beige;
+					border-radius: 5px;
+					height: 2rem;
+					width: 30rem;
+					margin-left: 1rem;
+					padding-left: 1rem;
+				}
+
+				&__form-body-checkboxes {
+					display: flex;
+					flex-direction: column;
+					margin-left: 1.95rem;
+
+					&__form-body-checboxes-label {
+						display: block;
+					}
+				}
+			}
+		}
+
+		&__avatar-inputs {
+			margin-left: 1rem;
+			display: flex;
+			flex-direction: column;
+
+			&__avatars-display {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				margin-left: 6rem;
+				margin-bottom: 1rem;
+
+				&__avatar-block {
+					display: flex;
+					flex-direction: column;
+
+					&__curr-old-info {
+						margin-bottom: 1rem;
+						color: #342d29;
+						font-size: 1rem;
+						font-weight: 500;
+					}
+
+					&__is-success {
+						margin-top: 1rem;
+					}
+				}
+				}
+
+
+			&__form-inputs {
+				display: flex;
+				margin-bottom: 0.5rem;
+
+				&__form-body-label {
+					display: block;
+					width: 5rem;
+				}
+
+				&__form-body-input {
+					border: none;
+					background-color: $beige;
+					border-radius: 5px;
+					height: 2rem;
+					width: 30rem;
+					margin-left: 1rem;
+					padding-left: 1rem;
+				}
+			}
+
+		}
+	}
+
+	.user-admin-button:hover {
+		cursor: pointer;
+	}
+
+	.email-input {
+		font-family: "Work sans", sans-serif;
+		font-size: 1rem;
+		font-weight: 500;
+		padding: 0.75rem;
+		border: solid 2px $sand;
+	}
+
+		&__form-footer {
+		display: flex;
+		margin-bottom: 1.5rem;
+		justify-content: end;
+
+		&__form-footer-button {
+			padding: 0.5rem;
+			border-radius: 5px;
+			border: 1px solid $marron;
+			width: 15rem;
+			background-color: mediumseagreen;
+		}
+	}
+}
