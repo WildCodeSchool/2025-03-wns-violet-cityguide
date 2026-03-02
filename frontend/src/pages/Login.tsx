@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 // GraphQL
-import { type NewUserInput, useLoginMutation } from "../generated/graphql-types";
+import { useLoginMutation } from "../generated/graphql-types";
+import { ApolloError } from "@apollo/client";
 
 // Zustand - Context
 import { useLogin } from "../zustand/userStore";
@@ -24,21 +25,44 @@ export default function Login() {
 
 		const form = e.currentTarget;
 		const formData = new FormData(form as HTMLFormElement);
-		const formJson = Object.fromEntries(formData.entries());
+		const email = String(formData.get("email") ?? "");
+		const password = String(formData.get("password") ?? "");
 
 		try {
-			const { data } = await doLogin({
-				variables: { data: formJson as NewUserInput }
+			const result = await doLogin({
+				variables: { data: { email, password } }
 			});
 
-			if (!data?.login) return new Error("LOGIN_FAILED");
+			if (result.errors?.length) {
+				setError("Email ou mot de passe incorrect.");
+				return;
+			}
 
-			loginToStore(data.login);
+			const login = result.data?.login;
+
+			if (!login || !("token" in login) || !login.token) {
+				setError("Email ou mot de passe incorrect.");
+				return;
+			}
+
+			loginToStore(login);
 
 			path("/home-page");
 		} catch (error) {
+			if (error instanceof ApolloError) {
+				// si GraphQL renvoie un message d'erreur
+				const gqlMsg = error.graphQLErrors?.[0]?.message;
+
+				if (gqlMsg === "Argument Validation Error") {
+					setError("Les champs envoyés ne sont pas valides (vérifiez l'email et/ou le mot de passe).");
+					return;
+				}
+
+				setError(gqlMsg ?? "Email ou mot de passe incorrect.");
+				return;
+			}
+
 			setError("Email ou mot de passe incorrect.");
-			console.error(error);
 		}
 	}
 
