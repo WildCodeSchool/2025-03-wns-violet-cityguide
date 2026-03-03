@@ -249,12 +249,12 @@ export default function BackofficePoi() {
 		<>
 			<h2>Points d'intêret</h2>
 			<div className="tab__container">
-				<div className={"tab__btn " + (isCreationPoiTab === 'creation-tab' ? 'active' : '')} onClick={() => changingTabHandler('creation-tab')}>
+				<button className={"tab__btn " + (isCreationPoiTab === 'creation-tab' ? 'active' : '')} onClick={() => changingTabHandler('creation-tab')}>
 					<h3>Créer un nouveau POI</h3>
-				</div>
-				<div className={"tab__btn " + (isCreationPoiTab === 'edition-tab' ? 'active' : '')} onClick={() => changingTabHandler('edition-tab')}>
+				</button>
+				<button className={"tab__btn " + (isCreationPoiTab === 'edition-tab' ? 'active' : '')} onClick={() => changingTabHandler('edition-tab')}>
 					<h3>Administrer un Poi</h3>
-				</div>
+				</button>
 			</div>
 
 			<div className="backoffice__container">
