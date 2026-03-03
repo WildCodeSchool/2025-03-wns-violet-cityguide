@@ -1,9 +1,10 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import React, { useState, type FormEvent } from "react"
-import useImageVerificationAndUpload from '../pages/backofficeHandler/imageVerificationAndUpload';
+import useImageVerificationAndUpload from '../hooks/imageVerificationAndUpload';
 import { useCreateCityMutation, useGetAllCitiesQuery, useUpdateOneCityMutation, type City } from '../generated/graphql-types';
 
 import { GET_ALL_CITIES } from '../graphql/operations';
+import { useCheckCordinates } from '../hooks/useCheckCordinates';
 
 export default function BackofficeCity() {
 
@@ -18,57 +19,21 @@ export default function BackofficeCity() {
 		setAdminTabCities(tab);
 	}
 
-	// LES COORDONNEES ! 
-	// Ceci sont les state nécessaires à montrer et selectionnée les coordonnées de la ville
-	const [mapLatitude, setMapLatitude] = useState(0); //latitude pinnée sur la carte leaflet
-	const [isLatitudeValid, setIsLatitudeValid] = useState(true) // la latitude est validée
-	const [mapLongitude, setMapLongitude] = useState(0); //longitude pinnée sur la carte leaflet
-	const [isLongitudeValid, setIsLongitudeValid] = useState(true); // la longitude est validée
-	const [showMap, setShowMap] = useState(false); // affiche ou non la map leaflet pour afficher les coordonées ci-dessus
-	let coordinateFormatError = "" // le message d'erreur affiché si les coordonnées entrées ne sont pas valides
-
-	// on check les coordonnées input par l'utilisateur
-	const checkCoordinateInput = (e: React.ChangeEvent<HTMLInputElement>, setValid: (valid: boolean) => void, type: string) => {
-		const coordinate = Number(e.target.value);
-
-		if (coordinate) {
-			// coordinate a un type renseigné (string) : "latitude" || "longitude"
-			// on vérifie ici les latitudes et longitudes
-
-			if (type === "latitude") {
-				// la latitude ne peut être comprise que entre 90 et -90
-				if (coordinate <= 90 || coordinate >= -90) {
-					setMapLatitude(coordinate)
-					setIsLatitudeValid(true)
-				} else {
-					setIsLatitudeValid(false)
-					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
-				}
-			} else if (type === "longitude") {
-				if (coordinate <= 180 || coordinate >= -180) {
-					setMapLongitude(coordinate)
-					setIsLongitudeValid(true)
-				} else {
-					setIsLongitudeValid(false)
-					coordinateFormatError = 'Erreur de format. Veuillez choisir une latitude comprise entre 90 et -90 et une longitute comprise en 180 et -180'
-				}
-			} else {
-				coordinateFormatError = "Veuillez renseigner une coordonnée."
-				return setValid(false)
-			}
-			// on lance par la suite une fonction pour afficher la minimap
-			showMapHandler()
-		}
-		return setValid
-	}
-
-	function showMapHandler() {
-		if (!mapLatitude && !mapLongitude) {
-			return setShowMap(false)
-		} else {
-			return setShowMap(true)
-		}
-	}
+	const {
+		cordinatesUseState, 
+		checkCoordinateInput, 
+	} = useCheckCordinates()
+	const {
+		mapLatitude, 
+		isLatitudeValid, 
+		mapLongitude, 
+		isLongitudeValid, 
+		showMap, 
+		coordinateFormatError, 
+		setIsLatitudeValid, 
+		setIsLongitudeValid, 
+		setShowMap
+	} = cordinatesUseState()
 
 	// IMAGES ! 
 	const { resetUseState, imageUploadUseState, validateImageFrontEndSide } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'image

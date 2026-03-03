@@ -1,33 +1,37 @@
-import { useState, type FormEvent, type FormEventHandler } from "react";
-import { useCreatePoiMutation, useDeletePoiMutation, useEditPoiMutation, useGetAllCategoriesQuery, useGetAllCitiesQuery, useGetAllPoisQuery, useGetPoiByIdQuery, useGetPoisByCityQuery } from "../generated/graphql-types";
+import { useState, type FormEvent } from "react";
+import { useCreatePoiMutation, useDeletePoiMutation, useEditPoiMutation, useGetAllCategoriesQuery, useGetAllCitiesQuery, useGetPoiByIdQuery, useGetPoisByCityQuery } from "../generated/graphql-types";
 import "../scss/pages/backoffice.scss";
-import useImageVerificationAndUpload from "../pages/backofficeHandler/imageVerificationAndUpload";
+import useImageVerificationAndUpload from "../hooks/imageVerificationAndUpload";
 import { GET_ALL_POIS } from "../graphql/operations";
+import { useCheckCordinates } from "../hooks/useCheckCordinates";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-type PoiDataType = {
-	address: string,
-	createdAt: Date,
-	externalLink: string,
-	imageUrl: string,
-	poiCategory: number,
-	poiCity: number,
-	poiDescription: string,
-	poiId: number,
-	poiLatitude: number,
-	poiLongitude: number,
-	poiName: string,
-	updateAt: Date
-}
 
 export default function BackofficePoi() {
 
 	// All mutation request and queries
-	const { data: cityData, loading: cityLoading, error: cityError } = useGetAllCitiesQuery();
-	const { data: allCategoriesData, loading: allCategoriesLoading, error: allCategoriesError } = useGetAllCategoriesQuery();
+	const { data: cityData } = useGetAllCitiesQuery();
+	const { data: allCategoriesData } = useGetAllCategoriesQuery();
 
 	const [createPoi] = useCreatePoiMutation();
-	const [udpatePoi] = useEditPoiMutation();
+	const [updatePoi] = useEditPoiMutation();
 	const [deletePoi] = useDeletePoiMutation();
+
+	const {
+		cordinatesUseState,
+		checkCoordinateInput,
+	} = useCheckCordinates()
+	const {
+		mapLatitude,
+		isLatitudeValid,
+		mapLongitude,
+		isLongitudeValid,
+		showMap,
+		coordinateFormatError,
+		setIsLatitudeValid,
+		setIsLongitudeValid,
+		setShowMap
+	} = cordinatesUseState()
 
 
 	// Handle the tabs : create a poi or edit/delete a poi
@@ -54,11 +58,13 @@ export default function BackofficePoi() {
 	}
 
 	// validate the URL so that the backend validator accept it
-	type UrlIsFQDN = '' | 'http' | 'trailing-slash' | 'simply-invalid' | 'valid'
+	type UrlIsFQDN = '' | 'http' | 'trailing-slash' | 'simply-invalid' | 'valid';
 	const [urlIsFQDN, setUrlIsFQDN] = useState<UrlIsFQDN>('');
 	const validateTheDomain = (e: string) => {
 		const string = e
 		setUrlIsFQDN('');
+
+		if (urlIsFQDN === '') return setUrlIsFQDN('');
 
 		const isProtocol = new RegExp(/^(http:\/\/|https:\/\/)/)
 		if (isProtocol.exec(string)) {
@@ -93,7 +99,7 @@ export default function BackofficePoi() {
 
 		const destructuredData = {
 			address: formJsonAddPoi['address'] as string,
-			externalLink: formJsonAddPoi['externalLink'] as string,
+			externalLink: formJsonAddPoi['externalLink'] !== '' ? formJsonAddPoi['externalLink'] as string : '' as string,
 			imageUrl: imgSrc,
 			poiCategory: Number(formJsonAddPoi['poiCategory']),
 			poiCity: Number(formJsonAddPoi['poiCity']),
@@ -131,12 +137,13 @@ export default function BackofficePoi() {
 			})
 			if (!result) throw new Error('Missing data');
 
-			alert('Point d\'intérêt créer avec suscès !');
+			alert('Point d\'intérêt créé avec succès !');
 			form.reset();
 			resetUseState();
+
 		} catch (error) {
 			console.error('Erreur lors de la création du point d\'intérêt', error);
-			alert('Erreur lors de la création du point d\'intérêt')
+			alert('Erreur lors de la création du point d\'intérêt');
 		}
 	}
 
@@ -163,8 +170,9 @@ export default function BackofficePoi() {
 		skip: selectedPoiId === 0
 	})
 	const handleEditPoi = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault(); 
-		const formEditPoi = new FormData(e.currentTarget);
+		e.preventDefault();
+		const form = e.currentTarget; 
+		const formEditPoi = new FormData(form);
 		const formJsonEditPoi = Object.fromEntries(formEditPoi.entries())
 
 		try {
@@ -185,11 +193,11 @@ export default function BackofficePoi() {
 				throw new Error('ID du POI manquant');
 			}
 
-			const { data } = await udpatePoi({
+			const { data } = await updatePoi({
 				variables : {  
 					data: newPoiInformations,
   				 	poiId: poiByIdData.getPoiById.poiId
-				}, 
+				},
 				refetchQueries: [
 					{ query: GET_ALL_POIS}
 				], 
@@ -199,6 +207,10 @@ export default function BackofficePoi() {
 				throw new Error("Erreur lors de la requête d'update du Poi");
 			}
 			alert('Point d\'intérêt modifié avec succès !');
+			form.reset(); 
+			setEditPoiStep(1); 
+			setEditPoiCity(0); 
+			setSelectedPoiId(0); 
 		} catch (error) {
 			alert("Une erreur est survenue lors de l'édition du point d'intérêt")
 			console.error("Une erreur est survenue lors de l'édition du POI", error)
@@ -210,7 +222,7 @@ export default function BackofficePoi() {
 	type DeletePoiConfirmation = "no" | 'wish' | "yes"
 	const [userConfirmDeletion, setUserConfirmDeletion] = useState<DeletePoiConfirmation>('no')
 	const handleDeletePoi = async (id:number) => {
-		setUserConfirmDeletion('yes'); 
+		setUserConfirmDeletion('yes');
 		try {
 			if (id === 0) throw new Error("Une erreur est survenue lors de la suppression du POI");
 			
@@ -225,7 +237,10 @@ export default function BackofficePoi() {
 			})
 			if (!data) throw new Error(`Une erreur est survenue lors de la suppression du POI ${poiByIdData?.getPoiById.poiName}`)
 
-			alert('Suppression du POI effectué avec succès !')
+			alert('Suppression du POI effectué avec succès !'); 
+			setEditPoiStep(1); 
+			setEditPoiCity(0); 
+			setSelectedPoiId(0); 
 		} catch (error) {
 			console.error('Une erreur inattendue est survenue lors de la suppression du POI', error)
 		}
@@ -239,7 +254,7 @@ export default function BackofficePoi() {
 					<h3>Créer un nouveau POI</h3>
 				</div>
 				<div className={"tab__btn " + (isCreationPoiTab === 'edition-tab' ? 'active' : '')} onClick={() => changingTabHandler('edition-tab')}>
-					<h3>Adminisitrer un Poi</h3>
+					<h3>Administrer un Poi</h3>
 				</div>
 			</div>
 
@@ -248,7 +263,7 @@ export default function BackofficePoi() {
 				{/* Create a new POI */}
 				{isCreationPoiTab === 'creation-tab' &&
 					<form onSubmit={handleAddPoi}>
-						<label htmlFor="poiCity">Ajouter un point d'intêret (POI) la ville :
+						<label htmlFor="poiCity">Sélectionner la ville dans laquelle se trouve le POI à modifier
 							<select name="poiCity" required>
 								<option value="">Sélectionnez une ville</option>
 								{cityData?.getAllCities.map((city) => (
@@ -304,7 +319,7 @@ export default function BackofficePoi() {
 						</label>
 
 						<label htmlFor="externalLink">Lien vers le site officiel du point d'intérêt
-							<input type="text" name="externalLink" placeholder="www.official-website.fr" required onBlur={(e) => validateTheDomain(e.target.value)} />
+							<input type="text" name="externalLink" placeholder="www.official-website.fr" onBlur={(e) => validateTheDomain(e.target.value)} />
 							{
 								urlIsFQDN === 'http' && <span>L'URL ne doit pas contenir : https:// ou http://. Veuillez simplement taper dans le format mondomaine.fr ou www.url.fr</span>
 							}
@@ -346,18 +361,37 @@ export default function BackofficePoi() {
 						<div>
 							<h3>Coordonnées</h3>
 							<label htmlFor="poiLongitude">Longitude
-								<input type="number" name="poiLongitude" placeholder="01234" step="any" required min="-180" max="180" />
+								<input type="number" name="poiLongitude" placeholder="48,8575" step="0.000001" required min="-180" max="180" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} />
+								{isLongitudeValid === false && <p>{coordinateFormatError}</p>}
 							</label>
 							<label htmlFor="poiLatitude">Latitude
-								<input type="number" name="poiLatitude" placeholder="01234" step="any" required min="-90" max="90" />
+								<input type="number" name="poiLatitude" placeholder="2.3514" step="0.000001" required min="-90" max="90" onBlur={(e) => checkCoordinateInput(e, setIsLatitudeValid, 'latitude')} />
+								{isLatitudeValid === false && <p>{coordinateFormatError}</p>}
 							</label>
+							{showMap &&
+								<MapContainer
+									center={[mapLatitude, mapLongitude]}
+									zoom={13}
+									style={{ height: '300px', width: '70%', alignSelf: 'center' }}
+								>
+									<TileLayer
+										url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+										attribution="&copy; OpenStreetMap contributors"
+									/>
+									<Marker position={[mapLatitude, mapLongitude]}>
+										<Popup>
+											Salut ! Je suis un marqueur Leaflet dans React.
+										</Popup>
+									</Marker>
+								</MapContainer>
+							}
 						</div>
 						<div>
 							<h3>
 								Description
 							</h3>
 							<label htmlFor="poiDescription">
-								<textarea name="poiDescription" required minLength={10}></textarea>
+								<textarea name="poiDescription" required minLength={10} cols={135}></textarea>
 							</label>
 						</div>
 						<input type="submit" value="valider" />
@@ -369,169 +403,196 @@ export default function BackofficePoi() {
 				{
 					isCreationPoiTab === "edition-tab" &&
 					<>
-					<form onSubmit={handleEditPoi}>
-						<label htmlFor="poiCity">Ajouter un point d'intêret (POI) la ville :
-							<select name="poiCity" required onChange={(e) => setEditPoiCity(Number(e.target.value))} onBlur={() => handlePoiStep(2)}>
-								<option value="">Sélectionnez une ville</option>
-								{cityData?.getAllCities.map((city) => (
-									<option value={city.cityId} key={city.cityId}>{city.cityName}</option>
-								))}
-							</select>
-						</label>
+						<form onSubmit={handleEditPoi}>
+							<label htmlFor="poiCity">Ajouter un point d'intêret (POI) la ville :
+								<select name="poiCity" required onChange={(e) => {
+									const cityId = Number(e.target.value);
+									setEditPoiCity(cityId);
+									if (cityId > 0) handlePoiStep(2); // Only advance if valid city selected
+								}}>
+									<option value="">Sélectionnez une ville</option>
+									{cityData?.getAllCities.map((city) => (
+										<option value={city.cityId} key={city.cityId}>{city.cityName}</option>
+									))}
+								</select>
+							</label>
+
+							{
+								editPoiStep >= 2 &&
+								<label htmlFor="poiId">Point d'intérêt à modifier
+									<select name="poiId" onChange={(e) => {
+										const poiId = Number(e.target.value);
+										setSelectedPoiId(poiId);
+										if (poiId > 0) handlePoiStep(3);
+									}}>
+										<option value=''>Sélectionnez le point d'intérêt</option>
+										{
+											allPoiFromCityData?.getPoisByCity.map((poi) => (
+												<option key={poi.poiId} value={poi.poiId} >
+													{poi.poiName}
+												</option>
+											))
+										}
+									</select></label>
+							}
+
+
+							{
+								editPoiStep === 3 &&
+								<>
+									<label htmlFor="newPoiName">Nouveau nom
+										<input type="text" name="newPoiName" placeholder="Nouveau nom" minLength={2} />
+										<span>Ancien nom : {poiByIdData?.getPoiById.poiName}</span>
+									</label>
+
+									<label htmlFor="newImageUrl" className='vertical' >Nouvelle image
+
+										<div>
+											<input
+												type="file"
+												name="newImageUrl"
+												id="imageUrl-file"
+												placeholder="Image"
+												accept="image/jpeg, image/png, image/jpg, image/webp"
+												onChange={validatePoiImage}
+											/>
+										</div>
+										{isImageValid === 'false' &&
+											<div className="img-div"><span className="img-div__error">{imageError}</span></div>
+										}
+										{isImageValid === 'true' &&
+											<div className="img-div">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="24"
+													height="24"
+													viewBox="0 0 24 24"
+												>
+													<path
+														d="M5 13 L9 17 L19 7"
+														fill="none"
+														stroke="#22c55e"
+														strokeWidth="2.5"
+														strokeLinecap="round"
+														strokeLinejoin="round"
+													/>
+												</svg>
+
+												<span className="img-div__valid">Image valide</span>
+											</div>}
+										{displayImage === true &&
+											<img src={imgSrc} style={{ maxHeight: "300px" }} />}
+										<div>Image actuelle
+											<img src={poiByIdData?.getPoiById.imageUrl} height="300" />
+										</div>
+									</label>
+
+									<label htmlFor="newAddress">Nouvelle adresse du point d'intêret
+										<input type="text" name="newAddress" placeholder="123 Chemin de la Route, Ville-la-ville 012345 France" minLength={10} />
+										<p>Ancienne adress : {poiByIdData?.getPoiById.address}</p>
+									</label>
+
+									<label htmlFor="newExternalLink">Nouveau lien vers le site officiel du point d'intérêt
+										<input type="text" name="newExternalLink" placeholder="www.official-website.fr" onBlur={(e) => validateTheDomain(e.target.value)} />
+										{
+											urlIsFQDN === 'http' && <span>L'URL ne doit pas contenir : https:// ou http://. Veuillez simplement taper dans le format mondomaine.fr ou www.url.fr</span>
+										}
+										{
+											urlIsFQDN === "trailing-slash" && <span>Veuillez enlever le '/' à la fin de votre URL.</span>
+										}
+										{
+											urlIsFQDN === "simply-invalid" && <span>Format de l'URL invalide. Veuillez entrer une URL valide.</span>
+										}
+										{
+											urlIsFQDN === 'valid' && <span>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="24"
+													height="24"
+													viewBox="0 0 24 24"
+												>
+													<path
+														d="M5 13 L9 17 L19 7"
+														fill="none"
+														stroke="#22c55e"
+														strokeWidth="2.5"
+														strokeLinecap="round"
+														strokeLinejoin="round"
+													/>
+												</svg> URL valide</span>
+										}
+										<span>Ancien lien : {poiByIdData?.getPoiById.externalLink}</span>
+									</label>
+
+									<label htmlFor="newPoiCategory">Catégorie du point d'intérêt
+										<select name="newPoiCategory">
+											<option value="">Sélectionnez une catégorie</option>
+											{allCategoriesData?.getAllCategories.map((cat) => (
+												<option value={cat.categoryId} key={cat.categoryId}>{cat.categoryName}</option>
+											))}
+										</select>
+										<span>Ancienne catégorie : {poiByIdData?.getPoiById.poiCategory?.categoryName}</span>
+									</label>
+
+									<div>
+										<h3>Coordonnées</h3>
+										<label htmlFor="newPoiLongitude">Nouvelle longitude
+											<input type="number" name="newPoiLongitude" placeholder="01234" step="any" min="-180" max="180" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} />
+											<span>Ancienne longitude : {poiByIdData?.getPoiById.poiLongitude}</span>
+											{isLongitudeValid === false && <p>{coordinateFormatError}</p>}
+										</label>
+										<label htmlFor="newPoiLatitude">Nouvelle latitude
+											<input type="number" name="newPoiLatitude" placeholder="01234" step="any" min="-90" max="90" onBlur={(e) => checkCoordinateInput(e, setIsLatitudeValid, 'latitude')} />
+											<span>Ancienne latitude : {poiByIdData?.getPoiById.poiLatitude}</span>
+											{isLatitudeValid === false && <p>{coordinateFormatError}</p>}
+										</label>
+										{showMap &&
+											<MapContainer
+												center={[mapLatitude, mapLongitude]}
+												zoom={13}
+												style={{ height: '300px', width: '70%', alignSelf: 'center' }}
+											>
+												<TileLayer
+													url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+													attribution="&copy; OpenStreetMap contributors"
+												/>
+												<Marker position={[mapLatitude, mapLongitude]}>
+													<Popup>
+														Salut ! Je suis un marqueur Leaflet dans React.
+													</Popup>
+												</Marker>
+											</MapContainer>
+										}
+									</div>
+									<div>
+										<h3>
+											Description
+										</h3>
+										<label htmlFor="newPoiDescription">
+											<textarea name="newPoiDescription" minLength={10}></textarea>
+											<p>Ancienne description : {poiByIdData?.getPoiById.poiDescription}</p>
+										</label>
+									</div>
+									<input type="submit" value="valider" />
+								</>
+							}
+						</form>
 
 						{
-							editPoiStep >= 2 &&
-							<label htmlFor="poiId">Point d'intérêt à modifier
-								<select name="poiId" onChange={(e) => setSelectedPoiId(Number(e.target.value))} onBlur={() => handlePoiStep(3)}>
-									<option value=''>Sélectionnez le point d'intérêt</option>
-									{
-										allPoiFromCityData?.getPoisByCity.map((poi) => (
-											<option key={poi.poiId} value={poi.poiId} >
-												{poi.poiName}
-											</option>
-										))
-									}
-								</select></label>
+							editPoiStep === 3 &&
+							<>
+								<p>Or</p>
+								<button onClick={() => setUserConfirmDeletion('wish')}>Supprimer le point d'intérêt</button>
+								{
+									userConfirmDeletion === 'wish' &&
+									<>
+										<p>Souhaitez-vous supprimer le point d'intérêt ? Attention cette action est irréversible.</p>
+										<button onClick={() => handleDeletePoi(Number(poiByIdData?.getPoiById.poiId))}>Oui, supprimer le point d'intérêt</button>
+										<button onClick={() => setUserConfirmDeletion('no')}>Annuler la suppression</button>
+									</>
+								}
+							</>
 						}
-
-
-					{
-						editPoiStep === 3 &&
-						<>
-						<label htmlFor="newPoiName">Nouveau nom
-							<input type="text" name="newPoiName" placeholder="Nouveau nom" required minLength={2} />
-							<span>Ancien nom : {poiByIdData?.getPoiById.poiName}</span>
-						</label>
-
-						<label htmlFor="newImageUrl" className='vertical' >Nouvelle image
-							
-							<div>
-								<input
-									type="file"
-									name="newImageUrl"
-									id="imageUrl-file"
-									placeholder="Image"
-									accept="image/jpeg, image/png, image/jpg, image/webp"
-									onChange={validatePoiImage}
-								/>
-							</div>
-							{isImageValid === 'false' &&
-								<div className="img-div"><span className="img-div__error">{imageError}</span></div>
-							}
-							{isImageValid === 'true' &&
-								<div className="img-div">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-									>
-										<path
-											d="M5 13 L9 17 L19 7"
-											fill="none"
-											stroke="#22c55e"
-											strokeWidth="2.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg>
-
-									<span className="img-div__valid">Image valide</span>
-								</div>}
-							{displayImage === true &&
-								<img src={imgSrc} style={{ maxHeight: "300px" }} />}
-								<div>Image actuelle
-								<img src={poiByIdData?.getPoiById.imageUrl} height="300" />
-							</div>
-						</label>
-
-						<label htmlFor="newAddress">Nouvelle adresse du point d'intêret
-							<input type="text" name="newAddress" placeholder="123 Chemin de la Route, Ville-la-ville 012345 France" required minLength={10} />
-							<p>Ancienne adress : {poiByIdData?.getPoiById.address}</p>
-						</label>
-
-						<label htmlFor="newExternalLink">Nouveau lien vers le site officiel du point d'intérêt
-							<input type="text" name="newExternalLink" placeholder="www.official-website.fr" required onBlur={(e) => validateTheDomain(e.target.value)} />
-							{
-								urlIsFQDN === 'http' && <span>L'URL ne doit pas contenir : https:// ou http://. Veuillez simplement taper dans le format mondomaine.fr ou www.url.fr</span>
-							}
-							{
-								urlIsFQDN === "trailing-slash" && <span>Veuillez enlever le '/' à la fin de votre URL.</span>
-							}
-							{
-								urlIsFQDN === "simply-invalid" && <span>Format de l'URL invalide. Veuillez entrer une URL valide.</span>
-							}
-							{
-								urlIsFQDN === 'valid' && <span>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="24"
-										height="24"
-										viewBox="0 0 24 24"
-									>
-										<path
-											d="M5 13 L9 17 L19 7"
-											fill="none"
-											stroke="#22c55e"
-											strokeWidth="2.5"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										/>
-									</svg> URL valide</span>
-							}
-							<span>Ancien lien : {poiByIdData?.getPoiById.externalLink}</span>
-						</label>
-
-						<label htmlFor="newPoiCategory">Catégorie du point d'intérêt
-							<select name="newPoiCategory" required>
-								<option value="">Sélectionnez une catégorie</option>
-								{allCategoriesData?.getAllCategories.map((cat) => (
-									<option value={cat.categoryId} key={cat.categoryId}>{cat.categoryName}</option>
-								))}
-							</select>
-							<span>Ancienne catégorie : {poiByIdData?.getPoiById.poiCategory?.categoryName}</span>
-						</label>
-
-						<div>
-							<h3>Coordonnées</h3>
-							<label htmlFor="newPoiLongitude">Nouvelle longitude
-								<input type="number" name="newPoiLongitude" placeholder="01234" step="any" required min="-180" max="180" />
-								<span>Ancienne longitude : {poiByIdData?.getPoiById.poiLongitude}</span>
-							</label>
-							<label htmlFor="newPoiLatitude">Nouvelle latitude
-								<input type="number" name="newPoiLatitude" placeholder="01234" step="any" required min="-90" max="90" />
-								<span>Ancienne latitude : {poiByIdData?.getPoiById.poiLatitude}</span>
-							</label>
-						</div>
-						<div>
-							<h3>
-								Description
-							</h3>
-							<label htmlFor="newPoiDescription">
-								<textarea name="newPoiDescription" required minLength={10}></textarea>
-								<p>Ancienne description : {poiByIdData?.getPoiById.poiDescription}</p>
-							</label>
-						</div>
-						<input type="submit" value="valider" />
-						</>
-					}
-					</form>
-
-					{
-						editPoiStep === 3 &&
-						<>
-						<p>Or</p>
-					<button onClick={() => setUserConfirmDeletion('wish')}>Supprimer le point d'intérêt</button>
-					{
-						userConfirmDeletion === 'wish' &&
-						<>
-						<p>Souhaitez-vous supprimer le point d'intérêt ? Attention cette action est irréversible.</p>
-						<button onClick={() => handleDeletePoi(Number(poiByIdData?.getPoiById.poiId))}>Oui, supprimer le point d'intérêt</button>
-						<button onClick={() => setUserConfirmDeletion('no')}>Annuler la suppression</button>
-						</>
-					}
-					</>
-				}
 					</>
 				}
 			</div>
