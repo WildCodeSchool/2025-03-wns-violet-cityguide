@@ -185,8 +185,8 @@ export type PoiInput = {
   address: Scalars['String']['input'];
   externalLink: Scalars['String']['input'];
   imageUrl: Scalars['String']['input'];
-  poiCategory: Scalars['ID']['input'];
-  poiCity: Scalars['ID']['input'];
+  poiCategory: Scalars['Int']['input'];
+  poiCity: Scalars['Int']['input'];
   poiDescription: Scalars['String']['input'];
   poiLatitude: Scalars['Float']['input'];
   poiLongitude: Scalars['Float']['input'];
@@ -424,6 +424,28 @@ export type GetPoisByCityQueryVariables = Exact<{
 
 
 export type GetPoisByCityQuery = { __typename?: 'Query', getPoisByCity: Array<{ __typename?: 'Poi', address: string, externalLink: string, imageUrl: string, poiDescription: string, poiId: number, poiLatitude: number, poiLongitude: number, poiName: string, poiCategory?: { __typename?: 'Category', categoryId: number, categoryName: string, style: string } | null, poiCity: { __typename?: 'City', cityName: string } }> };
+
+export type CreatePoiMutationVariables = Exact<{
+  data: PoiInput;
+}>;
+
+
+export type CreatePoiMutation = { __typename?: 'Mutation', createPoi: string };
+
+export type EditPoiMutationVariables = Exact<{
+  data: PoiInput;
+  poiId: Scalars['Float']['input'];
+}>;
+
+
+export type EditPoiMutation = { __typename?: 'Mutation', updatePoi: string };
+
+export type DeletePoiMutationVariables = Exact<{
+  poiId: Scalars['Float']['input'];
+}>;
+
+
+export type DeletePoiMutation = { __typename?: 'Mutation', deletePoi: string };
 
 export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1151,6 +1173,100 @@ export type GetPoisByCityQueryHookResult = ReturnType<typeof useGetPoisByCityQue
 export type GetPoisByCityLazyQueryHookResult = ReturnType<typeof useGetPoisByCityLazyQuery>;
 export type GetPoisByCitySuspenseQueryHookResult = ReturnType<typeof useGetPoisByCitySuspenseQuery>;
 export type GetPoisByCityQueryResult = Apollo.QueryResult<GetPoisByCityQuery, GetPoisByCityQueryVariables>;
+export const CreatePoiDocument = gql`
+    mutation CreatePoi($data: PoiInput!) {
+  createPoi(data: $data)
+}
+    `;
+export type CreatePoiMutationFn = Apollo.MutationFunction<CreatePoiMutation, CreatePoiMutationVariables>;
+
+/**
+ * __useCreatePoiMutation__
+ *
+ * To run a mutation, you first call `useCreatePoiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePoiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPoiMutation, { data, loading, error }] = useCreatePoiMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreatePoiMutation(baseOptions?: Apollo.MutationHookOptions<CreatePoiMutation, CreatePoiMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePoiMutation, CreatePoiMutationVariables>(CreatePoiDocument, options);
+      }
+export type CreatePoiMutationHookResult = ReturnType<typeof useCreatePoiMutation>;
+export type CreatePoiMutationResult = Apollo.MutationResult<CreatePoiMutation>;
+export type CreatePoiMutationOptions = Apollo.BaseMutationOptions<CreatePoiMutation, CreatePoiMutationVariables>;
+export const EditPoiDocument = gql`
+    mutation EditPoi($data: PoiInput!, $poiId: Float!) {
+  updatePoi(data: $data, poiId: $poiId)
+}
+    `;
+export type EditPoiMutationFn = Apollo.MutationFunction<EditPoiMutation, EditPoiMutationVariables>;
+
+/**
+ * __useEditPoiMutation__
+ *
+ * To run a mutation, you first call `useEditPoiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPoiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPoiMutation, { data, loading, error }] = useEditPoiMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      poiId: // value for 'poiId'
+ *   },
+ * });
+ */
+export function useEditPoiMutation(baseOptions?: Apollo.MutationHookOptions<EditPoiMutation, EditPoiMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditPoiMutation, EditPoiMutationVariables>(EditPoiDocument, options);
+      }
+export type EditPoiMutationHookResult = ReturnType<typeof useEditPoiMutation>;
+export type EditPoiMutationResult = Apollo.MutationResult<EditPoiMutation>;
+export type EditPoiMutationOptions = Apollo.BaseMutationOptions<EditPoiMutation, EditPoiMutationVariables>;
+export const DeletePoiDocument = gql`
+    mutation DeletePoi($poiId: Float!) {
+  deletePoi(poiId: $poiId)
+}
+    `;
+export type DeletePoiMutationFn = Apollo.MutationFunction<DeletePoiMutation, DeletePoiMutationVariables>;
+
+/**
+ * __useDeletePoiMutation__
+ *
+ * To run a mutation, you first call `useDeletePoiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePoiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePoiMutation, { data, loading, error }] = useDeletePoiMutation({
+ *   variables: {
+ *      poiId: // value for 'poiId'
+ *   },
+ * });
+ */
+export function useDeletePoiMutation(baseOptions?: Apollo.MutationHookOptions<DeletePoiMutation, DeletePoiMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePoiMutation, DeletePoiMutationVariables>(DeletePoiDocument, options);
+      }
+export type DeletePoiMutationHookResult = ReturnType<typeof useDeletePoiMutation>;
+export type DeletePoiMutationResult = Apollo.MutationResult<DeletePoiMutation>;
+export type DeletePoiMutationOptions = Apollo.BaseMutationOptions<DeletePoiMutation, DeletePoiMutationVariables>;
 export const GetAllCategoriesDocument = gql`
     query GetAllCategories {
   getAllCategories {

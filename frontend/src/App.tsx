@@ -15,7 +15,8 @@ import { useConsentCookies } from './hooks/useCookieConsent';
 export default function App() {
 	
 	const { pathname } = useLocation();
-	const showSignupHeader = pathname === '/' || pathname === '/unauthorized' || pathname === '/login' || pathname === '/signup';
+	const showSignupHeader = pathname === '/unauthorized' || pathname === '/login' || pathname === '/signup';
+	const isWelcomePage =  pathname === '/' ; 
 
 	// Gestion des cookies pour les préférences globales (avec consentement)
 	const [cookies, setCookie] = useConsentCookies(['cityGuide-theme', 'cityGuide-preferences']);
@@ -39,7 +40,9 @@ export default function App() {
 
 	return (
 		<>
-			{showSignupHeader ? <SignupHeader /> : <Header />}
+	{
+    !isWelcomePage && (showSignupHeader ? <SignupHeader /> : <Header />)
+}	
 			<Outlet context={{ toggleTheme, theme: cookies['cityGuide-theme'] }} />
 			<Footer />
 			<CookieConsent />
