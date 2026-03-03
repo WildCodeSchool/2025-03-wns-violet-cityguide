@@ -11,6 +11,9 @@ import { useCityStore, useCityAllPoiStore, useCityCategoryStore } from "../zusta
 // Types
 import type { City, Poi } from "../types/CityType";
 
+// Component
+import PoiMarker from "./PoiMarker";
+
 // Fonction pour générer une icône colorée
 function createColoredIcon(color: string) {
     return L.divIcon({
@@ -75,18 +78,7 @@ export default function Map() {
 
                     {/* Marqueur du Poi */}
                     {pois?.map((poi) => (
-                        <Marker
-                            key={poi.poiId}
-                            position={[poi.poiLatitude, poi.poiLongitude]}
-                            icon={createColoredIcon(poi.poiCategory?.style)}
-                            eventHandlers={{
-                                click: () => {
-                                    setSelectedPoi(poi);
-                                },
-                            }}
-                        >
-                            <Popup>{poi.poiName}</Popup>
-                        </Marker>
+                        <PoiMarker key={poi.poiId} poi={poi} onSelect={setSelectedPoi} />
                     ))}
                 </MapContainer>
 
@@ -103,6 +95,7 @@ export default function Map() {
                             <img src={selectedPoi.imageUrl} alt={'image de ' + selectedPoi.poiName} />
 
                                 <button
+                                    type="button"
                                     className="city__right-panel__cross"
                                     aria-label="Fermer le menu"
                                     aria-controls="main-nav"

@@ -10,7 +10,6 @@ import SearchBar from "../components/SearchBar.tsx";
 // GraphQL
 import {useGetAllCitiesQuery} from "../generated/graphql-types";
 import type {CityType} from "./City.tsx";
-import City from "./City.tsx";
 
 export default function HomePage() {
 		const {data, loading, error} = useGetAllCitiesQuery();

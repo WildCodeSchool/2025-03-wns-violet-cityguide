@@ -181,12 +181,12 @@ export default function BackofficeCategory() {
 		<>
 			<h2>Catégories</h2>
 			<div className="tab__container">
-				<div className={"tab__btn " + (adminTabCategories === 'add-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('add-categories')}>
+				<button className={"tab__btn " + (adminTabCategories === 'add-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('add-categories')}>
 					<h3>Ajouter une catégorie</h3>
-				</div>
-				<div className={"tab__btn " + (adminTabCategories === 'admin-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('admin-categories')}>
+				</button>
+				<button className={"tab__btn " + (adminTabCategories === 'admin-categories' ? 'active' : '')} onClick={() => handleAdminTabCategories('admin-categories')}>
 					<h3>Administrer les catégories</h3>
-				</div>
+				</button>
 			</div>
 
 			<div className="backoffice-container">
