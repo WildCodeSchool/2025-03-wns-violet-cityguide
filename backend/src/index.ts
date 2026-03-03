@@ -21,15 +21,15 @@ async function startServer() {
 	await dataSource.initialize();
 
 	// Seed de la base de données en développement
-	if (process.env.NODE_ENV !== 'production') {
-		try {
-			console.log('🌱 Seeding database in development mode...');
-			await seedDatabase(dataSource);
-		} catch (error) {
-			console.error('❌ Seeding failed:', error);
-			// Ne pas stopper le serveur si le seeding échoue
-		}
-	}
+	// if (process.env.NODE_ENV !== 'production') {
+	// 	try {
+	// 		console.log('🌱 Seeding database in development mode...');
+	// 		await seedDatabase(dataSource);
+	// 	} catch (error) {
+	// 		console.error('❌ Seeding failed:', error);
+	// 		// Ne pas stopper le serveur si le seeding échoue
+	// 	}
+	// }
 
 	// Construction du schema à partir des Resolvers (permet à QraphQL d'utiliser les requêtes écrites dans els resolvers pour manipuler les données)
 	const schema = await buildSchema({

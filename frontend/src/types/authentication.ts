@@ -27,7 +27,7 @@ export type UserResponse = {
 
 export type State = {
   user: GraphqlUser | null;
-	roles?: Role[];
+  roles: Role[];
   token: string | null;
   isAuthenticated: boolean;
   isAuthStoreReady: boolean;

@@ -9,8 +9,18 @@ export default function Welcome() {
 	return (
 		<div className="landing__page">
 			<div className="landing__page__buttons">
-				<input className="signup__card__form__button landing__page__buttons__button" aria-label="Bouton de redirection vers le formulaire de connexion" value="Connexion" onClick={() => navigate("/login")}/>
-				<input className="signup__card__form__button landing__page__buttons__button" aria-label="Bouton de redirection vers le formulaire d'inscription" value="Inscription" onClick={() => navigate("/signup")}/>
+				<button
+					className="signup__card__form__button landing__page__buttons__button"
+					aria-label="Bouton de redirection vers le formulaire de connexion"
+					onClick={() => navigate("/login")}>
+					Connexion
+				</button>
+				<button
+					className="signup__card__form__button landing__page__buttons__button"
+					aria-label="Bouton de redirection vers le formulaire d'inscription"
+					onClick={() => navigate("/signup")}>
+					Inscription
+				</button>
 			</div>
 
 			<div className="landing__page__text">

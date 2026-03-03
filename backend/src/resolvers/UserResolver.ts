@@ -15,7 +15,7 @@ import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context, UserToken } from "../types/Context";
 import { UserInfo } from "../entities/UserInfo";
-import { IsArray, IsEmail, IsString, MinLength } from "class-validator";
+import { IsArray, IsEmail, IsNumber, IsString, MinLength } from "class-validator";
 
 // Input de création d'un nouvel utilisateur
 @InputType()
@@ -64,12 +64,29 @@ class UpdateUserRoleInput {
 	roles: Role[];
 }
 
+// Input pour les modifications du mail d'un utilisateur
 @InputType()
 class UpdateUserDataInput {
 	@Field()
 	@IsEmail()
 	email: string;
 	// TODO voir pour le mot de passe dans un second temps
+}
+
+// Input pour l'update des utilisateurs dans le panneau d'administration
+@InputType()
+class UpdateUserEveryDetailsInput {
+	@Field()
+	@IsNumber()
+	userId: number;
+
+	@Field()
+	@IsEmail()
+	email: string;
+
+	@Field(() => [Role])
+	@IsArray()
+	roles: Role[];
 }
 
 /* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
@@ -156,7 +173,7 @@ export default class UserResolver {
 		const userInfo = UserInfo.create({
 			firstName: "",
 			lastName: "",
-			avatarUrl: "https://example.com/default-avatar.png",
+			avatarUrl: "",
 			user: user
 		});
 		await userInfo.save();
@@ -229,6 +246,21 @@ export default class UserResolver {
 			token: "",
 			message: "Logged out successfully"
 		};
+	}
+
+	// TODO TEST Modification globale d'un utilisateur
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
+	@Mutation(() => User)
+	async updateUserEveryDetail(@Arg("userId") userId: number, @Arg("data") data: UpdateUserEveryDetailsInput) {
+		// Récupérer l'utilisateur à modifier
+		let user = await User.findOneByOrFail({ userId });
+
+		// Assigner les nouvelles données à l'utilisateur
+		user = Object.assign(user, data);
+
+		// Enregistrer l'utilisateur modifié
+		await user.save();
+		return user;
 	}
 
 	// Modification du role d'un utilisateur (Prévoir de rendre possible à l'utilisateur de modifier son mot de passe)
