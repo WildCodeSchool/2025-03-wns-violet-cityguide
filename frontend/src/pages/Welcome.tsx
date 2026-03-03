@@ -42,7 +42,6 @@ export default function Welcome() {
 				<div className="container">
 					<img src={image} alt="Capture d'écran de la carte de Paris avec des points d'intérêts" className="container__mapexample"/>
 				</div>
-
 			</div>
 
 			<div className="catchphrase">
