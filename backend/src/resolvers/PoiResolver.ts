@@ -12,7 +12,6 @@ import {
 } from "type-graphql";
 
 import { 
-	IsFQDN, 
 	IsNumber, 
 	IsString, 
 	Max, 
@@ -59,7 +58,7 @@ class PoiInput {
 	poiLongitude!: number;
 
 	@Field()
-	@IsFQDN()
+	@IsString()
 	externalLink: string;
 
 	@Field(() => Int)
