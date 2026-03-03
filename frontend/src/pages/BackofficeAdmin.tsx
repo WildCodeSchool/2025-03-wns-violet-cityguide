@@ -10,32 +10,35 @@ export default function BackofficeAdmin() {
 
 	return (
 		<>
-			<div id="admin">
-				<div className="backoffice-banner">
-					<h1>Administration</h1>
-					<div className="href-container">
-						<a href="#admin-ville">Villes</a>
-						<a href="#admin-poi">Utilisateurs</a>
-						<a href="#admin-users">Point d'intêret</a>
-						<a href="#admin-categories">Catégories</a>
+			<div id="admin" className="admin">
+				<div className="admin__layout">
+
+					<div className="admin__banner">
+						<h1>Panneaux d'administration</h1>
+						<div className="id-container">
+							<button id="#admin-ville">Villes</button>
+							<button id="#admin-poi">Utilisateurs</button>
+							<button id="#admin-users">Point d'intêret</button>
+							<button id="#admin-categories">Catégories</button>
+						</div>
 					</div>
+
+					<section id="admin-ville">
+						<BackofficeCity />
+					</section>
+
+					<section id="admin-poi">
+						<BackofficePoi />
+					</section>
+
+					<section id="admin-users section-part">
+						<BackofficeUser />
+					</section>
+
+					<section id="admin-categories">
+						<BackofficeCategory />
+					</section>
 				</div>
-
-				<section id="admin-ville">
-					<BackofficeCity />
-				</section>
-
-				<section id="admin-poi">
-					<BackofficePoi />
-				</section>
-
-				<section id="admin-users section-part">
-					<BackofficeUser />
-				</section>
-
-				<section id="admin-categories">
-					<BackofficeCategory />
-				</section>
 			</div>
 		</>
 	)

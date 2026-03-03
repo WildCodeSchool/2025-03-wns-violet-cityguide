@@ -30,7 +30,6 @@ export default function BackofficePoi() {
 		coordinateFormatError,
 		setIsLatitudeValid,
 		setIsLongitudeValid,
-		setShowMap
 	} = cordinatesUseState()
 
 
@@ -258,11 +257,14 @@ export default function BackofficePoi() {
 				</div>
 			</div>
 
-			<div className="backoffice-container">
+			<div className="backoffice__container">
 
 				{/* Create a new POI */}
 				{isCreationPoiTab === 'creation-tab' &&
+				<>
+				<h3>Créer une nouveau point d'intérêt</h3>
 					<form onSubmit={handleAddPoi}>
+
 						<label htmlFor="poiCity">Sélectionner la ville dans laquelle se trouve le POI à modifier
 							<select name="poiCity" required>
 								<option value="">Sélectionnez une ville</option>
@@ -358,7 +360,7 @@ export default function BackofficePoi() {
 							</select>
 						</label>
 
-						<div>
+						<div className="backoffice__cordinates">
 							<h3>Coordonnées</h3>
 							<label htmlFor="poiLongitude">Longitude
 								<input type="number" name="poiLongitude" placeholder="48,8575" step="0.000001" required min="-180" max="180" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} />
@@ -386,24 +388,22 @@ export default function BackofficePoi() {
 								</MapContainer>
 							}
 						</div>
-						<div>
-							<h3>
-								Description
-							</h3>
-							<label htmlFor="poiDescription">
+							<label htmlFor="poiDescription">Description
 								<textarea name="poiDescription" required minLength={10} cols={135}></textarea>
 							</label>
-						</div>
-						<input type="submit" value="valider" />
 
+						<input type="submit" value="valider" />
 					</form>
+				</>
 				}
 
 				{/* Edition et suppression de POI */}
 				{
 					isCreationPoiTab === "edition-tab" &&
 					<>
+					<h3>Modifier un point d"intêret</h3>
 						<form onSubmit={handleEditPoi}>
+
 							<label htmlFor="poiCity">Ajouter un point d'intêret (POI) la ville :
 								<select name="poiCity" required onChange={(e) => {
 									const cityId = Number(e.target.value);
@@ -433,7 +433,8 @@ export default function BackofficePoi() {
 												</option>
 											))
 										}
-									</select></label>
+									</select>
+								</label>
 							}
 
 
@@ -534,7 +535,7 @@ export default function BackofficePoi() {
 										<span>Ancienne catégorie : {poiByIdData?.getPoiById.poiCategory?.categoryName}</span>
 									</label>
 
-									<div>
+									<div className="backoffice__cordinates"> 
 										<h3>Coordonnées</h3>
 										<label htmlFor="newPoiLongitude">Nouvelle longitude
 											<input type="number" name="newPoiLongitude" placeholder="01234" step="any" min="-180" max="180" onBlur={(e) => checkCoordinateInput(e, setIsLongitudeValid, 'longitude')} />
@@ -564,15 +565,10 @@ export default function BackofficePoi() {
 											</MapContainer>
 										}
 									</div>
-									<div>
-										<h3>
-											Description
-										</h3>
-										<label htmlFor="newPoiDescription">
-											<textarea name="newPoiDescription" minLength={10}></textarea>
+										<label htmlFor="newPoiDescription">Description
 											<p>Ancienne description : {poiByIdData?.getPoiById.poiDescription}</p>
+											<textarea name="newPoiDescription" minLength={10}></textarea>
 										</label>
-									</div>
 									<input type="submit" value="valider" />
 								</>
 							}
