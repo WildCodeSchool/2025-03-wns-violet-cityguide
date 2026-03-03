@@ -192,12 +192,12 @@ export default function BackofficeCity() {
 		<>
 			<h2>Villes</h2>
 			<div className='tab__container'>
-				<div className={"tab__btn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>
+				<button className={"tab__btn " + (adminTabCities === 'createCity' ? 'active' : '')} onClick={() => handleAdminTabCities('createCity')}>
 					<h3>Ajouter une ville</h3>
-				</div>
-				<div className={"tab__btn " + (adminTabCities === 'updateCity' ? 'active' : '')} onClick={() => handleAdminTabCities('updateCity')}>
+				</button>
+				<button className={"tab__btn " + (adminTabCities === 'updateCity' ? 'active' : '')} onClick={() => handleAdminTabCities('updateCity')}>
 					<h3>Administrer une ville</h3>
-				</div>
+				</button>
 			</div>
 
 			<div className="backoffice-container">
