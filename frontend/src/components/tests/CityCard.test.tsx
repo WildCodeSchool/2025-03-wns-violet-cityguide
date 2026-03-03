@@ -10,11 +10,11 @@ import { MemoryRouter } from "react-router-dom";
 // On moque useNavigate afin de tester le composant et non React-Routeur : on ne veut pas vraiment se rendre sur l'URL
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
-    const actual = await vi.importActual('react-router-dom');
-    return {
-        ...actual,
-        useNavigate: () => mockNavigate,
-    };
+		const actual = await vi.importActual('react-router-dom');
+		return {
+				...actual,
+				useNavigate: () => mockNavigate,
+		};
 });
 
 const cityCard: City = {
@@ -28,10 +28,10 @@ const cityCard: City = {
 
 describe('Test unitaire du composant CityCard', () => {
 
-	  // Nettoyer les mocks après chaque test
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
+		// Nettoyer les mocks après chaque test
+		afterEach(() => {
+				vi.restoreAllMocks();
+		});
 
 	it('on check que les informations de la cards affichées sont correctes', () => {
 		render(
@@ -40,31 +40,31 @@ describe('Test unitaire du composant CityCard', () => {
 			</MemoryRouter>
 		)
 
-        // Vérifier l'image par son alt text
-        const image = screen.getByAltText('Test1');
-        expect(image).toHaveAttribute('src', 'image1.png');
-        
-        // Vérifier le titre
-        expect(screen.getByText('Test1')).toBeInTheDocument();
-        
-        // Vérifier la description
-        expect(screen.getByText('Ceci est une ville de test 1')).toBeInTheDocument();
+				// Vérifier l'image par son alt text
+				const image = screen.getByAltText('Test1');
+				expect(image).toHaveAttribute('src', 'image1.png');
+				
+				// Vérifier le titre
+				expect(screen.getByText('Test1')).toBeInTheDocument();
+				
+				// Vérifier la description
+				expect(screen.getByText('Ceci est une ville de test 1')).toBeInTheDocument();
 
 	})
 
-	  it('navigue vers la bonne URL au click', () => {
-        render(
-            <MemoryRouter>
-                <CityCard city={cityCard}/>
-            </MemoryRouter>
-        )
+		it('navigue vers la bonne URL au click', () => {
+				render(
+						<MemoryRouter>
+								<CityCard city={cityCard}/>
+						</MemoryRouter>
+				)
 
-        // Click sur la card
-        const card = screen.getByText('Test1').closest('.cityCard'); 
+				// Click sur la card
+				const card = screen.getByText('Test1').closest('.cityCard'); 
 		expect(card).toBeInTheDocument()
-        fireEvent.click(card!);
+				fireEvent.click(card!);
 
-        // Vérifier que navigate a été appelé avec la bonne URL
-        expect(mockNavigate).toHaveBeenCalledWith('/city/1');
-    })
+				// Vérifier que navigate a été appelé avec la bonne URL
+				expect(mockNavigate).toHaveBeenCalledWith('/city/1');
+		})
 })

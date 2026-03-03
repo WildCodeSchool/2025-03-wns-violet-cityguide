@@ -1,16 +1,14 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import React, { useState, type FormEvent } from "react"
 import useImageVerificationAndUpload from '../pages/backofficeHandler/imageVerificationAndUpload';
-import { useCityStore } from '../zustand/cityStore';
-import { useCreateCityMutation, useGetAllCitiesQuery, useGetOneCityQuery, useUpdateOneCityMutation, type City, type CreateCityMutationOptions, type NewUserInput, type UpdateCityInput } from '../generated/graphql-types';
-import City from '../pages/City';
+import { useCreateCityMutation, useGetAllCitiesQuery, useUpdateOneCityMutation, type City } from '../generated/graphql-types';
+
 import { GET_ALL_CITIES } from '../graphql/operations';
 
 export default function BackofficeCity() {
 
 	// Les query et mutation graphQL relatives aux villes 
-	const { data: allCitiesData, loading: allCitiesLoading, error: allCitiesError } = useGetAllCitiesQuery();
+	const { data: allCitiesData, loading, error } = useGetAllCitiesQuery();
 	const [updateCity] = useUpdateOneCityMutation();
 	const [createCity] = useCreateCityMutation()
 
@@ -73,7 +71,7 @@ export default function BackofficeCity() {
 	}
 
 	// IMAGES ! 
-	const { resetUseState, imageUploadUseState, validateImageFrontEndSide, validateUrl } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'image
+	const { resetUseState, imageUploadUseState, validateImageFrontEndSide } = useImageVerificationAndUpload() // import de fonctions de vérifications de l'image
 	const { isImageValid, displayImage, imgSrc, imageError } = imageUploadUseState(); 
 
 	// vérification de l'image côté front-end
@@ -89,8 +87,6 @@ export default function BackofficeCity() {
 		validateImageFrontEndSide(file)
 	}
 
-	// TODO requête trop lourde (toutes les villes au lieu d'une seule pour les modif)
-
 	// CRÉATION D'UNE VILLE
 	const handleAddCitySubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -98,7 +94,8 @@ export default function BackofficeCity() {
 		const formAddCityData = new FormData(form);
 
 		try {
-			// Map form data to the correct structure KÉCÉCÉKECECOMMENTAIREMOISI ????
+
+			// Stocke les données de villes pour qu'elle soient en accord avec le cityInput
 			const cityInput = {
 				cityName: formAddCityData.get('cityName') as string,
 				description: formAddCityData.get('description') as string,
@@ -222,6 +219,9 @@ export default function BackofficeCity() {
 			console.error(error)
 		}
 	}
+
+	if (loading) return <p>Loading User...</p>;
+	if (error) return <p>Error 😔</p>;
 
 	return (
 		<>
@@ -364,14 +364,6 @@ export default function BackofficeCity() {
 						{/* Si la ville est trouvée, affichage du formulaire pré-rempli de modification de la ville */}
 						{ cityToUpdate?.cityId &&
 							<div className='backoffice-container relative'>
-
-								{/* Croix de fermeture du formulaire d'update de ville (haut droite) */}
-								<div className="close" onClick={() => { setEditCity(false); setEditCityName('') }}>
-									<svg height={15} width={15}>
-										<line x1="2" y1="2" x2="10" y2="10" style={{ stroke: "red", strokeWidth: 1 }} />
-										<line x1="2" y1="10" x2="10" y2="2" style={{ stroke: "red", strokeWidth: 1 }} />
-									</svg>
-								</div>
 
 								<form onSubmit={updateCityHandler}>
 

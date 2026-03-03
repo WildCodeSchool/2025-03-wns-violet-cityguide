@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCookieConsent } from '../hooks/useCookieConsent';
 
 const CookieSettings: React.FC = () => {
-    const { consent, resetConsent } = useCookieConsent();
+    const { consent } = useCookieConsent();
     const [showSettings, setShowSettings] = useState(false);
 
     if (!consent) {
@@ -54,24 +54,6 @@ const CookieSettings: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <button
-                            onClick={() => {
-                                resetConsent();
-                                setShowSettings(false);
-                            }}
-                            style={{
-                                backgroundColor: '#FEFAF1',
-                                color: '#000000',
-                                border: '1px solid #ddd',
-                                padding: '8px 15px',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                fontSize: '12px'
-                            }}
-                        >
-                            ↻ Modifier les préférences
-                        </button>
-                        
                         <button
                             onClick={() => setShowSettings(false)}
                             style={{
