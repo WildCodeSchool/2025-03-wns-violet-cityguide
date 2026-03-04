@@ -91,7 +91,7 @@ export default class PoiResolver {
 		return poi;
 	}
 
-	// On récupère les pois en fonction d'une catégorie
+	// On récupère les pois en fonction d'une  catégorie
 	@Query(() => [Poi])
 	async getPoisByCategory(@Arg("categoryId") categoryId: number): Promise<Poi[]> {
 		return await Poi.find({
