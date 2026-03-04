@@ -15,12 +15,15 @@ import { GET_ALL_USER_INFO, GET_ALL_USERS } from "../graphql/operations";
 
 export default function BackofficeUser() {
 
+	// Utilisateur connecté
+	const connectedUser = useCurrentUser();
+
 	// formRef est le formulaire contenu dans le DOM
 	const formRef = useRef< HTMLFormElement | null >(null);
 
 	// Opérations à la validation du formulaire
-	const [updateUserRole] = useUpdateUserRoleMutation();
-	const [updateUserData] = useUpdateUserDataMutation();
+	const [ updateUserRole ] = useUpdateUserRoleMutation();
+	const [ updateUserData ] = useUpdateUserDataMutation();
 	const [ updateUserInfo ] = useUpdateUserInfoMutation();
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -39,6 +42,13 @@ export default function BackofficeUser() {
 			roles.push(Role.AdminCity);
 		}
 		if (formData.get("admin-poi-role")) {
+			roles.push(Role.PoiCreator);
+		}
+
+		// Si l'utilisateur à modifier possède le rôle admin site, il doit garder tous les rôles
+		if (userToUpdate.roles.includes(Role.AdminSite)) {
+			roles.push(Role.AdminSite);
+			roles.push(Role.AdminCity);
 			roles.push(Role.PoiCreator);
 		}
 
@@ -99,8 +109,7 @@ export default function BackofficeUser() {
 	}
 	}
 
-	// Utilisateur connecté
-	const connectedUser = useCurrentUser();
+	// Gestion des autorisations de rôles
 	const rolesAllowedToUpdateUsersRoles = [Role.AdminSite, Role.AdminCity];
 	const isAllowedToAdministrateUsers = connectedUser?.roles?.some(role => rolesAllowedToUpdateUsersRoles.includes(role));
 
