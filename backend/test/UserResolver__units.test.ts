@@ -1017,17 +1017,5 @@ describe("User Resolver test", () => {
 			const deletedUser = await User.findOne({ where: { userId: 4 } });
 			expect(deletedUser).toBeNull();
 		})
-
-		// TODO: Test successful user deletion
-		// - Should delete user when called by ADMIN_SITE
-		// - Should return deleted userId
-		// - Should verify user is actually removed from database
-
-		// TODO: Test authorization
-		// - Should fail when user doesn't have ADMIN_SITE role
-
-		// TODO: Test error handling
-		// - Should handle deletion of non-existent userId gracefully
-		// - Should consider cascade deletion of related UserInfo
 	});
 });
