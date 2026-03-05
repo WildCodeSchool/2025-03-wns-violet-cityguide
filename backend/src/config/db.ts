@@ -19,7 +19,7 @@ const dataSource = new DataSource({
 		password: DB_PASSWORD,
 		database: DB_DATABASE,
 		entities: [User, City, Poi, Category, UserInfo],
-		synchronize: true,
+		synchronize: false,
 		logging: ["error", "query"],
 });
 
