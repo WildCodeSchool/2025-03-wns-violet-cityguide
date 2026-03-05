@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo coucou",
+		"test": "jest",
 		"build": "tsc -p tsconfig.json",
 		"start": "concurrently \"ts-node-dev ./src/index.ts\" \"ts-node-dev ./upload-image-service/server.ts\"",
 		"prod": "node ./build/index.js",
@@ -16,10 +16,11 @@
 	"description": "",
 	"dependencies": {
 		"@apollo/server": "^5.0.0",
+		"@jest/types": "^30.2.0",
 		"@types/multer": "^2.0.0",
 		"argon2": "^0.43.1",
-		"concurrently": "^9.2.1",
 		"class-validator": "^0.14.3",
+		"concurrently": "^9.2.1",
 		"cors": "^2.8.5",
 		"dotenv": "^17.2.1",
 		"express": "^5.1.0",
@@ -36,10 +37,15 @@
 		"typeorm": "^0.3.25"
 	},
 	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.13",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.3",
 		"@types/file-type": "^10.6.0",
+		"@types/jest": "^29.0.0",
 		"@types/jsonwebtoken": "^9.0.10",
+		"better-sqlite3": "^12.6.2",
+		"jest": "^30.2.0",
+		"ts-jest": "^29.2.0",
 		"ts-node": "^10.9.2",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "^5.8.3"
