@@ -146,7 +146,12 @@ export default function Account() {
 					userModify === 'yes-avatar' &&
 					<>
 						<form onSubmit={changeUserAvatar}>
-							<input type='text' name="avatarUrl" placeholder={userInfo.avatarUrl}/>
+							<label htmlFor="avatarUrl">URL de l'image</label>
+							<input
+								type="text"
+								name="avatarUrl"
+								placeholder={userInfo.avatarUrl}
+							/>
 							<input type="submit" value="Confirmer la modification" className="admin-user-button" />
 						</form>
 						<button className="admin-user-button" onClick={() => cancelModification()}> Annuler la modification</button>
