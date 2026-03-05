@@ -14,7 +14,7 @@ export default function CityCard({ city }: CityCardProps) {
   const navigate = useNavigate();
 
   return (
-    <section
+    <button
       className="cityCard"
       onClick={() => navigate(`/city/${city.cityId}`)}
     >
@@ -29,6 +29,6 @@ export default function CityCard({ city }: CityCardProps) {
         <h2 className="cityCard__text__title">{city.cityName}</h2>
         <p className="cityCard__text__description">{city.description}</p>
       </div>
-    </section>
+    </button>
   );
 }

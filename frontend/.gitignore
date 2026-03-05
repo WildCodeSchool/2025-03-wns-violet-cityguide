@@ -28,5 +28,4 @@ dist-ssr
 .env.dev
 .env.prod
 
-generated/
-generated/graphql-types.ts
+# ./frontend/generated/*

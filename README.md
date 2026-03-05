@@ -1,4 +1,4 @@
-# Où - City guide 🇫🇷 En
+# Où - City guide 🇫🇷
 
 ## Adresse du site / app link 
 [Où City guide](https://032025-bleu-1.wns.wilders.dev/)
@@ -40,6 +40,12 @@ Exécuter les commandes suivantes :
 * Utiliser des tabulations au lieu des espaces (VSCode): 
 	* Configuration : `File > Preferences > Settings`, taper `insert spaces` dans la barre de recherche, décocher `Editor: Detect Indentation` et `Editor: Insert Spaces`
 	* Réparation : Dans les fichier existants, utiliser `CTRL + Shift + P` et taper `Convert indentation to tabs` dans le champ qui apparaît
+
+
+* Si besoin de seed la Base de Données :
+  * Depuis le terminal, lancer la commande:
+    * ```docker exec -it backend-dev npm run seed```
+
 
 ### Messages de commmit :
 Format :

@@ -1,10 +1,18 @@
+type SvgType = {
+	width?: number | string;
+	height?: number | string;
+	color?: string;
+	strokeColor?: string;
+	className?: string;
+}
+
 export default function OuTextSVG({
 									  width = 120,
-									  height = "auto",
+									  height,
 									  color = "#342d29",
 									  strokeColor = "#342d29",
 									  className = "",
-								  }) {
+								  }: SvgType) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
