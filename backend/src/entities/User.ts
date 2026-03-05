@@ -33,11 +33,8 @@ class User extends BaseEntity {
 		hashedPassword: string;
 
 		@Column({
-		type: "enum",
-		enum: Role,
-		array: true,
-		default: [Role.USER],
-		enumName: "roles"
+		type: "simple-array", // Changed from "enum" to "simple-array" for SQLite compatibility in tests
+		default: [Role.USER].join(','), // simple-array expects comma-separated string
 		})
 		@Field(() => [Role])
 		roles: Role[];
