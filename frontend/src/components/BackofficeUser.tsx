@@ -6,8 +6,8 @@ import {
 	useUpdateUserRoleMutation,
 	useUpdateUserDataMutation,
 	useUpdateUserInfoMutation,
+	type GetAllUserInfosQuery,
 	type UpdateUserEveryDetailsInput,
-	type UserInfoInput,
 	useGetAllUserInfosQuery
 } from "../generated/graphql-types";
 import { useCurrentUser } from "../zustand/userStore";
@@ -31,7 +31,7 @@ export default function BackofficeUser() {
 		e.preventDefault();
 
 		// Données du formulaire
-		if (!formRef.current || !userToUpdate) return;
+		if (!formRef.current || !userToUpdate || !userInfoToUpdate) return;
 		const formData = new FormData(formRef.current);
 
 		// Composition des données User modifiées
@@ -55,10 +55,7 @@ export default function BackofficeUser() {
 		const email = formData.get("email") as string;
 		const firstName = formData.get("firstName") as string;
 		const lastName = formData.get("lastName") as string;
-		let avatarUrl = "";
-		if (formData.get("avatarUrl") as string != "") {
-			avatarUrl = formData.get("avatarUrl") as string
-		}
+		const avatarUrl = (formData.get("avatarUrl") as string) ?? "";
 
 		try {
 
@@ -96,7 +93,7 @@ export default function BackofficeUser() {
 						lastName:lastName,
 						avatarUrl: avatarUrl,
 					},
-					userInfoId: userToUpdate.userId
+					userInfoId: userInfoToUpdate.userInfoId
 				},
 				refetchQueries : [
 					{ query: GET_ALL_USER_INFO }
@@ -104,8 +101,8 @@ export default function BackofficeUser() {
 			});
 
 			setUserBeingUpdated(null);
-		} catch {
-		console.error("Erreur lors de la modification de l'utilisateur :", Error);
+		} catch (error) {
+		console.error("Erreur lors de la modification de l'utilisateur :", error);
 	}
 	}
 
@@ -121,7 +118,7 @@ export default function BackofficeUser() {
 
 	// Modification d'un utilisateur
 	const [userToUpdate, setUserToUpdate] = useState<null | UpdateUserEveryDetailsInput>(null);
-	const [userInfoToUpdate, setUserInfoToUpdate] = useState<null | UserInfoInput> (null);
+	const [userInfoToUpdate, setUserInfoToUpdate] = useState<null | GetAllUserInfosQuery["getAllUserInfos"][number]>(null);
 
 	const editUserHandler = (userToUpdateId: number) => {
 
