@@ -41,6 +41,12 @@ Exécuter les commandes suivantes :
 	* Configuration : `File > Preferences > Settings`, taper `insert spaces` dans la barre de recherche, décocher `Editor: Detect Indentation` et `Editor: Insert Spaces`
 	* Réparation : Dans les fichier existants, utiliser `CTRL + Shift + P` et taper `Convert indentation to tabs` dans le champ qui apparaît
 
+
+* Si besoin de seed la Base de Données :
+  * Depuis le terminal, lancer la commande:
+    * ```docker exec -it backend-dev npm run seed```
+
+
 ### Messages de commmit :
 Format :
 ```
