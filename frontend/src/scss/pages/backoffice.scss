@@ -1,591 +1,521 @@
 @use '../variables' as *;
 
-.href-container {
-	@include flex-row; 
-	@include align-center; 
-	width: 100%;
-	gap: 1rem; 
+.admin {
+	min-height: 100vh;
+	background: $beige;
+	color: $marron;
+	font-family: $text;
 
-	a {
-		color: inherit; 
-		text-decoration: none; 
-	}
-	a:hover, a:visited {
-		text-decoration: underline;
-	}
-}
-.backoffice {
-	&-banner {
-		@include flex-column;
-		@include align-center;
-		height: 120px;
+	display: flex;
+	justify-content: center;
+	padding: 24px 16px;
+
+	&__layout {
 		width: 100%;
+		max-width: 1200px;
+
+		display: flex;
+		gap: 18px;
+		align-items: flex-start;
+	}
+
+	&__sidebar {
+		width: 240px;
+		flex: 0 0 240px;
+
+		background: $light-beige;
+		border-radius: 18px;
+		box-shadow: $box-shadow;
+		padding: 18px;
+
+		position: sticky;
+		top: 24px;
+	}
+
+	&__brand {
+		padding-bottom: 12px;
+		border-bottom: 1px solid rgba($marron, 0.12);
 
 		h1 {
-			color: $marron;
+			margin: 0;
+			font-family: $title;
+			font-size: 22px;
+			letter-spacing: 0.2px;
 		}
-
 	}
 
-	&-container {
-		@include flex-column;
+	&__nav {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding-top: 12px;
+	}
+
+	&__navlink {
+		appearance: none;
+		-webkit-appearance: none;
+		border: none;
+		outline: none;
+		background: transparent;
+		font: inherit;
+
+		width: 100%;
+		text-align: left;
+
+		display: flex;
 		align-items: center;
-		min-height: 250px; 
-		width: 100%;
-		background-color: $sand;
+		gap: 10px;
 
-		h2, h3 {
-			text-align: center
+		padding: 10px 12px;
+		border-radius: 12px;
+
+		cursor: pointer;
+		transition: 160ms ease;
+
+		color: rgba($marron, 0.75);
+		font-weight: 700;
+
+		&:hover {
+			background: rgba($accent, 0.18);
+			color: $marron;
+			transform: translateY(-1px);
 		}
-		
-		form {
-			@include flex-column;
-			text-align: left;
-			justify-content: left;
-			width: 100%;
-			gap: 0.8rem;
-			padding: 0.8rem;
 
-			.description-field {
-				width: 800px; 
-				min-height: 50px; 
-				height: fit-content;
-				display: flex;
-				align-items: start;
-				text-wrap: initial;
+		&:focus-visible {
+			outline: 2px solid rgba($accent, 0.55);
+			outline-offset: 2px;
+		}
+
+		&.active {
+			background: rgba($accent, 0.24);
+			color: $marron;
+			box-shadow: 0 6px 18px rgba($marron, 0.10);
+			position: relative;
+			padding-left: 18px;
+
+			&::before {
+				content: "";
+				position: absolute;
+				left: 8px;
+				top: 8px;
+				bottom: 8px;
+				width: 4px;
+				border-radius: 999px;
+				background: $accent;
 			}
+		}
+	}
 
-			label {
-				display: inline-flex;
-				width: 100%;
-				padding-bottom: 1rem;
-				align-items: center;
-			}
+	&__main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
 
-			input {
-				margin-left: 1rem;
-
-			}
-
-			p {
-				text-align: center
-			}
-
-			input[type="submit"] {
-				height: 40px;
-				max-width: 50%;
-				margin: 0 25%;
-				font-size: 18px;
-				color: $marron; 
-				border-radius: 20px; 
-				border: 1px solid $marron; 
-				background-color: antiquewhite;
-				cursor: pointer;
-
-				&:hover {
-					transition: 1s;
-					background-color: bisque;
-				}
-			}
+		section {
+			background: $light-beige;
+			border-radius: 18px;
+			box-shadow: $box-shadow;
+			padding: 18px;
 		}
 	}
 }
 
-.container-row {
-	padding: 0.8rem;
-	gap:0.8rem; 
-	display: flex; 
-	flex-direction: row; 
-	flex-wrap: wrap;
-}
-.add-ville-coordonnees {
-	@include flex-row;
-	justify-content: space-between;
-
-	@media (max-width: $breakpoint-small) {
-		@include flex-column;
-	}
-}
-
-#admin {
-	section {
-		@include flex-column;
-		width: 100%;
-		padding: 0.8rem;
-		margin-bottom: 1rem;
-
-		.section-part {
-			background-color: $sand;
-			display: flex;
+@media (max-width: $breakpoint-medium) {
+	.admin {
+		&__layout {
 			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			padding: 2rem;
 		}
-
-		.border-for-tabs {
-			border-radius: 0 15px 15px 15px;
-		}
-
-		.border-all {
-			border-radius: 15px;
-		}
-
-		h2 {
-			text-align: center;
+		&__sidebar {
 			width: 100%;
+			flex: none;
+			position: static;
 		}
-
-		.hr {
-			width: 500px;
-			height: 5px;
-			background-color: $accent ;
-		}
-	}
-
-
-	label {
-		color: $marron;
-		font-size: 1rem;
-		font-weight: 500;
-		margin-right: 0.8rem;
-	}
-
-	input[type="text"],
-	input[type="number"],
-	input[type="url"],
-	select, textarea {
-		background-color: $beige;
-		border: solid 2px $sand;
-		border-radius: 5px;
-		font-family: $text;
-		font-size: 1rem;
-		font-weight: 500;
-		// color: $beige;
-		padding: .5rem;
-
-		option {
-			background-color: $beige;
-		}
-	}
-
-	select {margin-left: 0.8rem}
-
-	textarea {
-		height: fit-content;
-	}
-
-
-	input[type="number"] {
-		min-width: 200px;
-	}
-
-	select {
-		color: $marron;
-	}
-
-	::picker(select) {
-		border-radius: 10px;
-	}
-
-	option:hover,
-	option:focus,
-	option:focus-visible,
-	option:active {
-		background: $beige ;
-	}
-
-	option:last-of-type {
-		border-radius: 10px 10px;
-	}
-}
-
-.separator {
-	height: 4px;
-	@include flex-column;
-	@include align-center;
-	margin: 2rem 0;
-
-	&-line {
-		width: 300px;
-		background-color: $accent;
-		height: 100%;
 	}
 }
 
 .tab {
 	&__container {
-		display: inline-flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		gap: 2rem;
-		width: 100%;
+		display: flex;
+		gap: 10px;
+		margin: 10px 0 14px;
+		flex-wrap: wrap;
 	}
-
 
 	&__btn {
-		background-color: $beige;
-		padding: 8px 20px;
+		border: 1px solid rgba($marron, 0.12);
+		background: $sand;
+		border-radius: 999px;
+		padding: 10px 14px;
 		cursor: pointer;
-		font-weight: 600;
-		border: none;
-	}
-}
+		transition: 160ms ease;
+		box-shadow: 0 2px 10px rgba($marron, 0.10);
 
-
-.active {
-	background-color: $sand;
-}
-
-.category-tag {
-	padding: .3rem 1rem;
-	position: relative;
-	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	height: 30px;
-	min-width: 150px;
-	border-radius: 5px;
-	gap: 5px;
-	border: 1px solid $marron;
-
-
-	&__pin {
-		width: 20px;
-		height: 20px;
-		border-radius: 90px;
-	}
-
-	&:hover {
-		background-color: $light-beige;
-	}
-}
-
-.user-mail {
-	width: 100%;
-	border: 1px solid yellow;
-
-	input {
-		width: 450px;
-	}
-
-	&__content {
-		width: 450px;
-		// border: 1px solid $marron; 
-		border-radius: 0 0 15px 15px;
-		background-color: $light-beige;
-		padding: 0.8rem;
-	}
-
-	&__item {
-		border-bottom: 1px solid lightgrey;
-		padding: .8rem;
-
-		&:last-child {
-			border-bottom: none;
+		h3 {
+			margin: 0;
+			font-size: 14px;
+			color: rgba($marron, 0.70);
+			font-weight: 700;
 		}
 
 		&:hover {
-			background-color: beige;
-			cursor: pointer;
+			transform: translateY(-1px);
+			box-shadow: 0 6px 18px rgba($marron, 0.14);
+		}
+
+		&.active {
+			background: rgba($accent, 0.22);
+			border-color: rgba($accent, 0.35);
+
+			h3 {
+				color: $marron;
+			}
 		}
 	}
 }
 
-.img-div {
-	height: 100%;
-	display: inline-flex;
-	align-items: center;
-
-	&__error {
-		color: red;
-	}
-
-	&__valid {
-		color: green;
-	}
-}
-
-.edit-zone,
-.danger-zone {
-	width: 60%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 20px;
-
-	input[type="submit"],
-	button {
-		background-color: transparent;
-		height: 25px;
-		padding: 1rem 15px;
+.backoffice {
+	&__container {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		border: 1px solid black;
-		color: black;
-		cursor: pointer;
-		border-radius: 15px;
+		gap: 18px;
+	}
+
+	&__cordinates {
+		background: rgba($accent, 0.12);
+		border: 1px solid rgba($accent, 0.22);
+		border-radius: 12px;
+		padding: 14px;
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		h3, p {
+			margin: 0;
+			font-weight: 800;
+			color: $marron;
+		}
+
+		label p {
+			margin-top: 6px;
+			color: #b23b3b;
+			font-weight: 700;
+		}
 	}
 }
-.relative {
-	position: relative;
-}
-.close {
-	position: absolute; 
-	top: 0; 
-	right: 0; 
-	padding: 0.3rem;
+
+.admin {
+	&__main {
+		.backoffice__container form,
+		.backoffice-container form,
+		form.form-update-user {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+
+			padding: 16px;
+			border-radius: 18px;
+			border: 1px solid rgba($marron, 0.12);
+			background: rgba($white, 0.35);
+			box-shadow: 0 10px 30px rgba($marron, 0.12);
+
+			h3 {
+				margin: 0 0 6px 0;
+			}
+
+			label {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				font-weight: 700;
+				color: $marron;
+
+				span,
+				p {
+					font-weight: 600;
+					color: rgba($marron, 0.70);
+					margin: 0;
+				}
+
+				&.vertical > div {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					flex-wrap: wrap;
+				}
+			}
+
+			input[type="text"],
+			input[type="email"],
+			input[type="url"],
+			input[type="number"],
+			select,
+			textarea {
+				width: 100%;
+				border: 1px solid rgba($marron, 0.12);
+				background: rgba($white, 0.55);
+				border-radius: 10px;
+				padding: 10px 12px;
+				color: $marron;
+				transition: 160ms ease;
+				box-shadow: 0 2px 10px rgba($marron, 0.10);
+
+				&:focus {
+					outline: none;
+					border-color: rgba($accent, 0.60);
+					box-shadow: 0 0 0 4px rgba($accent, 0.18);
+					background: rgba($white, 0.72);
+				}
+			}
+
+			textarea {
+				min-height: 110px;
+				resize: vertical;
+			}
+
+			input[type="file"] {
+				border: 1px dashed rgba($accent, 0.55);
+				background: rgba($white, 0.35);
+				padding: 10px;
+				border-radius: 12px;
+			}
+
+			input[type="submit"],
+			button[type="submit"] {
+				margin-top: 6px;
+				border: none;
+				border-radius: 14px;
+				padding: 12px 14px;
+				cursor: pointer;
+
+				font-weight: 900;
+				letter-spacing: 0.2px;
+				color: $white;
+
+				background: $accent;
+				box-shadow: 0 10px 22px rgba($accent, 0.30);
+				transition: 160ms ease;
+
+				&:hover {
+					filter: brightness(0.95);
+					transform: translateY(-1px);
+				}
+
+				&:active {
+					transform: translateY(0px);
+				}
+			}
+		}
+	}
 }
 
-.danger-zone {
-	border-radius: 15px;
-	background-color: lightcoral;
-	height: 150px;
+.admin .img-div {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	border-radius: 999px;
+	border: 1px solid rgba($marron, 0.12);
+	background: rgba($white, 0.55);
+
+	&__error {
+		color: #b23b3b;
+		font-weight: 800;
+	}
+	&__valid {
+		color: #2f8f5b;
+		font-weight: 800;
+	}
 }
 
-.edit-zone {
-	border-radius: 10px;
-	background-color: papayawhip;
-	width: 100%;
-	height: 50px;
-}
-
-.vertical {
-	display: flex;
-	flex-direction: column;
-	align-items: start !important;
-}
-
-.latitude-longitude {
-	display: flex;
-	flex-direction: row;
-}
-
-// USERS
-// Liste des utilisateurs
 .admin-table-users {
-	width: 80%;
-	align-self: center;
-	margin-top: 1.5rem;
-}
+	width: 100%;
+	border-collapse: collapse;
+	overflow: hidden;
+	border-radius: 18px;
+	border: 1px solid rgba($marron, 0.12);
+	box-shadow: 0 6px 18px rgba($marron, 0.12);
+	background: rgba($white, 0.35);
 
-thead {
-	font-size: 1.25rem;
-}
+	th, td {
+		padding: 12px 10px;
+		border-bottom: 1px solid rgba($marron, 0.12);
+		text-align: left;
+		vertical-align: middle;
+	}
 
-thead > tr > th {
-	font-weight: initial;
-	line-height: 3rem;
-	border-bottom: 2px solid $marron;
-}
+	th {
+		font-size: 13px;
+		text-transform: uppercase;
+		letter-spacing: 0.4px;
+		color: rgba($marron, 0.70);
+		background: rgba($accent, 0.12);
+	}
 
-tr:nth-child(even) {
-  background-color: $sand;
-	line-height: 2.5rem;
-}
+	tr:hover td {
+		background: rgba($accent, 0.08);
+	}
 
-td {
-	text-align: center;
-	vertical-align: middle;
-	
-}
-
-// Image
-.td-image {
-	padding-top: 0.6rem;
+	.td-image {
+		width: 70px;
+	}
 }
 
 .miniature-pp {
-	width: 4.5rem;
-	height: 4.5rem;
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	object-fit: cover;
+	border: 1px solid rgba($marron, 0.12);
+	box-shadow: 0 6px 16px rgba($marron, 0.14);
 }
 
-// Boutons
 .admin-user-td-buttons {
 	display: flex;
-	justify-content: space-evenly;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .admin-user-button {
-	padding: 0.25rem;
-	border: 1px solid $marron;
-	border-radius: 5px;
-	background-color: $beige;
-}
-
-.admin-user-button:hover {
+	border: 1px solid rgba($marron, 0.12);
+	background: rgba($white, 0.50);
+	border-radius: 12px;
+	padding: 8px 10px;
 	cursor: pointer;
+	transition: 160ms ease;
+	box-shadow: 0 2px 10px rgba($marron, 0.10);
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 8px 16px rgba($marron, 0.14);
+	}
 }
 
 .delete-alert {
-	padding: 0 0.5rem;
-	border-radius: 5px;
-	border: 1px solid $marron;
-}
-
-.delete-alert:hover {
+	border-radius: 12px;
+	padding: 8px 10px;
+	font-weight: 900;
+	border: none;
 	cursor: pointer;
 }
-
 .delete-cancel {
-	background-color: $sand;
+	background: rgba($marron, 0.12);
 }
-
 .delete-confirm {
-	background-color: lightcoral;
+	background: rgba(#b23b3b, 0.86);
+	color: $white;
 }
 
-// Formulaire
-.form-update-user {
-	width: 80%;
-	align-self: center;
-	border: 1px solid $marron;
-	background-color: $sand;
-	border-radius: 5px;
-	margin-top: 1rem;
-	padding: 0.75rem;
-
-	display: flex;
-	flex-direction: column;
-
-	&__form-header {
+.backoffice-container,
+.backoffice__container {
+	.container-row {
 		display: flex;
-		margin-bottom: 1.5rem;
-
-		&__form-header-title {
-			flex-grow: 3;
-			text-align: center;
-		}
-
-		&__form-header-button {
-			padding: 0.5rem;
-			border-radius: 5px;
-			border: 1px solid $marron;
-			width: 15rem;
-			background-color: lightcoral;
-		}
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 
-	&__form-body {
-		display: flex;
-		flex-direction: row;
-
-		&__infos-without-avatar {
-			display: flex;
-			flex-direction: column;
-
-			&__form-inputs {
-				display: flex;
-				margin-bottom: 0.5rem;
-
-				&__form-body-label {
-					display: block;
-					width: 5rem;
-				}
-
-				&__form-body-input {
-					border: none;
-					background-color: $beige;
-					border-radius: 5px;
-					height: 2rem;
-					width: 30rem;
-					margin-left: 1rem;
-					padding-left: 1rem;
-				}
-
-				&__form-body-checkboxes {
-					display: flex;
-					flex-direction: column;
-					margin-left: 1.95rem;
-
-					&__form-body-checboxes-label {
-						display: block;
-					}
-				}
-			}
-		}
-
-		&__avatar-inputs {
-			margin-left: 1rem;
-			display: flex;
-			flex-direction: column;
-
-			&__avatars-display {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-around;
-				margin-left: 6rem;
-				margin-bottom: 1rem;
-
-				&__avatar-block {
-					display: flex;
-					flex-direction: column;
-
-					&__curr-old-info {
-						margin-bottom: 1rem;
-						color: #342d29;
-						font-size: 1rem;
-						font-weight: 500;
-					}
-
-					&__is-success {
-						margin-top: 1rem;
-					}
-				}
-				}
-
-
-			&__form-inputs {
-				display: flex;
-				margin-bottom: 0.5rem;
-
-				&__form-body-label {
-					display: block;
-					width: 5rem;
-				}
-
-				&__form-body-input {
-					border: none;
-					background-color: $beige;
-					border-radius: 5px;
-					height: 2rem;
-					width: 30rem;
-					margin-left: 1rem;
-					padding-left: 1rem;
-				}
-			}
-
-		}
-	}
-
-	.user-admin-button:hover {
+	.category-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		border: 1px solid rgba($marron, 0.12);
+		background: rgba($white, 0.45);
+		padding: 10px 12px;
+		border-radius: 999px;
 		cursor: pointer;
-	}
+		transition: 160ms ease;
+		box-shadow: 0 2px 10px rgba($marron, 0.10);
 
-	.email-input {
-		font-family: "Work sans", sans-serif;
-		font-size: 1rem;
-		font-weight: 500;
-		padding: 0.75rem;
-		border: solid 2px $sand;
-	}
-
-		&__form-footer {
-		display: flex;
-		margin-bottom: 1.5rem;
-		justify-content: end;
-
-		&__form-footer-button {
-			padding: 0.5rem;
-			border-radius: 5px;
-			border: 1px solid $marron;
-			width: 15rem;
-			background-color: mediumseagreen;
+		&:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 8px 16px rgba($marron, 0.14);
 		}
+
+		&__pin {
+			width: 14px;
+			height: 14px;
+			border-radius: 999px;
+			border: 1px solid rgba($black, 0.12);
+		}
+
+		&__name {
+			font-weight: 900;
+			color: $marron;
+		}
+	}
+
+	.danger-zone {
+		margin-top: 12px;
+		padding: 12px;
+		border-radius: 12px;
+		border: 1px solid rgba(#b23b3b, 0.22);
+		background: rgba(#b23b3b, 0.08);
+
+		button {
+			border: none;
+			background: rgba(#b23b3b, 0.86);
+			color: $white;
+			border-radius: 12px;
+			padding: 10px 12px;
+			font-weight: 900;
+			cursor: pointer;
+
+			&:hover {
+				filter: brightness(0.95);
+			}
+		}
+	}
+
+	.relative {
+		position: relative;
+	}
+
+	.close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		width: 30px;
+		height: 30px;
+		border-radius: 999px;
+		display: grid;
+		place-items: center;
+		cursor: pointer;
+		border: 1px solid rgba($marron, 0.12);
+		background: rgba($white, 0.5);
+	}
+}
+
+.admin .leaflet-container,
+.admin .map-update-city {
+	border-radius: 18px;
+	border: 1px solid rgba($marron, 0.12);
+	box-shadow: 0 6px 18px rgba($marron, 0.12);
+	overflow: hidden;
+}
+
+.suppr-button {
+	margin-top: 6px;
+	border: none;
+	border-radius: 14px;
+	padding: 12px 14px;
+	cursor: pointer;
+
+	font-weight: 900;
+	letter-spacing: 0.2px;
+	color: $white;
+
+	background: $accent;
+	box-shadow: 0 10px 22px rgba($accent, 0.30);
+	transition: 160ms ease;
+
+	&:hover {
+		filter: brightness(0.95);
+		transform: translateY(-1px);
+	}
+
+	&:active {
+		transform: translateY(0px);
 	}
 }

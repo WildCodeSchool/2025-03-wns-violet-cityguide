@@ -1,42 +1,87 @@
-// style:
-import "../scss/pages/backoffice.scss"
+// React & React Router
+import { useState } from "react";
 
+// Composants
 import BackofficeCategory from "../components/BackofficeCategory";
 import BackofficeCity from "../components/BackofficeCity";
 import BackofficeUser from "../components/BackofficeUser";
 import BackofficePoi from "../components/BackofficePoi";
 
+// Types
+type Panel = "cities" | "users" | "poi" | "categories";
+
 export default function BackofficeAdmin() {
+	const [activePanel, setActivePanel] = useState<Panel>("cities");
 
 	return (
-		<>
-			<div id="admin">
-				<div className="backoffice-banner">
-					<h1>Administration</h1>
-					<div className="href-container">
-						<a href="#admin-ville">Villes</a>
-						<a href="#admin-poi">Utilisateurs</a>
-						<a href="#admin-users">Point d'intêret</a>
-						<a href="#admin-categories">Catégories</a>
+		<div id="admin" className="admin">
+			<div className="admin__layout">
+				<aside className="admin__sidebar">
+					<div className="admin__brand">
+						<h1>Administration</h1>
 					</div>
-				</div>
 
-				<section id="admin-ville">
-					<BackofficeCity />
-				</section>
+					<nav className="admin__nav">
+						<button
+							type="button"
+							className={`admin__navlink ${activePanel === "cities" ? "active" : ""}`}
+							onClick={() => setActivePanel("cities")}
+						>
+							Villes
+						</button>
 
-				<section id="admin-poi">
-					<BackofficePoi />
-				</section>
+						<button
+							type="button"
+							className={`admin__navlink ${activePanel === "users" ? "active" : ""}`}
+							onClick={() => setActivePanel("users")}
+						>
+							Utilisateurs
+						</button>
 
-				<section id="admin-users section-part">
-					<BackofficeUser />
-				</section>
+						<button
+							type="button"
+							className={`admin__navlink ${activePanel === "poi" ? "active" : ""}`}
+							onClick={() => setActivePanel("poi")}
+						>
+							Points d&apos;intérêt
+						</button>
 
-				<section id="admin-categories">
-					<BackofficeCategory />
-				</section>
+						<button
+							type="button"
+							className={`admin__navlink ${activePanel === "categories" ? "active" : ""}`}
+							onClick={() => setActivePanel("categories")}
+						>
+							Catégories
+						</button>
+					</nav>
+				</aside>
+
+				<main className="admin__main">
+					{activePanel === "cities" && (
+						<section>
+							<BackofficeCity />
+						</section>
+					)}
+
+					{activePanel === "poi" && (
+						<section>
+							<BackofficePoi />
+						</section>
+					)}
+
+					{activePanel === "users" && (
+						<section>
+							<BackofficeUser />
+						</section>
+					)}
+
+					{activePanel === "categories" && (
+						<section>
+							<BackofficeCategory />
+						</section>
+					)}
+				</main>
 			</div>
-		</>
+		</div>
 	)
 }

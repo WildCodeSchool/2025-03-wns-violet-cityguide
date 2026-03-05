@@ -38,6 +38,10 @@
 			}
 		}
 
+		h2, p {
+			color: $marron;
+		}
+
 		div:first-child {
 			display: flex;
 			flex-direction: column;
@@ -57,7 +61,6 @@
 			@media screen and (max-width:$breakpoint-medium) {
 				max-width: 100%;
 			}
-			
 		}
 
 		@media screen and (max-width:$breakpoint-medium) {
@@ -70,6 +73,7 @@
 		flex-direction: column;
 		align-items: center;
 		width: 100%;
+		color: $marron;
 		@media screen and (min-width: $breakpoint-medium) {
 			flex-direction: row;
 			justify-content: space-evenly;
@@ -115,6 +119,7 @@
 		flex-direction: column;
 		padding: 1rem;
 		align-items: center;
+		color: $marron;
 	}
 }
 
@@ -133,6 +138,10 @@
 	@media screen and (max-width:$breakpoint-small) {
 		height: 150px;
 		padding: 1rem;
+	}
+
+	h3 {
+		color: $marron;
 	}
 	
 }
