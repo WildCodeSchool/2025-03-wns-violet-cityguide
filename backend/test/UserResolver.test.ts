@@ -29,13 +29,38 @@ let testDataSource: DataSource; // Connexion à la BDD
 let schema: GraphQLSchema; //Schema GraphQL utilisée lors de l'initialisation de la BDD
 let testUser: User; // Mock user pour les test d'authentification; 
 
-const mockCtx: Context = {
-	res: {
-		setHeader: jest.fn(),
-	} as any,
-	req: {} as any,
-	user: undefined,
-};
+function createMockContext(user?: {
+	id: number,
+	firstname : string, 
+	roles: Role[]
+}) {
+	return {
+		res: { setHeader: jest.fn() } as any,
+		req: {} as any,
+		user:user
+	};
+}
+const mockCtx = createMockContext(); 
+const sysadminCtx = createMockContext({
+	id: 1, 
+	firstname: 'sysadmin', 
+	roles: [Role.ADMIN_SITE]
+})
+const cityAdminCtx = createMockContext({
+	id: 2, 
+	firstname: 'célemairedelaville', 
+	roles: [Role.ADMIN_CITY]
+})
+const poiCreatorCtx = createMockContext({ 
+	id: 3, 
+	firstname: 'victor_the_creator_of_poi', 
+	roles: [Role.POI_CREATOR]
+})
+const userLambdaCtx = createMockContext({ 
+	id: 4, 
+	firstname: 'user_lambda', 
+	roles: [Role.USER]
+})
 
 describe("User Resolver test", () => {
 
@@ -269,70 +294,70 @@ describe("User Resolver test", () => {
 			const allUsers = await User.find();
 			expect(allUsers.length).toBe(4);
 		});
-	}),
+	});
 
-		describe("Login Mutation", () => {
-			it("User s'authentifie : info correct = success", async () => {
-				const userResolver = new UserResolver();
+	describe("Login Mutation", () => {
+		it("User s'authentifie : info correct = success", async () => {
+			const userResolver = new UserResolver();
 
-				const authUser = {
-					email: 'simple-user@example.com',
-					password: 'hashedPassword123'
-				}
+			const authUser = {
+				email: 'simple-user@example.com',
+				password: 'hashedPassword123'
+			}
 
-				const result = await userResolver.login(
-					{ email: authUser.email, password: authUser.password },
-					mockCtx
-				);
+			const result = await userResolver.login(
+				{ email: authUser.email, password: authUser.password },
+				mockCtx
+			);
 
-				expect(result).toBeDefined();
-				expect(result.message).toContain('Login successful');
-				expect(result.user?.email).toContain('simple-user@example.com');
-				expect(result.token).not.toBe('');
+			expect(result).toBeDefined();
+			expect(result.message).toContain('Login successful');
+			expect(result.user?.email).toContain('simple-user@example.com');
+			expect(result.token).not.toBe('');
 
-			});
-
-			it("User s'authentifie : info incorrectes (email) = fail", async () => {
-				const userResolver = new UserResolver();
-
-				const authUser = {
-					email: 'simple-not-user@example.com',
-					password: 'hashedPassword123'
-				}
-
-				const result = await userResolver.login(
-					{ email: authUser.email, password: authUser.password },
-					mockCtx
-				);
-
-
-				expect(result).toBeDefined();
-				expect(result.message).not.toBe('Login successful');
-				expect(result.token).toBe('');
-			});
-
-			it("User s'authentifie : info incorrectes (password) = fail", async () => {
-				const userResolver = new UserResolver();
-
-				const authUser = {
-					email: 'simple-user@example.com',
-					password: 'wrongPassword123'
-				}
-
-				const result = await userResolver.login(
-					{ email: authUser.email, password: authUser.password },
-					mockCtx
-				);
-
-				// Assert the error response
-				expect(result.token).toBe("");
-				expect(result.message).toBe("Invalid password");
-				expect(result.user).toBeUndefined();
-
-				// Verify NO cookie was set
-				expect(mockCtx.res.setHeader).not.toHaveBeenCalled();
-			});
 		});
+
+		it("User s'authentifie : info incorrectes (email) = fail", async () => {
+			const userResolver = new UserResolver();
+
+			const authUser = {
+				email: 'simple-not-user@example.com',
+				password: 'hashedPassword123'
+			}
+
+			const result = await userResolver.login(
+				{ email: authUser.email, password: authUser.password },
+				mockCtx
+			);
+
+
+			expect(result).toBeDefined();
+			expect(result.message).not.toBe('Login successful');
+			expect(result.token).toBe('');
+		});
+
+		it("User s'authentifie : info incorrectes (password) = fail", async () => {
+			const userResolver = new UserResolver();
+
+			const authUser = {
+				email: 'simple-user@example.com',
+				password: 'wrongPassword123'
+			}
+
+			const result = await userResolver.login(
+				{ email: authUser.email, password: authUser.password },
+				mockCtx
+			);
+
+			// Assert the error response
+			expect(result.token).toBe("");
+			expect(result.message).toBe("Invalid password");
+			expect(result.user).toBeUndefined();
+
+			// Verify NO cookie was set
+			expect(mockCtx.res.setHeader).not.toHaveBeenCalled();
+		});
+	});
 
 	describe("Logout Mutation", () => {
 		it("User se déconnecte de sa session", async () => {
@@ -387,16 +412,8 @@ describe("User Resolver test", () => {
 	})
 
 	describe("UpdateUserEveryDetail Mutation", () => {
-		it("User Site change des roles = success", async () => {
-			const adminMockCtx: Context = {
-				res: { setHeader: jest.fn() } as any,
-				req: {} as any,
-				user: {
-					id: 1,
-					firstname: 'sysadmin',
-					roles: [Role.ADMIN_SITE]
-				}
-			};
+		it("ADMIN_SITE change des roles = success", async () => {
+	
 			// userId: 4,
 			// email: "simple-user@example.com",
 			// roles: [Role.USER],
@@ -429,7 +446,7 @@ describe("User Resolver test", () => {
 						roles: [Role.USER, Role.POI_CREATOR]
 					}
 				},
-				contextValue: adminMockCtx
+				contextValue: sysadminCtx
 			});
 
 			expect(result.errors).toBeUndefined();
@@ -437,16 +454,7 @@ describe("User Resolver test", () => {
 			expect(modifiedUser?.email).toContain("new-email@example.com");
 		});
 
-		it("User City change des roles = success", async () => {
-			const adminCityMockCtx: Context = {
-				res: { setHeader: jest.fn() } as any,
-				req: {} as any,
-				user: {
-					id: 1,
-					firstname: 'city_admin',
-					roles: [Role.ADMIN_CITY]
-				}
-			};
+		it("ADMIN_CITY change des roles = success", async () => {
 
 			// userId: 4,
 			// email: "simple-user@example.com",
@@ -479,7 +487,7 @@ describe("User Resolver test", () => {
 						roles: [Role.USER, Role.POI_CREATOR]
 					}
 				},
-				contextValue: adminCityMockCtx
+				contextValue: cityAdminCtx
 			});
 
 			expect(result.errors).toBeUndefined();
@@ -491,15 +499,6 @@ describe("User Resolver test", () => {
 		});
 
 		it("Poi creator change des roles = fail", async () => {
-			const poiCreatorCtx: Context = {
-				res: { setHeader: jest.fn() } as any,
-				req: {} as any,
-				user: {
-					id: 1,
-					firstname: 'julien_le_createur_de_poi',
-					roles: [Role.POI_CREATOR]
-				}
-			};
 
 			// userId: 4,
 			// email: "simple-user@example.com",
@@ -543,15 +542,6 @@ describe("User Resolver test", () => {
 		});
 
 		it("User (simple) change des roles = fail", async () => {
-			const userLambdaCtx: Context = {
-				res: { setHeader: jest.fn() } as any,
-				req: {} as any,
-				user: {
-					id: 1,
-					firstname: 'user_lambda',
-					roles: [Role.USER]
-				}
-			};
 
 			// userId: 4,
 			// email: "simple-user@example.com",
@@ -620,94 +610,302 @@ describe("User Resolver test", () => {
 				userResolver.updateUserEveryDetail(10, newData)
 			).rejects.toThrow('Could not find any entity of type "User"');
 		})
+	});
 
-		describe("UpdateUserRole Mutation", () => {
+	describe("UpdateUserRole Mutation", () => {
+		it("ADMIN_SITE is changing user role = success", async () => {
 
-			// TODO: Test successful role update by admin
-			// - Should update user roles when called by ADMIN_SITE
-			// - Should update user roles when called by ADMIN_CITY
-			// - Should return the userId after successful update
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
 
-			// TODO: Test authorization
-			// - Should fail when user doesn't have required admin permissions
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
 
-			// TODO: Test error handling
-			// - Should throw error when userId doesn't exist
-			// - Should handle invalid role values
-		});
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+				mutation UpdateUserRole($data: UpdateUserRoleInput!, $userId: Float!) {
+  				updateUserRole(data: $data, userId: $userId)
+				}`;
 
-		describe("UpdateUserData Mutation", () => {
-
-			// TODO: Test ADMIN_SITE can update any user
-			// - Should allow ADMIN_SITE to update any user's email
-			// - Should return userId after successful update
-
-			// TODO: Test USER can update their own data
-			// - Should allow user to update their own email (when userId matches ctx.user.id)
-			// - Should return userId after successful update
-
-			// TODO: Test authorization failures
-			// - Should throw error when USER tries to update another user's data
-			// - Should throw "Vous n'êtes pas autorisé à faire cette modification" for unauthorized access
-
-			// TODO: Test error handling
-			// - Should throw error when userId doesn't exist
-			// - Should validate email format
-		});
-
-		describe("DeleteUser Mutation", () => {
-
-			it("ADMIN_SITE, supprime un utilisateur", async () => {
-				const sysadminCtx: Context = {
-					res: { setHeader: jest.fn() } as any,
-					req: {} as any,
-					user: {
-						id: 1,
-						firstname: 'sysadmin',
-						roles: [Role.ADMIN_SITE]
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+					data: {
+						roles: [Role.USER, Role.POI_CREATOR, Role.ADMIN_CITY]
 					}
-				};
+				},
+				contextValue: sysadminCtx
+			});
 
-				// userId: 4,
-				// email: "simple-user@example.com",
-				// roles: [Role.USER],
-				// hashedPassword: hashedPassword,
+			expect(result).toBeDefined();
 
-				const initialInformations = await User.findOne({ where: { userId: 4 } })
-				expect(initialInformations?.email).toBe('simple-user@example.com');
-				expect(initialInformations?.roles).toBeDefined()
+			const modifiedUser = await User.findOne({ where: { userId: 4 } })
+			expect(modifiedUser?.email).toBe("simple-user@example.com");
+			expect(modifiedUser?.roles).toContain(Role.POI_CREATOR)
+			expect(modifiedUser?.roles).toContain(Role.USER)
+			expect(modifiedUser?.roles).toContain(Role.ADMIN_CITY)
+		});
 
-				// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
-				const mutation = `
+		it("ADMIN_CITY is changing user role = success", async () => {
+
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+				mutation UpdateUserRole($data: UpdateUserRoleInput!, $userId: Float!) {
+  				updateUserRole(data: $data, userId: $userId)
+				}`;
+
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+					data: {
+						roles: [Role.USER, Role.POI_CREATOR, Role.ADMIN_CITY]
+					}
+				},
+				contextValue: sysadminCtx
+			});
+
+			expect(result).toBeDefined();
+
+			const modifiedUser = await User.findOne({ where: { userId: 4 } })
+			expect(modifiedUser?.email).toBe("simple-user@example.com");
+			expect(modifiedUser?.roles).toContain(Role.POI_CREATOR)
+			expect(modifiedUser?.roles).toContain(Role.USER)
+			expect(modifiedUser?.roles).toContain(Role.ADMIN_CITY)
+
+		});
+
+		it("POI_CREATOR is changing user role = fail", async () => {
+
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+				mutation UpdateUserRole($data: UpdateUserRoleInput!, $userId: Float!) {
+  				updateUserRole(data: $data, userId: $userId)
+				}`;
+
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+					data: {
+						roles: [Role.USER, Role.POI_CREATOR, Role.ADMIN_CITY]
+					}
+				},
+				contextValue: poiCreatorCtx
+			});
+
+			expect(result).toBeDefined();
+
+			const modifiedUser = await User.findOne({ where: { userId: 4 } })
+			expect(modifiedUser?.email).toBe("simple-user@example.com");
+			expect(modifiedUser?.roles).toContain(Role.USER)
+			expect(modifiedUser?.roles).not.toContain(Role.POI_CREATOR)
+			expect(modifiedUser?.roles).not.toContain(Role.ADMIN_CITY)
+		});
+
+		it("USER (lambda) is changing user role = fail", async () => {
+
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+				mutation UpdateUserRole($data: UpdateUserRoleInput!, $userId: Float!) {
+  				updateUserRole(data: $data, userId: $userId)
+				}`;
+
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+					data: {
+						roles: [Role.USER, Role.POI_CREATOR, Role.ADMIN_CITY]
+					}
+				},
+				contextValue: userLambdaCtx
+			});
+
+			expect(result).toBeDefined();
+
+			const modifiedUser = await User.findOne({ where: { userId: 4 } })
+			expect(modifiedUser?.email).toBe("simple-user@example.com");
+			expect(modifiedUser?.roles).toContain(Role.USER)
+			expect(modifiedUser?.roles).not.toContain(Role.POI_CREATOR)
+			expect(modifiedUser?.roles).not.toContain(Role.ADMIN_CITY)
+		});
+
+		it(" user role with incorrect id = fail", async () => {
+
+			const userResolver = new UserResolver(); // on ne test plus en fonction du rôle mais de la fonction => alors on retourne sur le resolver standard
+
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
+
+			await expect(userResolver.updateUserRole(
+				10,
+				{ roles: [Role.ADMIN_SITE] }
+			)).rejects.toThrow(Error)
+		});
+	});
+
+	describe("UpdateUserData Mutation", () => {
+
+		it("ADMIN_SITE is changing user role = success", async () => {
+
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toContain(Role.USER)
+			expect(initialInformations?.roles).not.toContain(Role.POI_CREATOR)
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+			mutation UpdateUserData($data: UpdateUserDataInput!, $userId: Float!) {
+ 			updateUserData(data: $data, userId: $userId)
+			}`;
+
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+					data: {
+						roles: [Role.USER, Role.POI_CREATOR, Role.ADMIN_CITY]
+					}
+				},
+				contextValue: sysadminCtx
+			});
+
+			expect(result).toBeDefined();
+
+			const modifiedUser = await User.findOne({ where: { userId: 4 } })
+			expect(modifiedUser?.email).toBe("simple-user@example.com");
+			expect(modifiedUser?.roles).toContain(Role.USER)
+			expect(modifiedUser?.roles).not.toContain(Role.POI_CREATOR)
+			expect(modifiedUser?.roles).not.toContain(Role.ADMIN_CITY)
+		});
+	});
+
+	describe("DeleteUser Mutation", () => {
+
+		it("ADMIN_SITE, supprime un utilisateur", async () => {
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
+
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toBeDefined()
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
 				mutation Mutation($userId: Float!) {
 					deleteUser(userId: $userId)
 				}`;
 
-				const result = await graphql({
-					schema,
-					source: mutation,
-					variableValues: {
-						userId: 4,
-					},
-					contextValue: sysadminCtx
-				});
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+				},
+				contextValue: sysadminCtx
+			});
 
-				expect(result.errors).toBeUndefined();
-				const deletedUser = await User.findOne({ where: { userId: 4 } });
-				expect(deletedUser).toBeNull();
-			})
+			expect(result.errors).toBeUndefined();
+			const deletedUser = await User.findOne({ where: { userId: 4 } });
+			expect(deletedUser).toBeNull();
+		})
 
-			// TODO: Test successful user deletion
-			// - Should delete user when called by ADMIN_SITE
-			// - Should return deleted userId
-			// - Should verify user is actually removed from database
+		it("ADMIN_SITE, supprime un utilisateur", async () => {
 
-			// TODO: Test authorization
-			// - Should fail when user doesn't have ADMIN_SITE role
+			// userId: 4,
+			// email: "simple-user@example.com",
+			// roles: [Role.USER],
+			// hashedPassword: hashedPassword,
 
-			// TODO: Test error handling
-			// - Should handle deletion of non-existent userId gracefully
-			// - Should consider cascade deletion of related UserInfo
-		});
+			const initialInformations = await User.findOne({ where: { userId: 4 } })
+			expect(initialInformations?.email).toBe('simple-user@example.com');
+			expect(initialInformations?.roles).toBeDefined()
+
+			// Ici, on utilise la mutation et pas le userResolver pour pouvoir faire appelle à l'autorization 
+			const mutation = `
+				mutation Mutation($userId: Float!) {
+					deleteUser(userId: $userId)
+				}`;
+
+			const result = await graphql({
+				schema,
+				source: mutation,
+				variableValues: {
+					userId: 4,
+				},
+				contextValue: sysadminCtx
+			});
+
+			expect(result.errors).toBeUndefined();
+			const deletedUser = await User.findOne({ where: { userId: 4 } });
+			expect(deletedUser).toBeNull();
+		})
+
+		// TODO: Test successful user deletion
+		// - Should delete user when called by ADMIN_SITE
+		// - Should return deleted userId
+		// - Should verify user is actually removed from database
+
+		// TODO: Test authorization
+		// - Should fail when user doesn't have ADMIN_SITE role
+
+		// TODO: Test error handling
+		// - Should handle deletion of non-existent userId gracefully
+		// - Should consider cascade deletion of related UserInfo
 	});
-})
+});
