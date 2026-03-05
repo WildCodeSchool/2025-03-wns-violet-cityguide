@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from "react";
 import { useCreatePoiMutation, useDeletePoiMutation, useEditPoiMutation, useGetAllCategoriesQuery, useGetAllCitiesQuery, useGetPoiByIdQuery, useGetPoisByCityQuery } from "../generated/graphql-types";
-import "../scss/pages/backoffice.scss";
 import useImageVerificationAndUpload from "../hooks/imageVerificationAndUpload";
 import { GET_ALL_POIS } from "../graphql/operations";
 import { useCheckCordinates } from "../hooks/useCheckCordinates";

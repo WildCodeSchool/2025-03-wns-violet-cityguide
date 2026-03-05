@@ -1,6 +1,5 @@
 @use '../variables' as *;
 
-/* ---------- Global page wrapper ---------- */
 .admin {
 	min-height: 100vh;
 	background: $beige;
@@ -20,7 +19,6 @@
 		align-items: flex-start;
 	}
 
-	/* ---- Sidebar (ex-banner) ---- */
 	&__sidebar {
 		width: 240px;
 		flex: 0 0 240px;
@@ -61,7 +59,6 @@
 		background: transparent;
 		font: inherit;
 
-		/* ton style */
 		width: 100%;
 		text-align: left;
 
@@ -109,7 +106,6 @@
 		}
 	}
 
-	/* ---- Main content ---- */
 	&__main {
 		flex: 1;
 		display: flex;
@@ -125,7 +121,6 @@
 	}
 }
 
-/* Responsive : menu au-dessus sur mobile */
 @media (max-width: $breakpoint-medium) {
 	.admin {
 		&__layout {
@@ -139,7 +134,6 @@
 	}
 }
 
-/* ---------- Tabs (City / POI / Category already use this) ---------- */
 .tab {
 	&__container {
 		display: flex;
@@ -180,7 +174,6 @@
 	}
 }
 
-/* ---------- Content containers ---------- */
 .backoffice {
 	&__container {
 		display: flex;
@@ -212,108 +205,112 @@
 	}
 }
 
-/* ---------- Forms ---------- */
-form {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-
-	padding: 16px;
-	border-radius: 18px;
-	border: 1px solid rgba($marron, 0.12);
-	background: rgba($white, 0.35);
-	box-shadow: 0 10px 30px rgba($marron, 0.12);
-
-	h3 {
-		margin: 0 0 6px 0;
-	}
-
-	label {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		font-weight: 700;
-		color: $marron;
-
-		span, p {
-			font-weight: 600;
-			color: rgba($marron, 0.70);
-			margin: 0;
-		}
-
-		&.vertical > div {
+.admin {
+	&__main {
+		.backoffice__container form,
+		.backoffice-container form,
+		form.form-update-user {
 			display: flex;
-			align-items: center;
-			gap: 10px;
-			flex-wrap: wrap;
-		}
-	}
+			flex-direction: column;
+			gap: 12px;
 
-	input[type="text"],
-	input[type="email"],
-	input[type="url"],
-	input[type="number"],
-	select,
-	textarea {
-		width: 100%;
-		border: 1px solid rgba($marron, 0.12);
-		background: rgba($white, 0.55);
-		border-radius: 10px;
-		padding: 10px 12px;
-		color: $marron;
-		transition: 160ms ease;
-		box-shadow: 0 2px 10px rgba($marron, 0.10);
+			padding: 16px;
+			border-radius: 18px;
+			border: 1px solid rgba($marron, 0.12);
+			background: rgba($white, 0.35);
+			box-shadow: 0 10px 30px rgba($marron, 0.12);
 
-		&:focus {
-			outline: none;
-			border-color: rgba($accent, 0.60);
-			box-shadow: 0 0 0 4px rgba($accent, 0.18);
-			background: rgba($white, 0.72);
-		}
-	}
+			h3 {
+				margin: 0 0 6px 0;
+			}
 
-	textarea {
-		min-height: 110px;
-		resize: vertical;
-	}
+			label {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				font-weight: 700;
+				color: $marron;
 
-	input[type="file"] {
-		border: 1px dashed rgba($accent, 0.55);
-		background: rgba($white, 0.35);
-		padding: 10px;
-		border-radius: 12px;
-	}
+				span,
+				p {
+					font-weight: 600;
+					color: rgba($marron, 0.70);
+					margin: 0;
+				}
 
-	/* Primary CTA */
-	input[type="submit"],
-	button[type="submit"] {
-		margin-top: 6px;
-		border: none;
-		border-radius: 14px;
-		padding: 12px 14px;
-		cursor: pointer;
+				&.vertical > div {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					flex-wrap: wrap;
+				}
+			}
 
-		font-weight: 900;
-		letter-spacing: 0.2px;
-		color: $white;
+			input[type="text"],
+			input[type="email"],
+			input[type="url"],
+			input[type="number"],
+			select,
+			textarea {
+				width: 100%;
+				border: 1px solid rgba($marron, 0.12);
+				background: rgba($white, 0.55);
+				border-radius: 10px;
+				padding: 10px 12px;
+				color: $marron;
+				transition: 160ms ease;
+				box-shadow: 0 2px 10px rgba($marron, 0.10);
 
-		background: $accent;
-		box-shadow: 0 10px 22px rgba($accent, 0.30);
-		transition: 160ms ease;
+				&:focus {
+					outline: none;
+					border-color: rgba($accent, 0.60);
+					box-shadow: 0 0 0 4px rgba($accent, 0.18);
+					background: rgba($white, 0.72);
+				}
+			}
 
-		&:hover {
-			filter: brightness(0.95);
-			transform: translateY(-1px);
-		}
+			textarea {
+				min-height: 110px;
+				resize: vertical;
+			}
 
-		&:active {
-			transform: translateY(0px);
+			input[type="file"] {
+				border: 1px dashed rgba($accent, 0.55);
+				background: rgba($white, 0.35);
+				padding: 10px;
+				border-radius: 12px;
+			}
+
+			input[type="submit"],
+			button[type="submit"] {
+				margin-top: 6px;
+				border: none;
+				border-radius: 14px;
+				padding: 12px 14px;
+				cursor: pointer;
+
+				font-weight: 900;
+				letter-spacing: 0.2px;
+				color: $white;
+
+				background: $accent;
+				box-shadow: 0 10px 22px rgba($accent, 0.30);
+				transition: 160ms ease;
+
+				&:hover {
+					filter: brightness(0.95);
+					transform: translateY(-1px);
+				}
+
+				&:active {
+					transform: translateY(0px);
+				}
+			}
 		}
 	}
 }
 
-/* ---------- Image validation blocks ---------- */
-.img-div {
+.admin .img-div {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
@@ -332,7 +329,6 @@ form {
 	}
 }
 
-/* ---------- Tables (Users) ---------- */
 .admin-table-users {
 	width: 100%;
 	border-collapse: collapse;
@@ -375,7 +371,6 @@ form {
 	box-shadow: 0 6px 16px rgba($marron, 0.14);
 }
 
-/* User action buttons */
 .admin-user-td-buttons {
 	display: flex;
 	gap: 8px;
@@ -398,7 +393,6 @@ form {
 	}
 }
 
-/* Delete confirm/cancel */
 .delete-alert {
 	border-radius: 12px;
 	padding: 8px 10px;
@@ -414,7 +408,6 @@ form {
 	color: $white;
 }
 
-/* ---------- BackofficeCategory helpers ---------- */
 .backoffice-container,
 .backoffice__container {
 	.container-row {
@@ -494,9 +487,8 @@ form {
 	}
 }
 
-/* ---------- Leaflet map polish ---------- */
-.leaflet-container,
-.map-update-city {
+.admin .leaflet-container,
+.admin .map-update-city {
 	border-radius: 18px;
 	border: 1px solid rgba($marron, 0.12);
 	box-shadow: 0 6px 18px rgba($marron, 0.12);
