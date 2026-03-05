@@ -262,10 +262,11 @@ export default function BackofficePoi() {
 				{/* Create a new POI */}
 				{isCreationPoiTab === 'creation-tab' &&
 				<>
-				<h3>Créer une nouveau point d'intérêt</h3>
+				<h3>Ajouter un point d'intérêt</h3>
 					<form onSubmit={handleAddPoi}>
 
-						<label htmlFor="poiCity">Sélectionner la ville dans laquelle se trouve le POI à modifier
+						<label htmlFor="poiCity">Sélectionner la ville
+							dans laquelle modifier un point d'intérêt
 							<select name="poiCity" required>
 								<option value="">Sélectionnez une ville</option>
 								{cityData?.getAllCities.map((city) => (
