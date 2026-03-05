@@ -502,3 +502,28 @@ form {
 	box-shadow: 0 6px 18px rgba($marron, 0.12);
 	overflow: hidden;
 }
+
+.suppr-button {
+	margin-top: 6px;
+	border: none;
+	border-radius: 14px;
+	padding: 12px 14px;
+	cursor: pointer;
+
+	font-weight: 900;
+	letter-spacing: 0.2px;
+	color: $white;
+
+	background: $accent;
+	box-shadow: 0 10px 22px rgba($accent, 0.30);
+	transition: 160ms ease;
+
+	&:hover {
+		filter: brightness(0.95);
+		transform: translateY(-1px);
+	}
+
+	&:active {
+		transform: translateY(0px);
+	}
+}

@@ -579,7 +579,7 @@ export default function BackofficePoi() {
 							editPoiStep === 3 &&
 							<>
 								<p>Or</p>
-								<button onClick={() => setUserConfirmDeletion('wish')}>Supprimer le point d'intérêt</button>
+								<button className="suppr-button" onClick={() => setUserConfirmDeletion('wish')}>Supprimer le point d'intérêt</button>
 								{
 									userConfirmDeletion === 'wish' &&
 									<>
