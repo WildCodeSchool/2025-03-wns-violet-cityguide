@@ -2,7 +2,7 @@ import {
 	Arg,
 	Field,
 	Ctx,
-	ID, 
+	ID,
 	InputType,
 	Mutation,
 	Query,
@@ -48,10 +48,10 @@ class UserInput {
 class UserResponse {
 	@Field(() => String)
 	token: string;
-	
+
 	@Field(() => User, { nullable: true })
 	user?: User;
-	
+
 	@Field(() => String, { nullable: true })
 	message?: string;
 }
@@ -158,7 +158,7 @@ export default class UserResolver {
 
 		// Si l'utilisateur existe déjà, envoi d'une erreur et arrêt du processus
 		if (existingUser) throw new Error("Email already in use");
-		
+
 		// Hashage du password (la librairie argon2 fourni la fonction de hash)
 		const hashedPassword = await argon2.hash(data.password);
 
@@ -167,7 +167,7 @@ export default class UserResolver {
 
 		// Enregistrement du nouvel utilisateur
 		await user.save();
-		
+
 		/* Les utilisateurs ont la possibilité de fournir d'autres informations les concernant ultérieurement
 		Toutefois, on crée ces informations avec des valeurs par défaut pour qu'elles soient associées avec le nouvel utilisateur */
 		const userInfo = UserInfo.create({
@@ -204,7 +204,7 @@ export default class UserResolver {
 
 		// Rechercher en base un utilisateur avec le mail fourni
 		try {
-			const user = await User.findOneOrFail({ 
+			const user = await User.findOneOrFail({
 				where: { email: data.email },
 				relations: ["userInfo"]
 			});
@@ -237,15 +237,18 @@ export default class UserResolver {
 	}
 
 	// Déconnexion de l'utilisateur
+	@Authorized("ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER")
 	@Mutation(() => UserResponse)
 	async logout(@Ctx() ctx: Context) {
-
-		// Fabrication d'un cookie vide et stockage de celui-ci dans le navigateur : l'utilisateur n'est plus connecté
-		setCookie(ctx, "");
-		return {
-			token: "",
-			message: "Logged out successfully"
-		};
+		try {
+			setCookie(ctx, "");
+			return {
+				token: "",
+				message: "Logged out successfully"
+			};
+		} catch (error) {
+			throw new Error("Logout failed");
+		}
 	}
 
 	// TODO TEST Modification globale d'un utilisateur
@@ -281,9 +284,9 @@ export default class UserResolver {
 
 	// Modification du mail d'un utilisateur
 	@Authorized("ADMIN_SITE", "USER")
-		@Mutation(() => ID)
+	@Mutation(() => ID)
 	async updateUserData(
-		@Arg("userId") userId: number, 
+		@Arg("userId") userId: number,
 		@Arg("data") data: UpdateUserDataInput,
 		@Ctx() ctx: Context) {
 
@@ -301,7 +304,7 @@ export default class UserResolver {
 
 		// Si l'utilisateur n'est ni administrateur site ni "lui-même"
 		if (!isAdmin && !isSelf) {
-			throw new Error ("Vous n'êtes pas autorisé à faire cette modification");
+			throw new Error("Vous n'êtes pas autorisé à faire cette modification");
 		}
 
 		// Assigner les nouvelles données à l'utilisateur
