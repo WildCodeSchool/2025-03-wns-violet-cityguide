@@ -200,7 +200,7 @@ export default function BackofficeCity() {
 				</button>
 			</div>
 
-			<div className="backoffice-container">
+			<div className="backoffice__container">
 
 				{/* ajouter une ville */}
 				{adminTabCities === "createCity" &&
@@ -262,8 +262,8 @@ export default function BackofficeCity() {
 						</label>
 
 						{/* Coordonnées */}
+						<div className="backoffice__cordinates">
 						<p>Coordonnées</p>
-						<div className="add-ville-coordonnees">
 							<label htmlFor="cityLatitude">Latitude
 								<input
 									type="number"
@@ -314,7 +314,7 @@ export default function BackofficeCity() {
 
 				{/* administrer une ville */}
 				{adminTabCities === "updateCity" &&
-					<div className="backoffice-container">
+					<>
 
 						{/* Choix de la ville à éditer */}
 						<label htmlFor="select-ville">Choisissez une ville à éditer
@@ -328,7 +328,7 @@ export default function BackofficeCity() {
 
 						{/* Si la ville est trouvée, affichage du formulaire pré-rempli de modification de la ville */}
 						{ cityToUpdate?.cityId &&
-							<div className='backoffice-container relative'>
+							<>
 
 								<form onSubmit={updateCityHandler}>
 
@@ -400,8 +400,8 @@ export default function BackofficeCity() {
 									</label>
 
 									{/* Coordonnées */}
-									<h5>Coordonnées</h5>
-									<div className='latitude-longitude'>
+									<div className='backoffice__cordinates'>
+									<p>Coordonnées</p>
 										<p>Latitude actuelle : { currentLatitude }</p>
 										<label htmlFor='cityLatitude'>
 											Nouvelle latitude : 
@@ -415,9 +415,6 @@ export default function BackofficeCity() {
 												onChange={ handleCityLatitudeUpdate }
 											/>
 										</label>
-									</div>
-									
-									<div className='latitude-longitude'>
 										<p>Longitude actuelle : { currentLongitude }</p>
 										<label htmlFor='cityLongitude'>
 											Nouvelle longitude : 
@@ -453,9 +450,9 @@ export default function BackofficeCity() {
 									{/* bouton de validation du form */}
 									<input type="submit" value="Modifier la ville" />
 								</form>
-							</div>
+							</>
 						}
-				</div>
+				</>
 			}
 			</div>
 		</>
