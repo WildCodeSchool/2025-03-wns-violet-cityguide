@@ -11,7 +11,7 @@
 		"seed:clear": "ts-node ./src/scripts/seed.ts --clear",
 		"seed:clear-only": "ts-node ./src/scripts/seed.ts --clear-only"
 	},
-	"author": "",
+	"author": "Où Team",
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
