@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll, beforeEach, beforeAll, afterEach } from "@jest/globals";
+import "reflect-metadata";
 
 // Import des entitées necessaires aux tests unitaires
 import { Poi } from "../src/entities/Poi";
