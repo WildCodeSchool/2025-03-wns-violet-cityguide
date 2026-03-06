@@ -15,27 +15,29 @@ const CookieConsent: React.FC = () => {
     }, [cookies]);
 
     const acceptAllCookies = () => {
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
         setCookie('cityGuide-consent', {
             necessary: true,
             preferences: true
         }, {
             path: '/',
-            maxAge: 365 * 24 * 60 * 60, // 1 an
-            secure: true,
-            sameSite: 'strict'
+            maxAge: 365 * 24 * 60 * 60,
+            secure: isProduction,
+            sameSite: isProduction ? 'strict' : 'lax'
         });
         setShowBanner(false);
     };
 
     const acceptOnlyNecessary = () => {
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
         setCookie('cityGuide-consent', {
             necessary: true,
             preferences: false
         }, {
             path: '/',
-            maxAge: 365 * 24 * 60 * 60, // 1 an
-            secure: true,
-            sameSite: 'strict'
+            maxAge: 365 * 24 * 60 * 60,
+            secure: isProduction,
+            sameSite: isProduction ? 'strict' : 'lax'
         });
         setShowBanner(false);
     };
