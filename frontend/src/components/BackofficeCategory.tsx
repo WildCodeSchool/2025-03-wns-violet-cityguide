@@ -11,7 +11,7 @@ type Category = {
 
 export default function BackofficeCategory() {
 	// Get toutes les catégories existantes 
-	const { data: allCategoriesData, loading: allCategoriesLoading, error: allCategoriesError } = useGetAllCategoriesQuery();
+	const { data: allCategoriesData } = useGetAllCategoriesQuery();
 
 	// Import des couleurs 
 	const [importedColors, setImportedColors] = useState(true);
