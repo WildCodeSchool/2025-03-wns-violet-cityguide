@@ -47,15 +47,17 @@ const CookieConsent: React.FC = () => {
     return (
         <div style={{
             position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
+            bottom: '5px',
+            right: '5px',
             backgroundColor: '#eee0cb',
             color: 'white',
             padding: '20px',
             zIndex: 10000,
             boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
-            borderTop: '1px solid #342D29FF'
+            border: '2px solid #342D29FF', 
+			maxWidth: '500px', 
+			borderRadius: '30px'
+
         }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <div style={{ marginBottom: '15px' }}>
