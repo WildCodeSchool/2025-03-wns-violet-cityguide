@@ -6,6 +6,8 @@ services:
     # Récupération de l'image existante pour la base de données
     image: postgres
     # "script" du healthckeck
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_DATABASE} -U ${DB_USER}"]
       # interval entre les healthcheck => à définir, ce n'est pas une valeur fixe (revoir si besoin, si le projet devient plus gros par exemple)
