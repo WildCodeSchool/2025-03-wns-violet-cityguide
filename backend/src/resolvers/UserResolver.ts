@@ -92,9 +92,14 @@ class UpdateUserEveryDetailsInput {
 /* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
 Le cookie possède une date d'expiration (expires=XXX) : après l'expiration du cookie l'utilisateur sera obligé de se re-connecter pour accéder à l'application */
 function setCookie(ctx: Context, token: string) {
+	// In production, use 'secure' flag (HTTPS only). In dev/test, use Lax for localhost compatibility
+	const isProduction = process.env.NODE_ENV === 'production';
+	const secureFix = isProduction ? 'secure;' : '';
+	const sameSite = isProduction ? 'SameSite=Strict' : 'SameSite=Lax';
+	
 	ctx.res.setHeader(
 		"Set-Cookie",
-		`cityGuide-auth=${token};secure;HttpOnly;SameSite=Strict;expires=${new Date(
+		`cityGuide-auth=${token};${secureFix}HttpOnly;${sameSite};expires=${new Date(
 			Date.now() + 1000 * 60 * 60 * 24
 		).toUTCString()};`
 	);

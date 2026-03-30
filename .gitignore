@@ -34,5 +34,9 @@ generated/graphql-types.ts
 
 ./frontend/src/generated
 
-playwright-report/
-test-results/
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
