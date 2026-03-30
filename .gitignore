@@ -33,3 +33,6 @@ generated/
 generated/graphql-types.ts
 
 ./frontend/src/generated
+
+playwright-report/
+test-results/
