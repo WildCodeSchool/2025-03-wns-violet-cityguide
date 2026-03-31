@@ -24,9 +24,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: toto
-          POSTGRES_PASSWORD: toto
-          POSTGRES_DB: city_guide_test
+          POSTGRES_USER: ${{ secrets.TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.TEST_DB_NAME }}
         ports:
           - 5432:5432
         options: >-
@@ -38,10 +38,10 @@ jobs:
     env:
       TEST_DB_HOST: 127.0.0.1
       TEST_DB_PORT: 5432
-      TEST_DB_USER: toto
-      TEST_DB_PASSWORD: toto
-      TEST_DB_NAME: city_guide_test
-      JWT_SECRET: secret
+      TEST_DB_USER: ${{ secrets.TEST_DB_USER }}
+      TEST_DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+      TEST_DB_NAME: ${{ secrets.TEST_DB_NAME }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     steps:
       - name: Récupération du code

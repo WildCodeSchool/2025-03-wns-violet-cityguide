@@ -25,7 +25,10 @@ import * as jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
 import { Context } from "../src/types/Context";
 
-
+// fichier env
+import path from "path";
+import dotenv from "dotenv";
+dotenv.config({ path: path.resolve(__dirname, ".env.test"), });
 
 let testDataSource: DataSource; // Connexion à la BDD
 let schema: GraphQLSchema; //Schema GraphQL utilisée lors de l'initialisation de la BDD
@@ -73,9 +76,14 @@ describe("User Resolver test", () => {
 		process.env.JWT_SECRET = "test-secret-key-for-jwt-generation";
 
 		testDataSource = new DataSource({
-			type: "better-sqlite3",
-			database: ":memory:",
+			type: "postgres",
+			host: process.env.TEST_DB_HOST || "127.0.0.1",
+			port: Number(process.env.TEST_DB_PORT || 5432),
+			username: process.env.TEST_DB_USER || "toto",
+			password: process.env.TEST_DB_PASSWORD || "toto",
+			database: process.env.TEST_DB_NAME || "city_guide_test",
 			synchronize: true,
+			dropSchema: true,
 			entities: [User, UserInfo, Poi, City, Category],
 			logging: false,
 		});
@@ -197,7 +205,7 @@ describe("User Resolver test", () => {
 
 	describe("Signup Mutation", () => {
 
-		it('User entre des informations correctes : signup = succes', async () => {
+		it('User entre des informations correctes : signup = success', async () => {
 			const userResolver = new UserResolver();
 
 			const newUser = {

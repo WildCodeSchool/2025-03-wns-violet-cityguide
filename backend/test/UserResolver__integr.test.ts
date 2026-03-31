@@ -93,13 +93,13 @@ describe("User Resolver test", () => {
 		schema = await buildSchema({
 			resolvers: [UserResolver],
 			authChecker: ({ context }, roles) => {
-				// If no roles required, allow access
+				// Si pas de rôle requis, valider l'accès
 				if (!roles || roles.length === 0) return true;
 
-				// If no user in context, deny access
+				// Si pas de user dans le contexte, refuser l'accès
 				if (!context.user) return false;
 
-				// Check if user has any of the required roles
+				// Check si le user possède l'un des rôles requis
 				return roles.some((role: Role) => context.user.roles.includes(role));
 			}
 		});
