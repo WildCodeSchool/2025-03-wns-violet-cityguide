@@ -91,31 +91,31 @@ export async function seedDatabase(dataSource: DataSource): Promise<void> {
 			{
 				firstName: 'Jésus',
 				lastName: 'Choucroute',
-				avatarUrl: '',
+				avatarUrl: 'https://zupimages.net/up/26/14/1rwz.jpg',
 				user: users[0],
 			},
 			{
 				firstName: 'Jeep',
 				lastName: 'Renault',
-				avatarUrl: '',
+				avatarUrl: 'https://zupimages.net/up/26/14/1rwz.jpg',
 				user: users[1],
 			},
 			{
 				firstName: 'John',
 				lastName: 'Doudou',
-				avatarUrl: '',
+				avatarUrl: 'https://zupimages.net/up/26/14/1rwz.jpg',
 				user: users[2],
 			},
 			{
 				firstName: 'Elan',
 				lastName: 'Naralbol',
-				avatarUrl: '',
+				avatarUrl: 'https://zupimages.net/up/26/14/1rwz.jpg',
 				user: users[3],
 			},
 			{
 				firstName: 'Rodéo',
 				lastName: 'Danger',
-				avatarUrl: '',
+				avatarUrl: 'https://zupimages.net/up/26/14/1rwz.jpg',
 				user: users[4],
 			}
 		]);
