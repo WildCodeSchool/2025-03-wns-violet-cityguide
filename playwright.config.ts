@@ -11,7 +11,6 @@ export default defineConfig({
     baseURL: 'http://localhost:7000',
     trace: 'on-first-retry',
   },
-
   projects: [
     {
       name: 'chromium',

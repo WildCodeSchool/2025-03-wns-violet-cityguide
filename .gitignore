@@ -25,6 +25,7 @@ dist-ssr
 
 .idea
 .env
+backend/test/.env.test
 .env.prod
 .env.stage
 .env.dev
