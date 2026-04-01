@@ -19,7 +19,7 @@ const dataSource = new DataSource({
 		password: DB_PASSWORD,
 		database: DB_DATABASE,
 		entities: [User, City, Poi, Category, UserInfo],
-		synchronize: false,
+		synchronize: true, // éviter le synchronize true en stage et en prod : riqsue de perte de données
 		logging: ["error", "query"],
 });
 
