@@ -57,3 +57,5 @@ shell-frontend-prod: #permet d"écouter et lancer des commandes dans le services
 shell-db-prod: #permet d"écouter et lancer des commandes dans le services de db prod + lire les logs [debug]
 	docker exec -it database sh
 
+seed-db : #permet de seeder la base de donnée
+	docker exec -it backend-dev npm run seed
