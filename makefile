@@ -9,7 +9,7 @@ remove-all: #stoppe tous les containers
 prune-image: #nettoie juste les images pas utilisées, pour un petit clean rapide
 	docker image prune -f
 
-dev: #lance le build de dev docker
+dev: #lance le build de dev docker (--build sert à forcer Docker a reconstruire au lieu d'utiliser le cache)
 	docker compose -f compose.dev.yaml --env-file .env.dev up -d --build
 
 test-dev: #lance le build de test de dev  => /!\ pas de volumes ni de gateway dans le build de test ! 
@@ -57,3 +57,5 @@ shell-frontend-prod: #permet d"écouter et lancer des commandes dans le services
 shell-db-prod: #permet d"écouter et lancer des commandes dans le services de db prod + lire les logs [debug]
 	docker exec -it database sh
 
+seed-db : #permet de seeder la base de donnée
+	docker exec -it backend-dev npm run seed

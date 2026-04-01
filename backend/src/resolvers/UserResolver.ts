@@ -2,7 +2,7 @@ import {
 	Arg,
 	Field,
 	Ctx,
-	ID, 
+	ID,
 	InputType,
 	Mutation,
 	Query,
@@ -15,7 +15,7 @@ import * as argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { Context, UserToken } from "../types/Context";
 import { UserInfo } from "../entities/UserInfo";
-import { IsArray, IsEmail, IsString, MinLength } from "class-validator";
+import { IsArray, IsEmail, IsNumber, IsString, MinLength } from "class-validator";
 
 // Input de création d'un nouvel utilisateur
 @InputType()
@@ -48,10 +48,10 @@ class UserInput {
 class UserResponse {
 	@Field(() => String)
 	token: string;
-	
+
 	@Field(() => User, { nullable: true })
 	user?: User;
-	
+
 	@Field(() => String, { nullable: true })
 	message?: string;
 }
@@ -64,6 +64,7 @@ class UpdateUserRoleInput {
 	roles: Role[];
 }
 
+// Input pour les modifications du mail d'un utilisateur
 @InputType()
 class UpdateUserDataInput {
 	@Field()
@@ -72,12 +73,33 @@ class UpdateUserDataInput {
 	// TODO voir pour le mot de passe dans un second temps
 }
 
+// Input pour l'update des utilisateurs dans le panneau d'administration
+@InputType()
+class UpdateUserEveryDetailsInput {
+	@Field()
+	@IsNumber()
+	userId: number;
+
+	@Field()
+	@IsEmail()
+	email: string;
+
+	@Field(() => [Role])
+	@IsArray()
+	roles: Role[];
+}
+
 /* Création d'un cookie qui sera stocké dans le header de la réponse reçue et qui va rester stocké dans le navigateur
 Le cookie possède une date d'expiration (expires=XXX) : après l'expiration du cookie l'utilisateur sera obligé de se re-connecter pour accéder à l'application */
 function setCookie(ctx: Context, token: string) {
+	// In production, use 'secure' flag (HTTPS only). In dev/test, use Lax for localhost compatibility
+	const isProduction = process.env.NODE_ENV === 'production';
+	const secureFix = isProduction ? 'secure;' : '';
+	const sameSite = isProduction ? 'SameSite=Strict' : 'SameSite=Lax';
+	
 	ctx.res.setHeader(
 		"Set-Cookie",
-		`cityGuide-auth=${token};secure;HttpOnly;SameSite=Strict;expires=${new Date(
+		`cityGuide-auth=${token};${secureFix}HttpOnly;${sameSite};expires=${new Date(
 			Date.now() + 1000 * 60 * 60 * 24
 		).toUTCString()};`
 	);
@@ -141,7 +163,7 @@ export default class UserResolver {
 
 		// Si l'utilisateur existe déjà, envoi d'une erreur et arrêt du processus
 		if (existingUser) throw new Error("Email already in use");
-		
+
 		// Hashage du password (la librairie argon2 fourni la fonction de hash)
 		const hashedPassword = await argon2.hash(data.password);
 
@@ -150,13 +172,13 @@ export default class UserResolver {
 
 		// Enregistrement du nouvel utilisateur
 		await user.save();
-		
+
 		/* Les utilisateurs ont la possibilité de fournir d'autres informations les concernant ultérieurement
 		Toutefois, on crée ces informations avec des valeurs par défaut pour qu'elles soient associées avec le nouvel utilisateur */
 		const userInfo = UserInfo.create({
 			firstName: "",
 			lastName: "",
-			avatarUrl: "https://example.com/default-avatar.png",
+			avatarUrl: "https://zupimages.net/up/26/14/1rwz.jpg",
 			user: user
 		});
 		await userInfo.save();
@@ -187,7 +209,7 @@ export default class UserResolver {
 
 		// Rechercher en base un utilisateur avec le mail fourni
 		try {
-			const user = await User.findOneOrFail({ 
+			const user = await User.findOneOrFail({
 				where: { email: data.email },
 				relations: ["userInfo"]
 			});
@@ -220,19 +242,37 @@ export default class UserResolver {
 	}
 
 	// Déconnexion de l'utilisateur
+	@Authorized("ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR", "USER")
 	@Mutation(() => UserResponse)
 	async logout(@Ctx() ctx: Context) {
+		try {
+			setCookie(ctx, "");
+			return {
+				token: "",
+				message: "Logged out successfully"
+			};
+		} catch (error) {
+			throw new Error("Logout failed");
+		}
+	}
 
-		// Fabrication d'un cookie vide et stockage de celui-ci dans le navigateur : l'utilisateur n'est plus connecté
-		setCookie(ctx, "");
-		return {
-			token: "",
-			message: "Logged out successfully"
-		};
+	// TODO TEST Modification globale d'un utilisateur
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
+	@Mutation(() => User)
+	async updateUserEveryDetail(@Arg("userId") userId: number, @Arg("data") data: UpdateUserEveryDetailsInput) {
+		// Récupérer l'utilisateur à modifier
+		let user = await User.findOneByOrFail({ userId });
+
+		// Assigner les nouvelles données à l'utilisateur
+		user = Object.assign(user, data);
+
+		// Enregistrer l'utilisateur modifié
+		await user.save();
+		return user;
 	}
 
 	// Modification du role d'un utilisateur (Prévoir de rendre possible à l'utilisateur de modifier son mot de passe)
-	@Authorized("ADMIN_SITE")
+	@Authorized("ADMIN_SITE", "ADMIN_CITY")
 	@Mutation(() => ID)
 	async updateUserRole(@Arg("userId") userId: number, @Arg("data") data: UpdateUserRoleInput) {
 
@@ -249,9 +289,9 @@ export default class UserResolver {
 
 	// Modification du mail d'un utilisateur
 	@Authorized("ADMIN_SITE", "USER")
-		@Mutation(() => ID)
+	@Mutation(() => ID)
 	async updateUserData(
-		@Arg("userId") userId: number, 
+		@Arg("userId") userId: number,
 		@Arg("data") data: UpdateUserDataInput,
 		@Ctx() ctx: Context) {
 
@@ -269,7 +309,7 @@ export default class UserResolver {
 
 		// Si l'utilisateur n'est ni administrateur site ni "lui-même"
 		if (!isAdmin && !isSelf) {
-			throw new Error ("Vous n'êtes pas autorisé à faire cette modification");
+			throw new Error("Vous n'êtes pas autorisé à faire cette modification");
 		}
 
 		// Assigner les nouvelles données à l'utilisateur

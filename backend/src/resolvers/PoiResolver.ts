@@ -7,11 +7,11 @@ import {
 	Mutation, 
 	ID, 
 	Arg, 
-	Authorized 
+	Authorized,
+	Int
 } from "type-graphql";
 
 import { 
-	IsFQDN, 
 	IsNumber, 
 	IsString, 
 	Max, 
@@ -58,16 +58,16 @@ class PoiInput {
 	poiLongitude!: number;
 
 	@Field()
-	@IsFQDN()
+	@IsString()
 	externalLink: string;
 
-	@Field(() => ID)
+	@Field(() => Int)
 	@IsNumber()
-	poiCity: City;
+	poiCity: City['cityId'];
 
-	@Field(() => ID)
+	@Field(() => Int)
 	@IsNumber()
-	poiCategory: Category;
+	poiCategory: Category['categoryId'];
 }
 
 @Resolver(Poi)
@@ -91,7 +91,7 @@ export default class PoiResolver {
 		return poi;
 	}
 
-	// On récupère les pois en fonction d'une catégorie
+	// On récupère les pois en fonction d'une  catégorie
 	@Query(() => [Poi])
 	async getPoisByCategory(@Arg("categoryId") categoryId: number): Promise<Poi[]> {
 		return await Poi.find({
@@ -132,7 +132,11 @@ export default class PoiResolver {
 	@Authorized("ADMIN_SITE", "ADMIN_CITY", "POI_CREATOR")
 	@Mutation(() => ID)
 	async createPoi(@Arg("data") data: PoiInput) {
-		const poi = Poi.create({...data});
+		const poi = Poi.create({
+			...data,
+			poiCity: { cityId: data.poiCity } as City,
+			poiCategory: { categoryId: data.poiCategory } as Category,
+		});
 		await poi.save();
 		return poi.poiId;
 	}

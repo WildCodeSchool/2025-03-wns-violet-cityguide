@@ -10,6 +10,9 @@
 @use "pages/notFound";
 @use "pages/faq";
 @use "pages/legalNotice";
+@use "pages/welcome";
+@use "pages/account";
+@use "pages/backoffice";
 @use 'variables' as *;
 
 h1 {
@@ -38,4 +41,9 @@ body {
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 5px;
 	//padding: 2rem;
+}
+
+lu, li {
+	list-style: none;
+	text-decoration: none;
 }

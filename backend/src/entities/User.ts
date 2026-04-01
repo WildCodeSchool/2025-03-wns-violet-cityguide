@@ -33,11 +33,11 @@ class User extends BaseEntity {
 		hashedPassword: string;
 
 		@Column({
-		type: "enum",
-		enum: Role,
-		array: true,
-		default: [Role.USER],
-		enumName: "roles"
+			type: "enum",
+			enum: Role,
+			array: true,
+			default: [Role.USER],
+			enumName: "roles"
 		})
 		@Field(() => [Role])
 		roles: Role[];

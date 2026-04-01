@@ -25,6 +25,7 @@ dist-ssr
 
 .idea
 .env
+backend/test/.env.test
 .env.prod
 .env.stage
 .env.dev
@@ -33,3 +34,10 @@ generated/
 generated/graphql-types.ts
 
 ./frontend/src/generated
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

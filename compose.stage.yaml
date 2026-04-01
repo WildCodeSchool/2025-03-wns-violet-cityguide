@@ -45,6 +45,11 @@ services:
     restart: always
     container_name: frontend-stage
     image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_PROJECT_NAME}:frontend-latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
+      - ${GATEWAY_PORT}:80
     healthcheck:
       interval: 20s 
       retries: 15
@@ -57,20 +62,5 @@ services:
         ]
     depends_on:
       backend-stage:
-        condition: service_healthy
-
-  # Permet d'accéder au front, back et db depuis un même port qui "distribue" les demandes en fonction de l'URL. Nécessaire pour pouvoir utiliser un JWT site strict
-  gateway-stage:
-    container_name: gateway-stage
-    image: nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      # Gateway port => "extérieur" de la porte du container : 80 => "intérieur" de la porte du container
-      - ${GATEWAY_PORT}:80
-    depends_on:
-      backend-stage:
-        condition: service_healthy
-      frontend-stage:
         condition: service_healthy
 

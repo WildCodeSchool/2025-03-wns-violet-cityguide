@@ -21,13 +21,16 @@ export type GraphqlUser = {
 export type UserResponse = {
   token: string;
   user?: GraphqlUser | null;
+	roles?: Role[];
   message?: string | null;
 };
 
 export type State = {
   user: GraphqlUser | null;
+  roles: Role[];
   token: string | null;
   isAuthenticated: boolean;
+  isAuthStoreReady: boolean;
 };
 
 export type Actions = {

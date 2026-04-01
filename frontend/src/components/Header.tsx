@@ -7,7 +7,8 @@ import LogoSVG from "./LogoSVG";
 import OuTextSVG from "./OuTextSVG";
 
 // Zustand - Context
-import { useIsAuthenticated, useLogout } from "../zustand/userStore";
+import { useIsAuthenticated, useLogout, useCurrentUser } from "../zustand/userStore";
+import { Role } from "../generated/graphql-types";
 
 export default function Header() {
 	const [open, setOpen] = useState(false);
@@ -20,6 +21,21 @@ export default function Header() {
 	const logout = useLogout();
 	const navigate = useNavigate();
 
+	// Récupération des informations de l'utilisateur connecté
+	const connectedUser = useCurrentUser();
+	const connectedUserRoles = connectedUser?.roles;
+
+	// Liste des roles autorisés à voir le bouton d'accès au panneau d'administration
+	const authorizedAdminSite = Role['AdminSite'];
+	const authorizedAdminCity = Role['AdminCity'];
+	const authorizedPoiCreator = Role['PoiCreator'];
+
+	// Est-ce que l'utilisateur connecté possède au moins un des roles autorisés ?
+	let isAuthorized = false;
+	if (connectedUserRoles?.includes(authorizedAdminSite) || connectedUserRoles?.includes(authorizedAdminCity) || connectedUserRoles?.includes(authorizedPoiCreator)) {
+		isAuthorized = true;
+	}
+
 	const scrollToId = (id: string) => {
 		const el = document.getElementById(id);
 		if (el) {
@@ -29,7 +45,7 @@ export default function Header() {
 
 	const navigateToCities = () => {
 		sessionStorage.setItem("scrollTo", "cities");
-		navigate("/");
+		navigate("/home-page/");
 	};
 
 	// Fermer le menu quand on change de route
@@ -67,13 +83,13 @@ export default function Header() {
 	const onLogout = () => {
 		logout();
 		setOpen(false);
-		navigate("/login");
+		navigate("/", { replace: true });
 	};
 
 	return (
 		<header className="header">
 			<div className="header__fullLogo">
-				<Link to="" className="header__brand">
+				<Link to="/home-page" className="header__brand">
 					<LogoSVG />
 					<OuTextSVG />
 				</Link>
@@ -95,7 +111,7 @@ export default function Header() {
 
 				{/* Nav desktop */}
 				<nav className="header__nav header__nav--desktop" aria-label="Navigation principale">
-					<Link to="">Accueil</Link>
+					<Link to="/home-page">Accueil</Link>
 					<button
 						type="button"
 						onClick={() => {
@@ -107,6 +123,9 @@ export default function Header() {
 					{isAuth ? (
 						<>
 							<Link to="/account">Mon compte</Link>
+							{isAuthorized && (
+								<Link aria-label="bouton d'accès au panneau d'administration" to="/admin">Admin</Link>
+							)}
 							<button className="auth-button" onClick={onLogout}>Déconnexion</button>
 						</>
 					) : (
@@ -128,7 +147,7 @@ export default function Header() {
 					aria-label="Menu"
 				>
 					<nav className="header__nav--mobile">
-						<Link to="">Accueil</Link>
+						<Link to="/home-page">Accueil</Link>
 						<button
 							type="button"
 							onClick={() => {

@@ -6,8 +6,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  height: 85vh;
-  width: 100vw;
+  height: 75vh;
   background-color: $beige;
   color: $marron;
   h1 {
@@ -17,6 +16,7 @@
   p {
     font-size: 1.5rem;
     font-weight: bold;
+    text-align: center;
   }
   a {
     color: $marron;
