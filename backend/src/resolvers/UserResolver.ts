@@ -178,7 +178,7 @@ export default class UserResolver {
 		const userInfo = UserInfo.create({
 			firstName: "",
 			lastName: "",
-			avatarUrl: "",
+			avatarUrl: "https://zupimages.net/up/26/14/1rwz.jpg",
 			user: user
 		});
 		await userInfo.save();
